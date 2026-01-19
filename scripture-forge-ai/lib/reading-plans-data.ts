@@ -628,6 +628,85 @@ export const proverbsIn31DaysSchedule: DailyReading[] = [
 ];
 
 /**
+ * Genesis & Exodus Journey - 60 Day Reading Plan
+ * Read through Genesis (50 chapters) and Exodus (40 chapters) in two months
+ * Total: 90 chapters over 60 days (~1.5 chapters per day)
+ */
+export const genesisExodusSchedule: DailyReading[] = [
+  // Week 1: Genesis 1-11 - Primeval History
+  { day: 1, readings: [{ book: "Genesis", chapters: "1-2" }], title: "Creation: In the Beginning" },
+  { day: 2, readings: [{ book: "Genesis", chapters: "3-4" }], title: "The Fall and Cain & Abel" },
+  { day: 3, readings: [{ book: "Genesis", chapters: "5-6" }], title: "Genealogy of Adam & Noah's Call" },
+  { day: 4, readings: [{ book: "Genesis", chapters: "7-8" }], title: "The Great Flood" },
+  { day: 5, readings: [{ book: "Genesis", chapters: "9-10" }], title: "God's Covenant with Noah" },
+  { day: 6, readings: [{ book: "Genesis", chapters: "11" }], title: "Tower of Babel" },
+  // Week 2: Genesis 12-22 - Abraham's Story
+  { day: 7, readings: [{ book: "Genesis", chapters: "12-13" }], title: "The Call of Abram" },
+  { day: 8, readings: [{ book: "Genesis", chapters: "14-15" }], title: "Abram Rescues Lot & God's Covenant" },
+  { day: 9, readings: [{ book: "Genesis", chapters: "16-17" }], title: "Hagar, Ishmael & Covenant of Circumcision" },
+  { day: 10, readings: [{ book: "Genesis", chapters: "18-19" }], title: "Sodom and Gomorrah" },
+  { day: 11, readings: [{ book: "Genesis", chapters: "20-21" }], title: "Abraham & Abimelech, Birth of Isaac" },
+  { day: 12, readings: [{ book: "Genesis", chapters: "22" }], title: "The Sacrifice of Isaac" },
+  // Week 3: Genesis 23-31 - Isaac and Jacob
+  { day: 13, readings: [{ book: "Genesis", chapters: "23-24" }], title: "Sarah's Death & A Wife for Isaac" },
+  { day: 14, readings: [{ book: "Genesis", chapters: "25-26" }], title: "Jacob and Esau, Isaac's Journeys" },
+  { day: 15, readings: [{ book: "Genesis", chapters: "27-28" }], title: "Jacob's Deception & Bethel" },
+  { day: 16, readings: [{ book: "Genesis", chapters: "29-30" }], title: "Jacob, Leah, and Rachel" },
+  { day: 17, readings: [{ book: "Genesis", chapters: "31" }], title: "Jacob Flees from Laban" },
+  // Week 4: Genesis 32-41 - Jacob to Joseph
+  { day: 18, readings: [{ book: "Genesis", chapters: "32-33" }], title: "Wrestling with God & Reunion with Esau" },
+  { day: 19, readings: [{ book: "Genesis", chapters: "34-35" }], title: "Dinah & Return to Bethel" },
+  { day: 20, readings: [{ book: "Genesis", chapters: "36-37" }], title: "Esau's Descendants & Joseph's Dreams" },
+  { day: 21, readings: [{ book: "Genesis", chapters: "38-39" }], title: "Judah and Tamar, Joseph in Egypt" },
+  { day: 22, readings: [{ book: "Genesis", chapters: "40-41" }], title: "Joseph Interprets Dreams" },
+  // Week 5: Genesis 42-50 - Joseph's Story Concluded
+  { day: 23, readings: [{ book: "Genesis", chapters: "42-43" }], title: "Joseph's Brothers Come to Egypt" },
+  { day: 24, readings: [{ book: "Genesis", chapters: "44-45" }], title: "Joseph Reveals Himself" },
+  { day: 25, readings: [{ book: "Genesis", chapters: "46-47" }], title: "Jacob's Family Moves to Egypt" },
+  { day: 26, readings: [{ book: "Genesis", chapters: "48-49" }], title: "Jacob Blesses His Sons" },
+  { day: 27, readings: [{ book: "Genesis", chapters: "50" }], title: "Death of Jacob and Joseph" },
+  // Week 6: Exodus 1-10 - Moses and the Plagues
+  { day: 28, readings: [{ book: "Exodus", chapters: "1-2" }], title: "Israel in Egypt & Birth of Moses" },
+  { day: 29, readings: [{ book: "Exodus", chapters: "3-4" }], title: "The Burning Bush & Moses' Call" },
+  { day: 30, readings: [{ book: "Exodus", chapters: "5-6" }], title: "Moses Before Pharaoh" },
+  { day: 31, readings: [{ book: "Exodus", chapters: "7-8" }], title: "Plagues Begin: Blood, Frogs, Gnats, Flies" },
+  { day: 32, readings: [{ book: "Exodus", chapters: "9" }], title: "Plagues Continue: Livestock, Boils, Hail" },
+  { day: 33, readings: [{ book: "Exodus", chapters: "10" }], title: "Plagues: Locusts and Darkness" },
+  // Week 7: Exodus 11-20 - Exodus and Sinai
+  { day: 34, readings: [{ book: "Exodus", chapters: "11-12" }], title: "The Passover & Death of Firstborn" },
+  { day: 35, readings: [{ book: "Exodus", chapters: "13-14" }], title: "The Exodus & Crossing the Red Sea" },
+  { day: 36, readings: [{ book: "Exodus", chapters: "15-16" }], title: "Song of Moses & Manna from Heaven" },
+  { day: 37, readings: [{ book: "Exodus", chapters: "17-18" }], title: "Water from the Rock & Jethro's Visit" },
+  { day: 38, readings: [{ book: "Exodus", chapters: "19-20" }], title: "Mount Sinai & The Ten Commandments" },
+  // Week 8: Exodus 21-28 - The Law and Tabernacle
+  { day: 39, readings: [{ book: "Exodus", chapters: "21-22" }], title: "Laws for Daily Life" },
+  { day: 40, readings: [{ book: "Exodus", chapters: "23-24" }], title: "Laws and Covenant Confirmed" },
+  { day: 41, readings: [{ book: "Exodus", chapters: "25-26" }], title: "Instructions for the Tabernacle" },
+  { day: 42, readings: [{ book: "Exodus", chapters: "27-28" }], title: "The Altar & Priestly Garments" },
+  // Week 9: Exodus 29-36 - Worship and the Golden Calf
+  { day: 43, readings: [{ book: "Exodus", chapters: "29-30" }], title: "Consecration of Priests & Altar of Incense" },
+  { day: 44, readings: [{ book: "Exodus", chapters: "31-32" }], title: "Sabbath & The Golden Calf" },
+  { day: 45, readings: [{ book: "Exodus", chapters: "33-34" }], title: "Moses Sees God's Glory & New Tablets" },
+  { day: 46, readings: [{ book: "Exodus", chapters: "35-36" }], title: "Offerings for the Tabernacle" },
+  // Week 10: Exodus 37-40 - Building the Tabernacle
+  { day: 47, readings: [{ book: "Exodus", chapters: "37-38" }], title: "Building the Ark & Altar" },
+  { day: 48, readings: [{ book: "Exodus", chapters: "39-40" }], title: "Completing the Tabernacle & God's Glory" },
+  // Extended Reading Days 49-60: Review & Key Passages
+  { day: 49, readings: [{ book: "Genesis", chapters: "1" }, { book: "Exodus", chapters: "20" }], title: "Review: Creation & The Ten Commandments" },
+  { day: 50, readings: [{ book: "Genesis", chapters: "12" }, { book: "Genesis", chapters: "15" }], title: "Review: Abraham's Call & Covenant" },
+  { day: 51, readings: [{ book: "Genesis", chapters: "22" }, { book: "Genesis", chapters: "28" }], title: "Review: Sacrifice of Isaac & Jacob's Ladder" },
+  { day: 52, readings: [{ book: "Genesis", chapters: "37" }, { book: "Genesis", chapters: "45" }], title: "Review: Joseph's Dreams & Revelation" },
+  { day: 53, readings: [{ book: "Exodus", chapters: "3" }, { book: "Exodus", chapters: "14" }], title: "Review: Burning Bush & Red Sea" },
+  { day: 54, readings: [{ book: "Exodus", chapters: "12" }, { book: "Exodus", chapters: "16" }], title: "Review: Passover & Manna" },
+  { day: 55, readings: [{ book: "Exodus", chapters: "19" }, { book: "Exodus", chapters: "34" }], title: "Review: Sinai Encounters" },
+  { day: 56, readings: [{ book: "Genesis", chapters: "2-3" }], title: "Deep Dive: The Garden & The Fall" },
+  { day: 57, readings: [{ book: "Genesis", chapters: "49" }], title: "Deep Dive: Jacob's Blessings & Prophecies" },
+  { day: 58, readings: [{ book: "Exodus", chapters: "25-26" }], title: "Deep Dive: The Tabernacle Design" },
+  { day: 59, readings: [{ book: "Exodus", chapters: "32-33" }], title: "Deep Dive: Golden Calf & Intercession" },
+  { day: 60, readings: [{ book: "Genesis", chapters: "50" }, { book: "Exodus", chapters: "40" }], title: "Conclusion: Joseph's Faith & God's Presence" },
+];
+
+/**
  * Get the reading schedule for a specific plan
  * Plan IDs match those defined in the reading page UI
  */
@@ -646,6 +725,8 @@ export function getReadingSchedule(planId: string): DailyReading[] | null {
     case "proverbs-31":
     case "proverbs-31-days":
       return proverbsIn31DaysSchedule;
+    case "genesis-exodus":
+      return genesisExodusSchedule;
     default:
       return null;
   }
