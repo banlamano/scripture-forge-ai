@@ -365,8 +365,22 @@
         "title": "Genesis & Exodus Reise",
         "description": "Erkunden Sie die Grundlagen des Glaubens durch Schöpfung, die Erzväter und den Exodus.",
         "duration": "60 Tage"
+      },
+      "acts21": {
+        "title": "Apostelgeschichte in 21 Tagen",
+        "description": "Verfolgen Sie das Wachstum der frühen Kirche und die Verbreitung des Evangeliums durch die Apostelgeschichte.",
+        "duration": "21 Tage"
+      },
+      "sermonMount": {
+        "title": "Die Bergpredigt",
+        "description": "Eine 14-tägige Vertiefung in Jesu berühmteste Lehre aus Matthäus 5-7.",
+        "duration": "14 Tage"
       }
-    }
+    },
+    "resetPlan": "Fortschritt zurücksetzen",
+    "removePlan": "Plan entfernen",
+    "confirmReset": "Sind Sie sicher, dass Sie diesen Plan zurücksetzen möchten? Aller Fortschritt geht verloren.",
+    "confirmRemove": "Sind Sie sicher, dass Sie diesen Plan entfernen möchten? Aller Fortschritt geht verloren."
   },
   "devotional": {
     "title": "Tägliche Andacht",

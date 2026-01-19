@@ -365,8 +365,22 @@
         "title": "Voyage dans Genèse et Exode",
         "description": "Explorez les fondements de la foi à travers la création, les patriarches et l'exode.",
         "duration": "60 jours"
+      },
+      "acts21": {
+        "title": "Actes en 21 Jours",
+        "description": "Suivez la croissance de l'Église primitive et la propagation de l'Évangile à travers le livre des Actes.",
+        "duration": "21 jours"
+      },
+      "sermonMount": {
+        "title": "Le Sermon sur la Montagne",
+        "description": "Une étude approfondie de 14 jours sur l'enseignement le plus célèbre de Jésus dans Matthieu 5-7.",
+        "duration": "14 jours"
       }
-    }
+    },
+    "resetPlan": "Réinitialiser",
+    "removePlan": "Supprimer le Plan",
+    "confirmReset": "Êtes-vous sûr de vouloir réinitialiser ce plan ? Toute la progression sera perdue.",
+    "confirmRemove": "Êtes-vous sûr de vouloir supprimer ce plan ? Toute la progression sera perdue."
   },
   "devotional": {
     "title": "Méditation Quotidienne",

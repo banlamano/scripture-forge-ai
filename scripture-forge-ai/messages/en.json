@@ -365,8 +365,22 @@
         "title": "Genesis & Exodus Journey",
         "description": "Explore the foundations of faith through creation, the patriarchs, and the exodus.",
         "duration": "60 days"
+      },
+      "acts21": {
+        "title": "Acts in 21 Days",
+        "description": "Follow the early church's growth and the spread of the Gospel through the book of Acts.",
+        "duration": "21 days"
+      },
+      "sermonMount": {
+        "title": "Sermon on the Mount",
+        "description": "A 14-day deep dive into Jesus' most famous teaching from Matthew 5-7.",
+        "duration": "14 days"
       }
-    }
+    },
+    "resetPlan": "Reset Progress",
+    "removePlan": "Remove Plan",
+    "confirmReset": "Are you sure you want to reset this plan? All progress will be lost.",
+    "confirmRemove": "Are you sure you want to remove this plan? All progress will be lost."
   },
   "devotional": {
     "title": "Daily Devotional",

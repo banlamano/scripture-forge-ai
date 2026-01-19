@@ -365,8 +365,22 @@
         "title": "Jornada em Gênesis e Êxodo",
         "description": "Explore os fundamentos da fé através da criação, dos patriarcas e do êxodo.",
         "duration": "60 dias"
+      },
+      "acts21": {
+        "title": "Atos em 21 Dias",
+        "description": "Acompanhe o crescimento da igreja primitiva e a propagação do Evangelho através do livro de Atos.",
+        "duration": "21 dias"
+      },
+      "sermonMount": {
+        "title": "O Sermão da Montanha",
+        "description": "Um mergulho de 14 dias no ensinamento mais famoso de Jesus de Mateus 5-7.",
+        "duration": "14 dias"
       }
-    }
+    },
+    "resetPlan": "Reiniciar Progresso",
+    "removePlan": "Remover Plano",
+    "confirmReset": "Tem certeza de que deseja reiniciar este plano? Todo o progresso será perdido.",
+    "confirmRemove": "Tem certeza de que deseja remover este plano? Todo o progresso será perdido."
   },
   "devotional": {
     "title": "Devocional Diário",

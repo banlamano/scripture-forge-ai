@@ -14,7 +14,10 @@ import {
   Target,
   Flame,
   Trophy,
-  Star
+  Star,
+  X,
+  RotateCcw,
+  Trash2
 } from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
@@ -103,6 +106,26 @@ const readingPlans: ReadingPlan[] = [
     categoryKey: "categories.oldTestament",
     image: "🌍",
     difficulty: "intermediate",
+  },
+  {
+    id: "acts-21",
+    titleKey: "plans.acts21.title",
+    descriptionKey: "plans.acts21.description",
+    durationKey: "plans.acts21.duration",
+    totalDays: 21,
+    categoryKey: "categories.newTestament",
+    image: "🔥",
+    difficulty: "beginner",
+  },
+  {
+    id: "sermon-mount",
+    titleKey: "plans.sermonMount.title",
+    descriptionKey: "plans.sermonMount.description",
+    durationKey: "plans.sermonMount.duration",
+    totalDays: 14,
+    categoryKey: "categories.newTestament",
+    image: "⛰️",
+    difficulty: "beginner",
   },
 ];
 
@@ -229,6 +252,38 @@ export default function ReadingPlansPage() {
     }
   };
 
+  const handleResetPlan = (planId: string) => {
+    if (!activePlans[planId]) return;
+    if (!confirm(t("confirmReset"))) return;
+    
+    setActivePlans(prev => ({
+      ...prev,
+      [planId]: {
+        ...prev[planId],
+        currentDay: 1,
+        completedDays: [],
+        startedAt: new Date().toISOString(),
+      },
+    }));
+  };
+
+  const handleRemovePlan = (planId: string) => {
+    if (!activePlans[planId]) return;
+    if (!confirm(t("confirmRemove"))) return;
+    
+    setActivePlans(prev => {
+      const newPlans = { ...prev };
+      delete newPlans[planId];
+      return newPlans;
+    });
+    
+    // If we removed the selected plan, select another one
+    if (selectedPlanId === planId) {
+      const remainingPlanIds = Object.keys(activePlans).filter(id => id !== planId);
+      setSelectedPlanId(remainingPlanIds.length > 0 ? remainingPlanIds[0] : null);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -291,7 +346,7 @@ export default function ReadingPlansPage() {
                       />
                     </div>
                     
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-4">
                       <Button onClick={handleCompleteDay} className="gap-2">
                         <CheckCircle2 className="w-4 h-4" />
                         {t("completeDay")} {currentActivePlan.currentDay}
@@ -302,6 +357,26 @@ export default function ReadingPlansPage() {
                           {t("openBible")}
                         </Button>
                       </Link>
+                      <div className="flex gap-2 ml-auto">
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          onClick={() => handleResetPlan(selectedPlanId!)}
+                          title={t("resetPlan")}
+                          className="text-muted-foreground hover:text-orange-500"
+                        >
+                          <RotateCcw className="w-4 h-4" />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          onClick={() => handleRemovePlan(selectedPlanId!)}
+                          title={t("removePlan")}
+                          className="text-muted-foreground hover:text-destructive"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                   <div className="text-center">

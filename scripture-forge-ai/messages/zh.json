@@ -365,8 +365,22 @@
         "title": "创世记与出埃及记之旅",
         "description": "通过创造、族长和出埃及，探索信仰的基础。",
         "duration": "60天"
+      },
+      "acts21": {
+        "title": "21天读完使徒行传",
+        "description": "通过使徒行传，追随早期教会的成长和福音的传播。",
+        "duration": "21天"
+      },
+      "sermonMount": {
+        "title": "登山宝训",
+        "description": "14天深入研读耶稣在马太福音5-7章中最著名的教导。",
+        "duration": "14天"
       }
-    }
+    },
+    "resetPlan": "重置进度",
+    "removePlan": "移除计划",
+    "confirmReset": "确定要重置此计划吗？所有进度将丢失。",
+    "confirmRemove": "确定要移除此计划吗？所有进度将丢失。"
   },
   "devotional": {
     "title": "每日灵修",

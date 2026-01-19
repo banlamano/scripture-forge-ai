@@ -365,8 +365,22 @@
         "title": "Viaje por Génesis y Éxodo",
         "description": "Explora los fundamentos de la fe a través de la creación, los patriarcas y el éxodo.",
         "duration": "60 días"
+      },
+      "acts21": {
+        "title": "Hechos en 21 Días",
+        "description": "Sigue el crecimiento de la iglesia primitiva y la difusión del Evangelio a través del libro de Hechos.",
+        "duration": "21 días"
+      },
+      "sermonMount": {
+        "title": "El Sermón del Monte",
+        "description": "Una inmersión de 14 días en la enseñanza más famosa de Jesús de Mateo 5-7.",
+        "duration": "14 días"
       }
-    }
+    },
+    "resetPlan": "Reiniciar Progreso",
+    "removePlan": "Eliminar Plan",
+    "confirmReset": "¿Estás seguro de que quieres reiniciar este plan? Todo el progreso se perderá.",
+    "confirmRemove": "¿Estás seguro de que quieres eliminar este plan? Todo el progreso se perderá."
   },
   "devotional": {
     "title": "Devocional Diario",
