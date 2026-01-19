@@ -554,7 +554,7 @@ function ChatMessage({ role, content, onCopy, onShare, onRetry, isLatest }: Chat
               size="icon" 
               className="h-8 w-8 hover:bg-muted hover:text-foreground" 
               onClick={onCopy}
-              title={t("goodResponse")}
+              title={t("copyResponse")}
             >
               <Copy className="w-4 h-4" />
             </Button>
@@ -587,7 +587,7 @@ function ChatMessage({ role, content, onCopy, onShare, onRetry, isLatest }: Chat
               size="icon" 
               className="h-8 w-8 hover:bg-muted hover:text-foreground" 
               onClick={onShare}
-              title={t("goodResponse")}
+              title={t("shareResponse")}
             >
               <Share2 className="w-4 h-4" />
             </Button>

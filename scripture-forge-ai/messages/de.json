@@ -110,6 +110,8 @@
     "regenerating": "Antwort wird neu generiert...",
     "playAudio": "Audio abspielen",
     "stopAudio": "Audio stoppen",
+    "copyResponse": "Antwort kopieren",
+    "shareResponse": "Antwort teilen",
     "goodResponse": "Gute Antwort",
     "badResponse": "Schlechte Antwort",
     "voiceInput": "Spracheingabe",

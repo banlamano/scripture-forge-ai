@@ -110,6 +110,8 @@
     "regenerating": "正在重新生成回答...",
     "playAudio": "播放音频",
     "stopAudio": "停止音频",
+    "copyResponse": "复制回答",
+    "shareResponse": "分享回答",
     "goodResponse": "好的回答",
     "badResponse": "不好的回答",
     "voiceInput": "语音输入",

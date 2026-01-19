@@ -110,6 +110,8 @@
     "regenerating": "Regenerando respuesta...",
     "playAudio": "Reproducir audio",
     "stopAudio": "Detener audio",
+    "copyResponse": "Copiar respuesta",
+    "shareResponse": "Compartir respuesta",
     "goodResponse": "Buena respuesta",
     "badResponse": "Mala respuesta",
     "voiceInput": "Entrada de voz",
