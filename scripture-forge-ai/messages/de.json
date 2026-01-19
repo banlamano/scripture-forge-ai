@@ -138,8 +138,8 @@
       "biblicalQuestionText": "Wer war der Apostel Paulus und was war seine Mission?"
     },
     "questionTemplates": {
-      "explainWord": "Erklären Sie die Bedeutung des Wortes „{word}" wie es in {verse} verwendet wird. Konzentrieren Sie sich speziell auf die biblische/theologische Bedeutung dieses Wortes, seine ursprüngliche hebräische oder griechische Bedeutung falls zutreffend, und seine Bedeutung in diesem besonderen Verskontext.",
-      "explainVerse": "Erklären Sie {verse} und seine Bedeutung im Kontext."
+      "explainWord": "Erklaeren Sie die Bedeutung des Wortes \"{word}\" wie es in {verse} verwendet wird. Konzentrieren Sie sich speziell auf die biblische/theologische Bedeutung dieses Wortes, seine urspruengliche hebraeische oder griechische Bedeutung falls zutreffend, und seine Bedeutung in diesem besonderen Verskontext.",
+      "explainVerse": "Erklaeren Sie {verse} und seine Bedeutung im Kontext."
     },
     "popularQueries": {
       "q1": "Was bedeutet Johannes 3:16?",
