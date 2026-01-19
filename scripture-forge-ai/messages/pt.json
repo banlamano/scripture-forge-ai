@@ -137,6 +137,10 @@
       "biblicalQuestion": "Pergunta bíblica",
       "biblicalQuestionText": "Quem foi o apóstolo Paulo e qual foi sua missão?"
     },
+    "questionTemplates": {
+      "explainWord": "Explique o significado da palavra \"{word}\" conforme usada em {verse}. Concentre-se especificamente no significado bíblico/teológico desta palavra, seu significado original em hebraico ou grego, se aplicável, e sua importância neste contexto particular do versículo.",
+      "explainVerse": "Explique {verse} e seu significado no contexto."
+    },
     "popularQueries": {
       "q1": "O que significa João 3:16?",
       "q2": "Como lidar com a ansiedade segundo a Bíblia?",

@@ -46,14 +46,14 @@ export function ChatInterface() {
   const tCommon = useTranslations("common");
   const { locale } = useLanguage();
   
-  // Build the initial query based on parameters
+  // Build the initial query based on parameters - using translated templates
   let initialQuery = "";
   if (word && verse) {
-    // Word explanation mode - explain just the word in context
-    initialQuery = `Explain the meaning of the word "${word}" as used in ${verse}. Focus specifically on this word's biblical/theological meaning, its original Hebrew or Greek meaning if applicable, and its significance in this particular verse context.`;
+    // Word explanation mode - explain just the word in context (in user's language)
+    initialQuery = t("questionTemplates.explainWord", { word, verse });
   } else if (verse) {
-    // Verse explanation mode
-    initialQuery = verse;
+    // Verse explanation mode (in user's language)
+    initialQuery = t("questionTemplates.explainVerse", { verse });
   } else if (query) {
     initialQuery = query;
   }

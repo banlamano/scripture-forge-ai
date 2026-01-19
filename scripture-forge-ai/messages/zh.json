@@ -137,6 +137,10 @@
       "biblicalQuestion": "圣经问题",
       "biblicalQuestionText": "使徒保罗是谁，他的使命是什么？"
     },
+    "questionTemplates": {
+      "explainWord": "请解释「{word}」这个词在{verse}中的含义。请特别关注这个词的圣经/神学意义、其原始希伯来语或希腊语含义（如适用）以及它在这个特定经文上下文中的重要性。",
+      "explainVerse": "请解释{verse}及其在上下文中的含义。"
+    },
     "popularQueries": {
       "q1": "约翰福音3:16是什么意思？",
       "q2": "如何根据圣经处理焦虑？",

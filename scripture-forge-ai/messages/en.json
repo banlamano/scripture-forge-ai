@@ -137,6 +137,10 @@
       "biblicalQuestion": "Biblical question",
       "biblicalQuestionText": "Who was the apostle Paul and what was his mission?"
     },
+    "questionTemplates": {
+      "explainWord": "Explain the meaning of the word \"{word}\" as used in {verse}. Focus specifically on this word's biblical/theological meaning, its original Hebrew or Greek meaning if applicable, and its significance in this particular verse context.",
+      "explainVerse": "Explain {verse} and its meaning in context."
+    },
     "popularQueries": {
       "q1": "What does John 3:16 mean?",
       "q2": "How to deal with anxiety according to the Bible?",
