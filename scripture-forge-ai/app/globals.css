@@ -1,0 +1,246 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Base theme - Serene parchment/cream palette */
+    --background: 40 33% 98%;
+    --foreground: 30 10% 15%;
+
+    --card: 40 30% 96%;
+    --card-foreground: 30 10% 15%;
+
+    --popover: 40 30% 96%;
+    --popover-foreground: 30 10% 15%;
+
+    --primary: 35 80% 45%;
+    --primary-foreground: 40 33% 98%;
+
+    --secondary: 85 25% 85%;
+    --secondary-foreground: 85 30% 25%;
+
+    --muted: 40 20% 92%;
+    --muted-foreground: 30 10% 45%;
+
+    --accent: 200 60% 50%;
+    --accent-foreground: 200 60% 98%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 35 20% 85%;
+    --input: 35 20% 88%;
+    --ring: 35 80% 45%;
+
+    --radius: 0.75rem;
+
+    /* ScriptureForge custom colors */
+    --scripture-gold: 43 74% 49%;
+    --scripture-parchment: 40 33% 96%;
+    --scripture-ink: 30 10% 20%;
+    --scripture-olive: 85 30% 40%;
+    --scripture-sky: 200 60% 55%;
+  }
+
+  .dark {
+    --background: 230 20% 10%;
+    --foreground: 40 20% 92%;
+
+    --card: 230 20% 13%;
+    --card-foreground: 40 20% 92%;
+
+    --popover: 230 20% 13%;
+    --popover-foreground: 40 20% 92%;
+
+    --primary: 43 74% 55%;
+    --primary-foreground: 230 20% 10%;
+
+    --secondary: 230 15% 20%;
+    --secondary-foreground: 40 20% 90%;
+
+    --muted: 230 15% 18%;
+    --muted-foreground: 40 10% 60%;
+
+    --accent: 200 50% 45%;
+    --accent-foreground: 200 50% 98%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 230 15% 22%;
+    --input: 230 15% 20%;
+    --ring: 43 74% 55%;
+
+    /* ScriptureForge dark theme colors */
+    --scripture-gold: 43 74% 55%;
+    --scripture-parchment: 230 20% 15%;
+    --scripture-ink: 40 20% 90%;
+    --scripture-olive: 85 25% 50%;
+    --scripture-sky: 200 50% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-muted rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50;
+  }
+
+  /* Selection color */
+  ::selection {
+    @apply bg-primary/20 text-foreground;
+  }
+}
+
+@layer components {
+  /* Scripture text styling */
+  .scripture-text {
+    @apply font-serif text-lg leading-relaxed tracking-wide;
+  }
+
+  .verse-number {
+    @apply text-xs font-bold text-primary align-super mr-1;
+  }
+
+  .verse-highlight {
+    @apply bg-scripture-gold/20 px-1 rounded;
+  }
+
+  /* Glass morphism cards */
+  .glass-card {
+    @apply bg-card/80 backdrop-blur-lg border border-border/50 shadow-lg;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary via-scripture-gold to-primary bg-clip-text text-transparent;
+  }
+
+  /* Chat bubbles */
+  .chat-bubble-user {
+    @apply bg-primary text-primary-foreground rounded-2xl rounded-br-sm px-4 py-3;
+  }
+
+  .chat-bubble-ai {
+    @apply bg-muted text-foreground rounded-2xl rounded-bl-sm px-4 py-3;
+  }
+
+  /* Serene animations */
+  .animate-serene-pulse {
+    animation: serene-pulse 4s ease-in-out infinite;
+  }
+
+  @keyframes serene-pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  /* Focus ring */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background;
+  }
+}
+
+@layer utilities {
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Text balance for better typography */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Safe area padding for mobile */
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* Prose styling for AI responses */
+.prose-scripture {
+  @apply max-w-none text-foreground leading-relaxed;
+}
+
+.prose-scripture p {
+  @apply mb-4;
+}
+
+.prose-scripture blockquote {
+  @apply border-l-4 border-primary/50 bg-muted/50 py-2 px-4 rounded-r-lg italic my-4;
+}
+
+.prose-scripture a {
+  @apply text-primary hover:text-primary/80 underline underline-offset-4;
+}
+
+.prose-scripture code {
+  @apply bg-muted px-1.5 py-0.5 rounded text-sm;
+}
+
+.prose-scripture h1, .prose-scripture h2, .prose-scripture h3 {
+  @apply font-bold text-foreground mt-6 mb-3;
+}
+
+.prose-scripture ul, .prose-scripture ol {
+  @apply my-4 pl-6;
+}
+
+.prose-scripture li {
+  @apply mb-2;
+}
+
+/* Loading skeleton */
+.skeleton {
+  @apply animate-pulse bg-muted rounded;
+}
+
+/* Print styles for Bible content */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .scripture-text {
+    font-size: 12pt;
+    line-height: 1.8;
+  }
+}
