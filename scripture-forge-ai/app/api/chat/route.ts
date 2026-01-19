@@ -11,7 +11,24 @@ function getGroqClient() {
   });
 }
 
-const SYSTEM_PROMPT = `You are ScriptureForge AI, a knowledgeable and compassionate Bible study companion. 
+// Language names for system prompt
+const LANGUAGE_NAMES: Record<string, string> = {
+  en: "English",
+  es: "Spanish",
+  de: "German",
+  fr: "French",
+  pt: "Portuguese",
+  zh: "Chinese (Simplified)",
+};
+
+// Get system prompt with language instruction
+function getSystemPrompt(lang: string = "en"): string {
+  const languageName = LANGUAGE_NAMES[lang] || "English";
+  const languageInstruction = lang !== "en" 
+    ? `\n\nIMPORTANT: You MUST respond entirely in ${languageName}. All your explanations, context, and applications should be written in ${languageName}. When quoting Bible verses, use a ${languageName} translation if possible, or provide both the original and a ${languageName} translation.`
+    : "";
+
+  return `You are ScriptureForge AI, a knowledgeable and compassionate Bible study companion. 
 
 IMPORTANT RULES:
 1. Always cite Bible verses accurately with book, chapter, and verse numbers
@@ -26,7 +43,8 @@ When asked about a specific verse:
 2. Explain its context (what comes before/after)
 3. Provide historical background
 4. Share practical application
-5. Suggest related verses`;
+5. Suggest related verses${languageInstruction}`;
+}
 
 // Fetch verse from bible-api.com for accuracy
 async function fetchVerseFromBibleAPI(reference: string): Promise<string | null> {
@@ -87,7 +105,7 @@ export const maxDuration = 60;
 
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();
+    const { messages, lang = "en" } = await req.json();
     
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return new Response(
@@ -98,6 +116,9 @@ export async function POST(req: Request) {
 
     const lastMessage = messages[messages.length - 1];
     const userQuery = lastMessage.content;
+    
+    // Get the system prompt with language instruction
+    const systemPrompt = getSystemPrompt(lang);
 
     // Extract and fetch any Bible verses mentioned (with timeout)
     const references = extractVerseReferences(userQuery);
@@ -134,7 +155,7 @@ export async function POST(req: Request) {
         const groqClient = getGroqClient();
         result = await streamText({
           model: groqClient("llama-3.3-70b-versatile"),
-          system: SYSTEM_PROMPT + bibleContext,
+          system: systemPrompt + bibleContext,
           messages: messages,
           temperature: 0.7,
           maxTokens: 2000,
@@ -149,7 +170,7 @@ export async function POST(req: Request) {
             result = await retryWithBackoff(async () => {
               return await streamText({
                 model: openai("gpt-4o-mini"),
-                system: SYSTEM_PROMPT + bibleContext,
+                system: systemPrompt + bibleContext,
                 messages: messages,
                 temperature: 0.7,
                 maxTokens: 1000,
@@ -161,7 +182,7 @@ export async function POST(req: Request) {
             if (hasAnthropic) {
               result = await streamText({
                 model: anthropic("claude-3-haiku-20240307"),
-                system: SYSTEM_PROMPT + bibleContext,
+                system: systemPrompt + bibleContext,
                 messages: messages,
                 temperature: 0.7,
                 maxTokens: 1500,
@@ -174,7 +195,7 @@ export async function POST(req: Request) {
         } else if (hasAnthropic) {
           result = await streamText({
             model: anthropic("claude-3-haiku-20240307"),
-            system: SYSTEM_PROMPT + bibleContext,
+            system: systemPrompt + bibleContext,
             messages: messages,
             temperature: 0.7,
             maxTokens: 1500,
@@ -188,7 +209,7 @@ export async function POST(req: Request) {
       result = await retryWithBackoff(async () => {
         return await streamText({
           model: openai("gpt-4o-mini"),
-          system: SYSTEM_PROMPT + bibleContext,
+          system: systemPrompt + bibleContext,
           messages: messages,
           temperature: 0.7,
           maxTokens: 1000,
@@ -198,7 +219,7 @@ export async function POST(req: Request) {
     } else if (hasAnthropic) {
       result = await streamText({
         model: anthropic("claude-3-haiku-20240307"),
-        system: SYSTEM_PROMPT + bibleContext,
+        system: systemPrompt + bibleContext,
         messages: messages,
         temperature: 0.7,
         maxTokens: 1500,

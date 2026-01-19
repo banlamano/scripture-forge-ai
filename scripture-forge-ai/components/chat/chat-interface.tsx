@@ -35,6 +35,7 @@ import { SuggestedPrompts } from "./suggested-prompts";
 import { MessageContent } from "./message-content";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { useLanguage } from "@/components/providers/language-provider";
 
 export function ChatInterface() {
   const searchParams = useSearchParams();
@@ -43,6 +44,7 @@ export function ChatInterface() {
   const query = searchParams.get("q");
   const t = useTranslations("chat");
   const tCommon = useTranslations("common");
+  const { locale } = useLanguage();
   
   // Build the initial query based on parameters
   let initialQuery = "";
@@ -84,6 +86,9 @@ export function ChatInterface() {
   } = useChat({
     api: "/api/chat",
     initialInput: initialQuery,
+    body: {
+      lang: locale, // Pass the user's language to the API
+    },
     onError: (err) => {
       // Show user-friendly error message
       const errorMsg = err.message || "Failed to get response";
@@ -200,9 +205,19 @@ export function ChatInterface() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
     
+    // Map locale to speech recognition language
+    const speechLangMap: Record<string, string> = {
+      en: "en-US",
+      fr: "fr-FR",
+      de: "de-DE",
+      es: "es-ES",
+      pt: "pt-BR",
+      zh: "zh-CN",
+    };
+    
     recognition.continuous = false;
     recognition.interimResults = true;
-    recognition.lang = 'en-US';
+    recognition.lang = speechLangMap[locale] || 'en-US';
 
     recognition.onstart = () => {
       setIsListening(true);
@@ -451,14 +466,30 @@ function ChatMessage({ role, content, onCopy, onShare, onRetry, isLatest }: Chat
     utterance.pitch = 1.0;
     utterance.volume = 1.0;
     
-    // Try to find a good English voice
-    const voices = window.speechSynthesis.getVoices();
-    const englishVoice = voices.find(voice => 
-      voice.lang.startsWith('en') && voice.name.includes('Google')
-    ) || voices.find(voice => voice.lang.startsWith('en'));
+    // Map locale to speech language prefix
+    const langPrefixMap: Record<string, string> = {
+      en: "en",
+      fr: "fr",
+      de: "de",
+      es: "es",
+      pt: "pt",
+      zh: "zh",
+    };
     
-    if (englishVoice) {
-      utterance.voice = englishVoice;
+    // Get locale from document or default to 'en'
+    const currentLocale = typeof document !== 'undefined' 
+      ? document.documentElement.lang || 'en' 
+      : 'en';
+    const langPrefix = langPrefixMap[currentLocale] || 'en';
+    
+    // Try to find a good voice for the current language
+    const voices = window.speechSynthesis.getVoices();
+    const preferredVoice = voices.find(voice => 
+      voice.lang.startsWith(langPrefix) && voice.name.includes('Google')
+    ) || voices.find(voice => voice.lang.startsWith(langPrefix));
+    
+    if (preferredVoice) {
+      utterance.voice = preferredVoice;
     }
 
     utterance.onstart = () => setIsPlaying(true);

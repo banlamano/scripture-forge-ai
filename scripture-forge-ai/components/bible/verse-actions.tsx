@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useLanguage } from "@/components/providers/language-provider";
 
 interface VerseActionsProps {
   selectedVerses: number[];
@@ -32,6 +33,7 @@ export function VerseActions({
 }: VerseActionsProps) {
   const t = useTranslations("bible");
   const tCommon = useTranslations("common");
+  const { locale } = useLanguage();
   
   const verseReference =
     selectedVerses.length === 1
@@ -43,10 +45,10 @@ export function VerseActions({
     ? `"${selectedWord}" in ${verseReference}`
     : verseReference;
 
-  // URL for AI chat - include word context if selected
+  // URL for AI chat - include word context and language if selected
   const chatUrl = selectedWord
-    ? `/chat?word=${encodeURIComponent(selectedWord)}&verse=${encodeURIComponent(verseReference)}`
-    : `/chat?verse=${encodeURIComponent(verseReference)}`;
+    ? `/chat?word=${encodeURIComponent(selectedWord)}&verse=${encodeURIComponent(verseReference)}&lang=${locale}`
+    : `/chat?verse=${encodeURIComponent(verseReference)}&lang=${locale}`;
 
   const handleCopy = async () => {
     try {
