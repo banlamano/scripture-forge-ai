@@ -315,9 +315,11 @@
     "openBible": "Bibel öffnen",
     "complete": "Abgeschlossen",
     "availablePlans": "Verfügbare Pläne",
+    "activePlans": "Aktive Pläne",
+    "totalDaysCompleted": "Tage abgeschlossen",
     "dayStreak": "Tage-Serie",
     "plansCompleted": "Pläne abgeschlossen",
-    "chaptersRead": "Kapitel gelesen",
+    "inProgress": "In Bearbeitung",
     "dayProgress": "{current} / {total} Tage",
     "difficulty": {
       "beginner": "Anfänger",

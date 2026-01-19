@@ -315,9 +315,11 @@
     "openBible": "打开圣经",
     "complete": "完成",
     "availablePlans": "可用计划",
+    "activePlans": "进行中的计划",
+    "totalDaysCompleted": "已完成天数",
     "dayStreak": "连续天数",
     "plansCompleted": "已完成计划",
-    "chaptersRead": "已读章节",
+    "inProgress": "进行中",
     "dayProgress": "{current} / {total} 天",
     "difficulty": {
       "beginner": "初学者",

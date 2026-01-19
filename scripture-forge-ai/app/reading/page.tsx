@@ -39,8 +39,8 @@ interface ActivePlan {
   startedAt: string; // ISO string for localStorage serialization
 }
 
-// Storage key for localStorage
-const STORAGE_KEY = "scripture-forge-reading-plans";
+// Storage key for localStorage - now stores multiple plans
+const STORAGE_KEY = "scripture-forge-reading-plans-v2";
 
 // Reading plans with translation keys instead of hardcoded text
 const readingPlans: ReadingPlan[] = [
@@ -106,54 +106,58 @@ const readingPlans: ReadingPlan[] = [
   },
 ];
 
-// Load active plan from localStorage
-function loadActivePlan(): ActivePlan | null {
-  if (typeof window === "undefined") return null;
+// Load all active plans from localStorage
+function loadActivePlans(): Record<string, ActivePlan> {
+  if (typeof window === "undefined") return {};
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       return JSON.parse(stored);
     }
   } catch (error) {
-    console.error("Error loading reading plan:", error);
+    console.error("Error loading reading plans:", error);
   }
-  return null;
+  return {};
 }
 
-// Save active plan to localStorage
-function saveActivePlan(plan: ActivePlan | null) {
+// Save all active plans to localStorage
+function saveActivePlans(plans: Record<string, ActivePlan>) {
   if (typeof window === "undefined") return;
   try {
-    if (plan) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(plan));
-    } else {
-      localStorage.removeItem(STORAGE_KEY);
-    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
   } catch (error) {
-    console.error("Error saving reading plan:", error);
+    console.error("Error saving reading plans:", error);
   }
 }
 
 export default function ReadingPlansPage() {
   const t = useTranslations("reading");
   const tCommon = useTranslations("common");
-  const [activePlan, setActivePlan] = useState<ActivePlan | null>(null);
+  // Store multiple active plans keyed by planId
+  const [activePlans, setActivePlans] = useState<Record<string, ActivePlan>>({});
+  // Currently selected plan to show in the banner
+  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load user's progress from localStorage on mount
   useEffect(() => {
-    const savedPlan = loadActivePlan();
-    setActivePlan(savedPlan);
+    const savedPlans = loadActivePlans();
+    setActivePlans(savedPlans);
+    // Select the first active plan by default
+    const planIds = Object.keys(savedPlans);
+    if (planIds.length > 0) {
+      setSelectedPlanId(planIds[0]);
+    }
     setIsLoaded(true);
   }, []);
 
-  // Save progress whenever activePlan changes
+  // Save progress whenever activePlans changes
   useEffect(() => {
     if (isLoaded) {
-      saveActivePlan(activePlan);
+      saveActivePlans(activePlans);
     }
-  }, [activePlan, isLoaded]);
+  }, [activePlans, isLoaded]);
 
   // Get unique category keys for filtering
   const categoryKeys = ["all", ...new Set(readingPlans.map(p => p.categoryKey))];
@@ -162,13 +166,17 @@ export default function ReadingPlansPage() {
     ? readingPlans 
     : readingPlans.filter(p => p.categoryKey === selectedCategory);
 
-  const getActivePlanDetails = () => {
-    if (!activePlan) return null;
-    return readingPlans.find(p => p.id === activePlan.planId);
-  };
-
-  const activePlanDetails = getActivePlanDetails();
-  const progress = activePlan ? Math.round((activePlan.completedDays.length / (activePlanDetails?.totalDays || 1)) * 100) : 0;
+  // Get the currently selected active plan for the banner
+  const currentActivePlan = selectedPlanId ? activePlans[selectedPlanId] : null;
+  const activePlanDetails = currentActivePlan 
+    ? readingPlans.find(p => p.id === currentActivePlan.planId)
+    : null;
+  const progress = currentActivePlan && activePlanDetails 
+    ? Math.round((currentActivePlan.completedDays.length / activePlanDetails.totalDays) * 100) 
+    : 0;
+  
+  // Get count of active plans
+  const activePlanCount = Object.keys(activePlans).length;
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -182,22 +190,43 @@ export default function ReadingPlansPage() {
   const handleStartPlan = (planId: string) => {
     const plan = readingPlans.find(p => p.id === planId);
     if (plan) {
-      setActivePlan({
+      // Check if plan already exists - if so, just select it
+      if (activePlans[planId]) {
+        setSelectedPlanId(planId);
+        return;
+      }
+      // Create new plan progress
+      const newPlan: ActivePlan = {
         planId,
         currentDay: 1,
         completedDays: [],
         startedAt: new Date().toISOString(),
-      });
+      };
+      setActivePlans(prev => ({
+        ...prev,
+        [planId]: newPlan,
+      }));
+      setSelectedPlanId(planId);
     }
   };
 
   const handleCompleteDay = () => {
-    if (!activePlan) return;
-    setActivePlan({
-      ...activePlan,
-      completedDays: [...activePlan.completedDays, activePlan.currentDay],
-      currentDay: activePlan.currentDay + 1,
-    });
+    if (!currentActivePlan || !selectedPlanId) return;
+    setActivePlans(prev => ({
+      ...prev,
+      [selectedPlanId]: {
+        ...currentActivePlan,
+        completedDays: [...currentActivePlan.completedDays, currentActivePlan.currentDay],
+        currentDay: currentActivePlan.currentDay + 1,
+      },
+    }));
+  };
+
+  const handleSelectPlan = (planId: string) => {
+    if (activePlans[planId]) {
+      setSelectedPlanId(planId);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   return (
@@ -214,21 +243,44 @@ export default function ReadingPlansPage() {
           </div>
 
           {/* Active Plan Banner */}
-          {activePlan && activePlanDetails && (
+          {currentActivePlan && activePlanDetails && (
             <Card className="mb-8 border-primary bg-primary/5">
               <CardContent className="pt-6">
+                {/* Plan switcher tabs when multiple plans are active */}
+                {activePlanCount > 1 && (
+                  <div className="flex flex-wrap gap-2 mb-4 pb-4 border-b">
+                    {Object.values(activePlans).map((plan) => {
+                      const planInfo = readingPlans.find(p => p.id === plan.planId);
+                      if (!planInfo) return null;
+                      const isSelected = selectedPlanId === plan.planId;
+                      return (
+                        <Button
+                          key={plan.planId}
+                          variant={isSelected ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setSelectedPlanId(plan.planId)}
+                          className="gap-2"
+                        >
+                          <span>{planInfo.image}</span>
+                          <span className="hidden sm:inline">{t(planInfo.titleKey)}</span>
+                        </Button>
+                      );
+                    })}
+                  </div>
+                )}
+                
                 <div className="flex flex-col md:flex-row md:items-center gap-6">
                   <div className="text-6xl">{activePlanDetails.image}</div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <Flame className="w-5 h-5 text-orange-500" />
                       <span className="text-sm font-medium text-orange-500">
-                        {activePlan.completedDays.length} {t("dayStreak")}!
+                        {currentActivePlan.completedDays.length} {t("dayStreak")}!
                       </span>
                     </div>
                     <h2 className="text-2xl font-bold mb-1">{t(activePlanDetails.titleKey)}</h2>
                     <p className="text-muted-foreground mb-4">
-                      {t("dayProgress", { current: activePlan.currentDay, total: activePlanDetails.totalDays })}
+                      {t("dayProgress", { current: currentActivePlan.currentDay, total: activePlanDetails.totalDays })}
                     </p>
                     
                     {/* Progress Bar */}
@@ -242,7 +294,7 @@ export default function ReadingPlansPage() {
                     <div className="flex items-center gap-4">
                       <Button onClick={handleCompleteDay} className="gap-2">
                         <CheckCircle2 className="w-4 h-4" />
-                        {t("completeDay")} {activePlan.currentDay}
+                        {t("completeDay")} {currentActivePlan.currentDay}
                       </Button>
                       <Link href="/bible">
                         <Button variant="outline" className="gap-2">
@@ -266,29 +318,36 @@ export default function ReadingPlansPage() {
             <Card>
               <CardContent className="pt-6 text-center">
                 <Target className="w-8 h-8 mx-auto text-primary mb-2" />
-                <div className="text-2xl font-bold">{readingPlans.length}</div>
-                <div className="text-sm text-muted-foreground">{t("availablePlans")}</div>
+                <div className="text-2xl font-bold">{activePlanCount}</div>
+                <div className="text-sm text-muted-foreground">{t("activePlans")}</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="pt-6 text-center">
                 <Flame className="w-8 h-8 mx-auto text-orange-500 mb-2" />
-                <div className="text-2xl font-bold">{activePlan?.completedDays.length || 0}</div>
-                <div className="text-sm text-muted-foreground">{t("dayStreak")}</div>
+                <div className="text-2xl font-bold">
+                  {Object.values(activePlans).reduce((sum, p) => sum + p.completedDays.length, 0)}
+                </div>
+                <div className="text-sm text-muted-foreground">{t("totalDaysCompleted")}</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="pt-6 text-center">
                 <Trophy className="w-8 h-8 mx-auto text-yellow-500 mb-2" />
-                <div className="text-2xl font-bold">0</div>
+                <div className="text-2xl font-bold">
+                  {Object.values(activePlans).filter(p => {
+                    const planInfo = readingPlans.find(rp => rp.id === p.planId);
+                    return planInfo && p.completedDays.length >= planInfo.totalDays;
+                  }).length}
+                </div>
                 <div className="text-sm text-muted-foreground">{t("plansCompleted")}</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="pt-6 text-center">
                 <Star className="w-8 h-8 mx-auto text-purple-500 mb-2" />
-                <div className="text-2xl font-bold">{activePlan?.completedDays.length || 0}</div>
-                <div className="text-sm text-muted-foreground">{t("chaptersRead")}</div>
+                <div className="text-2xl font-bold">{readingPlans.length}</div>
+                <div className="text-sm text-muted-foreground">{t("availablePlans")}</div>
               </CardContent>
             </Card>
           </div>
@@ -311,19 +370,28 @@ export default function ReadingPlansPage() {
           {/* Plans Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredPlans.map((plan) => {
-              const isActive = activePlan?.planId === plan.id;
-              const activeProgress = isActive ? Math.round((activePlan.completedDays.length / plan.totalDays) * 100) : 0;
+              const planProgress = activePlans[plan.id];
+              const isActive = !!planProgress;
+              const isSelected = selectedPlanId === plan.id;
+              const activeProgress = isActive ? Math.round((planProgress.completedDays.length / plan.totalDays) * 100) : 0;
               return (
                 <Card 
                   key={plan.id} 
-                  className={`hover:shadow-lg transition-all ${isActive ? "ring-2 ring-primary" : ""}`}
+                  className={`hover:shadow-lg transition-all ${isSelected ? "ring-2 ring-primary" : isActive ? "ring-1 ring-primary/50" : ""}`}
                 >
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <span className="text-4xl">{plan.image}</span>
-                      <span className={`text-xs px-2 py-1 rounded-full ${getDifficultyColor(plan.difficulty)}`}>
-                        {t(`difficulty.${plan.difficulty}`)}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        {isActive && (
+                          <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">
+                            {t("inProgress")}
+                          </span>
+                        )}
+                        <span className={`text-xs px-2 py-1 rounded-full ${getDifficultyColor(plan.difficulty)}`}>
+                          {t(`difficulty.${plan.difficulty}`)}
+                        </span>
+                      </div>
                     </div>
                     <CardTitle className="mt-2">{t(plan.titleKey)}</CardTitle>
                     <CardDescription>{t(plan.descriptionKey)}</CardDescription>
@@ -350,15 +418,12 @@ export default function ReadingPlansPage() {
                           />
                         </div>
                         <div className="text-xs text-muted-foreground mb-3 text-center">
-                          {t("dayProgress", { current: activePlan.currentDay, total: plan.totalDays })} ({activeProgress}%)
+                          {t("dayProgress", { current: planProgress.currentDay, total: plan.totalDays })} ({activeProgress}%)
                         </div>
                         <Button 
                           className="w-full group" 
-                          variant="default"
-                          onClick={() => {
-                            // Scroll to the active plan banner at top
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                          }}
+                          variant={isSelected ? "secondary" : "default"}
+                          onClick={() => handleSelectPlan(plan.id)}
                         >
                           <Play className="w-4 h-4 mr-2" />
                           {t("continuePlan")}
