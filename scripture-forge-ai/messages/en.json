@@ -317,10 +317,52 @@
     "dayStreak": "Day Streak",
     "plansCompleted": "Plans Completed",
     "chaptersRead": "Chapters Read",
+    "dayProgress": "{current} / {total} days",
     "difficulty": {
       "beginner": "Beginner",
       "intermediate": "Intermediate",
       "advanced": "Advanced"
+    },
+    "categories": {
+      "all": "All",
+      "wholeBible": "Whole Bible",
+      "newTestament": "New Testament",
+      "oldTestament": "Old Testament",
+      "poetry": "Poetry",
+      "wisdom": "Wisdom",
+      "epistles": "Epistles"
+    },
+    "plans": {
+      "bibleInYear": {
+        "title": "Bible in a Year",
+        "description": "Read through the entire Bible in 365 days with daily Old Testament, New Testament, and Psalms readings.",
+        "duration": "365 days"
+      },
+      "gospels30": {
+        "title": "The Gospels in 30 Days",
+        "description": "Journey through Matthew, Mark, Luke, and John to encounter the life and teachings of Jesus.",
+        "duration": "30 days"
+      },
+      "psalmsMonth": {
+        "title": "Psalms in a Month",
+        "description": "Experience the full range of human emotion and divine praise through all 150 Psalms.",
+        "duration": "30 days"
+      },
+      "proverbs31": {
+        "title": "Proverbs: 31 Days of Wisdom",
+        "description": "One chapter of Proverbs each day for practical wisdom in daily life.",
+        "duration": "31 days"
+      },
+      "romansDeep": {
+        "title": "Romans Deep Dive",
+        "description": "A thorough 16-week study through Paul's theological masterpiece.",
+        "duration": "16 weeks"
+      },
+      "genesisExodus": {
+        "title": "Genesis & Exodus Journey",
+        "description": "Explore the foundations of faith through creation, the patriarchs, and the exodus.",
+        "duration": "60 days"
+      }
     }
   },
   "devotional": {

@@ -317,10 +317,52 @@
     "dayStreak": "Jours Consécutifs",
     "plansCompleted": "Plans Terminés",
     "chaptersRead": "Chapitres Lus",
+    "dayProgress": "{current} / {total} jours",
     "difficulty": {
       "beginner": "Débutant",
       "intermediate": "Intermédiaire",
       "advanced": "Avancé"
+    },
+    "categories": {
+      "all": "Tous",
+      "wholeBible": "Bible Entière",
+      "newTestament": "Nouveau Testament",
+      "oldTestament": "Ancien Testament",
+      "poetry": "Poésie",
+      "wisdom": "Sagesse",
+      "epistles": "Épîtres"
+    },
+    "plans": {
+      "bibleInYear": {
+        "title": "La Bible en un An",
+        "description": "Lisez toute la Bible en 365 jours avec des lectures quotidiennes de l'Ancien Testament, du Nouveau Testament et des Psaumes.",
+        "duration": "365 jours"
+      },
+      "gospels30": {
+        "title": "Les Évangiles en 30 Jours",
+        "description": "Parcourez Matthieu, Marc, Luc et Jean pour rencontrer la vie et les enseignements de Jésus.",
+        "duration": "30 jours"
+      },
+      "psalmsMonth": {
+        "title": "Les Psaumes en un Mois",
+        "description": "Vivez toute la gamme des émotions humaines et de la louange divine à travers les 150 Psaumes.",
+        "duration": "30 jours"
+      },
+      "proverbs31": {
+        "title": "Proverbes: 31 Jours de Sagesse",
+        "description": "Un chapitre des Proverbes chaque jour pour une sagesse pratique dans la vie quotidienne.",
+        "duration": "31 jours"
+      },
+      "romansDeep": {
+        "title": "Étude Approfondie de Romains",
+        "description": "Une étude approfondie de 16 semaines du chef-d'œuvre théologique de Paul.",
+        "duration": "16 semaines"
+      },
+      "genesisExodus": {
+        "title": "Voyage dans Genèse et Exode",
+        "description": "Explorez les fondements de la foi à travers la création, les patriarches et l'exode.",
+        "duration": "60 jours"
+      }
     }
   },
   "devotional": {

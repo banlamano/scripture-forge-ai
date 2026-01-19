@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { 
@@ -23,11 +23,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 interface ReadingPlan {
   id: string;
-  title: string;
-  description: string;
-  duration: string;
+  titleKey: string;
+  descriptionKey: string;
+  durationKey: string;
   totalDays: number;
-  category: string;
+  categoryKey: string;
   image: string;
   difficulty: "beginner" | "intermediate" | "advanced";
 }
@@ -36,90 +36,131 @@ interface ActivePlan {
   planId: string;
   currentDay: number;
   completedDays: number[];
-  startedAt: Date;
+  startedAt: string; // ISO string for localStorage serialization
 }
 
+// Storage key for localStorage
+const STORAGE_KEY = "scripture-forge-reading-plans";
+
+// Reading plans with translation keys instead of hardcoded text
 const readingPlans: ReadingPlan[] = [
   {
     id: "bible-in-year",
-    title: "Bible in a Year",
-    description: "Read through the entire Bible in 365 days with daily Old Testament, New Testament, and Psalms readings.",
-    duration: "365 days",
+    titleKey: "plans.bibleInYear.title",
+    descriptionKey: "plans.bibleInYear.description",
+    durationKey: "plans.bibleInYear.duration",
     totalDays: 365,
-    category: "Whole Bible",
+    categoryKey: "categories.wholeBible",
     image: "📖",
     difficulty: "intermediate",
   },
   {
     id: "gospels-30",
-    title: "The Gospels in 30 Days",
-    description: "Journey through Matthew, Mark, Luke, and John to encounter the life and teachings of Jesus.",
-    duration: "30 days",
+    titleKey: "plans.gospels30.title",
+    descriptionKey: "plans.gospels30.description",
+    durationKey: "plans.gospels30.duration",
     totalDays: 30,
-    category: "New Testament",
+    categoryKey: "categories.newTestament",
     image: "✝️",
     difficulty: "beginner",
   },
   {
     id: "psalms-month",
-    title: "Psalms in a Month",
-    description: "Experience the full range of human emotion and divine praise through all 150 Psalms.",
-    duration: "30 days",
+    titleKey: "plans.psalmsMonth.title",
+    descriptionKey: "plans.psalmsMonth.description",
+    durationKey: "plans.psalmsMonth.duration",
     totalDays: 30,
-    category: "Poetry",
+    categoryKey: "categories.poetry",
     image: "🎵",
     difficulty: "beginner",
   },
   {
     id: "proverbs-31",
-    title: "Proverbs: 31 Days of Wisdom",
-    description: "One chapter of Proverbs each day for practical wisdom in daily life.",
-    duration: "31 days",
+    titleKey: "plans.proverbs31.title",
+    descriptionKey: "plans.proverbs31.description",
+    durationKey: "plans.proverbs31.duration",
     totalDays: 31,
-    category: "Wisdom",
+    categoryKey: "categories.wisdom",
     image: "💡",
     difficulty: "beginner",
   },
   {
     id: "romans-deep",
-    title: "Romans Deep Dive",
-    description: "A thorough 16-week study through Paul's theological masterpiece.",
-    duration: "16 weeks",
+    titleKey: "plans.romansDeep.title",
+    descriptionKey: "plans.romansDeep.description",
+    durationKey: "plans.romansDeep.duration",
     totalDays: 112,
-    category: "Epistles",
+    categoryKey: "categories.epistles",
     image: "📜",
     difficulty: "advanced",
   },
   {
     id: "genesis-exodus",
-    title: "Genesis & Exodus Journey",
-    description: "Explore the foundations of faith through creation, the patriarchs, and the exodus.",
-    duration: "60 days",
+    titleKey: "plans.genesisExodus.title",
+    descriptionKey: "plans.genesisExodus.description",
+    durationKey: "plans.genesisExodus.duration",
     totalDays: 60,
-    category: "Old Testament",
+    categoryKey: "categories.oldTestament",
     image: "🌍",
     difficulty: "intermediate",
   },
 ];
 
-const sampleActivePlan: ActivePlan = {
-  planId: "gospels-30",
-  currentDay: 8,
-  completedDays: [1, 2, 3, 4, 5, 6, 7],
-  startedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-};
+// Load active plan from localStorage
+function loadActivePlan(): ActivePlan | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      return JSON.parse(stored);
+    }
+  } catch (error) {
+    console.error("Error loading reading plan:", error);
+  }
+  return null;
+}
+
+// Save active plan to localStorage
+function saveActivePlan(plan: ActivePlan | null) {
+  if (typeof window === "undefined") return;
+  try {
+    if (plan) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(plan));
+    } else {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  } catch (error) {
+    console.error("Error saving reading plan:", error);
+  }
+}
 
 export default function ReadingPlansPage() {
   const t = useTranslations("reading");
   const tCommon = useTranslations("common");
-  const [activePlan, setActivePlan] = useState<ActivePlan | null>(sampleActivePlan);
+  const [activePlan, setActivePlan] = useState<ActivePlan | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  const categories = ["all", ...new Set(readingPlans.map(p => p.category))];
+  // Load user's progress from localStorage on mount
+  useEffect(() => {
+    const savedPlan = loadActivePlan();
+    setActivePlan(savedPlan);
+    setIsLoaded(true);
+  }, []);
+
+  // Save progress whenever activePlan changes
+  useEffect(() => {
+    if (isLoaded) {
+      saveActivePlan(activePlan);
+    }
+  }, [activePlan, isLoaded]);
+
+  // Get unique category keys for filtering
+  const categoryKeys = ["all", ...new Set(readingPlans.map(p => p.categoryKey))];
 
   const filteredPlans = selectedCategory === "all" 
     ? readingPlans 
-    : readingPlans.filter(p => p.category === selectedCategory);
+    : readingPlans.filter(p => p.categoryKey === selectedCategory);
 
   const getActivePlanDetails = () => {
     if (!activePlan) return null;
@@ -145,7 +186,7 @@ export default function ReadingPlansPage() {
         planId,
         currentDay: 1,
         completedDays: [],
-        startedAt: new Date(),
+        startedAt: new Date().toISOString(),
       });
     }
   };
@@ -185,9 +226,9 @@ export default function ReadingPlansPage() {
                         {activePlan.completedDays.length} {t("dayStreak")}!
                       </span>
                     </div>
-                    <h2 className="text-2xl font-bold mb-1">{activePlanDetails.title}</h2>
+                    <h2 className="text-2xl font-bold mb-1">{t(activePlanDetails.titleKey)}</h2>
                     <p className="text-muted-foreground mb-4">
-                      {activePlan.currentDay} / {activePlanDetails.totalDays}
+                      {t("dayProgress", { current: activePlan.currentDay, total: activePlanDetails.totalDays })}
                     </p>
                     
                     {/* Progress Bar */}
@@ -254,15 +295,15 @@ export default function ReadingPlansPage() {
 
           {/* Category Filter */}
           <div className="flex flex-wrap gap-2 mb-6">
-            {categories.map((category) => (
+            {categoryKeys.map((categoryKey) => (
               <Button
-                key={category}
-                variant={selectedCategory === category ? "default" : "outline"}
+                key={categoryKey}
+                variant={selectedCategory === categoryKey ? "default" : "outline"}
                 size="sm"
-                onClick={() => setSelectedCategory(category)}
-                className="rounded-full capitalize"
+                onClick={() => setSelectedCategory(categoryKey)}
+                className="rounded-full"
               >
-                {category}
+                {categoryKey === "all" ? t("categories.all") : t(categoryKey)}
               </Button>
             ))}
           </div>
@@ -279,22 +320,22 @@ export default function ReadingPlansPage() {
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <span className="text-4xl">{plan.image}</span>
-                      <span className={`text-xs px-2 py-1 rounded-full capitalize ${getDifficultyColor(plan.difficulty)}`}>
-                        {plan.difficulty}
+                      <span className={`text-xs px-2 py-1 rounded-full ${getDifficultyColor(plan.difficulty)}`}>
+                        {t(`difficulty.${plan.difficulty}`)}
                       </span>
                     </div>
-                    <CardTitle className="mt-2">{plan.title}</CardTitle>
-                    <CardDescription>{plan.description}</CardDescription>
+                    <CardTitle className="mt-2">{t(plan.titleKey)}</CardTitle>
+                    <CardDescription>{t(plan.descriptionKey)}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
-                        {plan.duration}
+                        {t(plan.durationKey)}
                       </span>
                       <span className="flex items-center gap-1">
                         <BookOpen className="w-4 h-4" />
-                        {plan.category}
+                        {t(plan.categoryKey)}
                       </span>
                     </div>
                     

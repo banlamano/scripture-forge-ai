@@ -317,10 +317,52 @@
     "dayStreak": "Tage-Serie",
     "plansCompleted": "Pläne abgeschlossen",
     "chaptersRead": "Kapitel gelesen",
+    "dayProgress": "{current} / {total} Tage",
     "difficulty": {
       "beginner": "Anfänger",
       "intermediate": "Fortgeschritten",
       "advanced": "Experte"
+    },
+    "categories": {
+      "all": "Alle",
+      "wholeBible": "Ganze Bibel",
+      "newTestament": "Neues Testament",
+      "oldTestament": "Altes Testament",
+      "poetry": "Poesie",
+      "wisdom": "Weisheit",
+      "epistles": "Briefe"
+    },
+    "plans": {
+      "bibleInYear": {
+        "title": "Die Bibel in einem Jahr",
+        "description": "Lesen Sie die gesamte Bibel in 365 Tagen mit täglichen Lesungen aus dem Alten Testament, Neuen Testament und den Psalmen.",
+        "duration": "365 Tage"
+      },
+      "gospels30": {
+        "title": "Die Evangelien in 30 Tagen",
+        "description": "Reisen Sie durch Matthäus, Markus, Lukas und Johannes, um das Leben und die Lehren Jesu kennenzulernen.",
+        "duration": "30 Tage"
+      },
+      "psalmsMonth": {
+        "title": "Psalmen in einem Monat",
+        "description": "Erleben Sie die volle Bandbreite menschlicher Emotionen und göttlichen Lobes durch alle 150 Psalmen.",
+        "duration": "30 Tage"
+      },
+      "proverbs31": {
+        "title": "Sprüche: 31 Tage Weisheit",
+        "description": "Ein Kapitel der Sprüche jeden Tag für praktische Weisheit im täglichen Leben.",
+        "duration": "31 Tage"
+      },
+      "romansDeep": {
+        "title": "Römerbrief Tiefenstudie",
+        "description": "Eine gründliche 16-wöchige Studie durch Paulus' theologisches Meisterwerk.",
+        "duration": "16 Wochen"
+      },
+      "genesisExodus": {
+        "title": "Genesis & Exodus Reise",
+        "description": "Erkunden Sie die Grundlagen des Glaubens durch Schöpfung, die Erzväter und den Exodus.",
+        "duration": "60 Tage"
+      }
     }
   },
   "devotional": {

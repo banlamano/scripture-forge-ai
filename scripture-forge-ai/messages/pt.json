@@ -317,10 +317,52 @@
     "dayStreak": "Sequência de Dias",
     "plansCompleted": "Planos Completados",
     "chaptersRead": "Capítulos Lidos",
+    "dayProgress": "{current} / {total} dias",
     "difficulty": {
       "beginner": "Iniciante",
       "intermediate": "Intermediário",
       "advanced": "Avançado"
+    },
+    "categories": {
+      "all": "Todos",
+      "wholeBible": "Bíblia Completa",
+      "newTestament": "Novo Testamento",
+      "oldTestament": "Antigo Testamento",
+      "poetry": "Poesia",
+      "wisdom": "Sabedoria",
+      "epistles": "Epístolas"
+    },
+    "plans": {
+      "bibleInYear": {
+        "title": "A Bíblia em um Ano",
+        "description": "Leia toda a Bíblia em 365 dias com leituras diárias do Antigo Testamento, Novo Testamento e Salmos.",
+        "duration": "365 dias"
+      },
+      "gospels30": {
+        "title": "Os Evangelhos em 30 Dias",
+        "description": "Viaje através de Mateus, Marcos, Lucas e João para encontrar a vida e os ensinamentos de Jesus.",
+        "duration": "30 dias"
+      },
+      "psalmsMonth": {
+        "title": "Salmos em um Mês",
+        "description": "Experimente toda a gama de emoções humanas e louvor divino através dos 150 Salmos.",
+        "duration": "30 dias"
+      },
+      "proverbs31": {
+        "title": "Provérbios: 31 Dias de Sabedoria",
+        "description": "Um capítulo de Provérbios cada dia para sabedoria prática na vida diária.",
+        "duration": "31 dias"
+      },
+      "romansDeep": {
+        "title": "Estudo Profundo de Romanos",
+        "description": "Um estudo completo de 16 semanas através da obra-prima teológica de Paulo.",
+        "duration": "16 semanas"
+      },
+      "genesisExodus": {
+        "title": "Jornada em Gênesis e Êxodo",
+        "description": "Explore os fundamentos da fé através da criação, dos patriarcas e do êxodo.",
+        "duration": "60 dias"
+      }
     }
   },
   "devotional": {

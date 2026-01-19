@@ -317,10 +317,52 @@
     "dayStreak": "连续天数",
     "plansCompleted": "已完成计划",
     "chaptersRead": "已读章节",
+    "dayProgress": "{current} / {total} 天",
     "difficulty": {
       "beginner": "初学者",
       "intermediate": "中级",
       "advanced": "高级"
+    },
+    "categories": {
+      "all": "全部",
+      "wholeBible": "整本圣经",
+      "newTestament": "新约",
+      "oldTestament": "旧约",
+      "poetry": "诗歌",
+      "wisdom": "智慧书",
+      "epistles": "书信"
+    },
+    "plans": {
+      "bibleInYear": {
+        "title": "一年读完圣经",
+        "description": "在365天内读完整本圣经，每日阅读旧约、新约和诗篇。",
+        "duration": "365天"
+      },
+      "gospels30": {
+        "title": "30天读完四福音",
+        "description": "通过马太福音、马可福音、路加福音和约翰福音，遇见耶稣的生平和教导。",
+        "duration": "30天"
+      },
+      "psalmsMonth": {
+        "title": "一个月读完诗篇",
+        "description": "通过150篇诗篇，体验人类情感的全部范围和神圣的赞美。",
+        "duration": "30天"
+      },
+      "proverbs31": {
+        "title": "箴言：31天智慧之旅",
+        "description": "每天一章箴言，获得日常生活中的实用智慧。",
+        "duration": "31天"
+      },
+      "romansDeep": {
+        "title": "罗马书深度研读",
+        "description": "16周深入研读保罗的神学巨著。",
+        "duration": "16周"
+      },
+      "genesisExodus": {
+        "title": "创世记与出埃及记之旅",
+        "description": "通过创造、族长和出埃及，探索信仰的基础。",
+        "duration": "60天"
+      }
     }
   },
   "devotional": {
