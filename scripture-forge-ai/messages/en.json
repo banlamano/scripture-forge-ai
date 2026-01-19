@@ -309,6 +309,7 @@
     "title": "Reading Plans",
     "description": "Structured Bible reading plans to help you grow in faith and understanding.",
     "startPlan": "Start Plan",
+    "continuePlan": "Continue Plan",
     "currentlyActive": "Currently Active",
     "completeDay": "Complete Day",
     "openBible": "Open Bible",

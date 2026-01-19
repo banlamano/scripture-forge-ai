@@ -312,6 +312,7 @@ export default function ReadingPlansPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredPlans.map((plan) => {
               const isActive = activePlan?.planId === plan.id;
+              const activeProgress = isActive ? Math.round((activePlan.completedDays.length / plan.totalDays) * 100) : 0;
               return (
                 <Card 
                   key={plan.id} 
@@ -340,10 +341,30 @@ export default function ReadingPlansPage() {
                     </div>
                     
                     {isActive ? (
-                      <Button className="w-full" variant="secondary" disabled>
-                        <CheckCircle2 className="w-4 h-4 mr-2" />
-                        {t("currentlyActive")}
-                      </Button>
+                      <>
+                        {/* Progress bar for active plan */}
+                        <div className="w-full bg-muted rounded-full h-2 mb-3">
+                          <div 
+                            className="bg-primary h-2 rounded-full transition-all duration-500"
+                            style={{ width: `${activeProgress}%` }}
+                          />
+                        </div>
+                        <div className="text-xs text-muted-foreground mb-3 text-center">
+                          {t("dayProgress", { current: activePlan.currentDay, total: plan.totalDays })} ({activeProgress}%)
+                        </div>
+                        <Button 
+                          className="w-full group" 
+                          variant="default"
+                          onClick={() => {
+                            // Scroll to the active plan banner at top
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                        >
+                          <Play className="w-4 h-4 mr-2" />
+                          {t("continuePlan")}
+                          <ChevronRight className="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                      </>
                     ) : (
                       <Button 
                         className="w-full group" 

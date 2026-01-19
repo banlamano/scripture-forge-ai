@@ -309,6 +309,7 @@
     "title": "阅读计划",
     "description": "结构化的圣经阅读计划，帮助您在信仰和理解中成长。",
     "startPlan": "开始计划",
+    "continuePlan": "继续计划",
     "currentlyActive": "当前进行",
     "completeDay": "完成今日",
     "openBible": "打开圣经",
