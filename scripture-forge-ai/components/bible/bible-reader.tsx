@@ -77,8 +77,23 @@ export function BibleReader() {
     }
     return 3;
   });
-  // Use the first available translation for the current language as default
+  // Local storage key for default translation preference (must match profile page)
+  const TRANSLATION_PREFERENCE_KEY = "scripture-forge-default-translation";
+  
+  // Use saved preference or first available translation for the current language as default
   const [selectedBibleId, setSelectedBibleId] = useState<string>(() => {
+    // Check for saved preference in localStorage (client-side only)
+    if (typeof window !== "undefined") {
+      const savedTranslation = localStorage.getItem(TRANSLATION_PREFERENCE_KEY);
+      if (savedTranslation) {
+        const translations = BIBLE_TRANSLATIONS[locale] || BIBLE_TRANSLATIONS["en"];
+        const isValid = translations.some(t => t.id === savedTranslation);
+        if (isValid) {
+          return savedTranslation;
+        }
+      }
+    }
+    // Default to first translation for current language
     const translations = BIBLE_TRANSLATIONS[locale] || BIBLE_TRANSLATIONS["en"];
     return translations[0]?.id || "685d1470fe4d5c3b-01";
   });

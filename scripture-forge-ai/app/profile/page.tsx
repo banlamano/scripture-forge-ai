@@ -2,7 +2,7 @@
 
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { 
@@ -20,7 +20,8 @@ import {
   Shield,
   Sun,
   Moon,
-  Monitor
+  Monitor,
+  Check
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -28,18 +29,61 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { useLanguage } from "@/components/providers/language-provider";
+import { BIBLE_TRANSLATIONS } from "@/lib/api-bible";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "sonner";
+
+// Local storage key for default translation preference
+const TRANSLATION_PREFERENCE_KEY = "scripture-forge-default-translation";
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { theme, setTheme } = useTheme();
+  const { locale } = useLanguage();
   const [mounted, setMounted] = useState(false);
+  const [defaultTranslation, setDefaultTranslation] = useState<string>("");
   const t = useTranslations("profile");
   const tCommon = useTranslations("common");
 
+  // Get available translations for the current language
+  const availableTranslations = useMemo(() => {
+    return BIBLE_TRANSLATIONS[locale] || BIBLE_TRANSLATIONS["en"];
+  }, [locale]);
+
+  // Load saved translation preference on mount
   useEffect(() => {
     setMounted(true);
-  }, []);
+    // Load saved preference from localStorage
+    const savedTranslation = localStorage.getItem(TRANSLATION_PREFERENCE_KEY);
+    if (savedTranslation) {
+      // Check if the saved translation is valid for current language
+      const isValid = availableTranslations.some(t => t.id === savedTranslation);
+      if (isValid) {
+        setDefaultTranslation(savedTranslation);
+      } else {
+        // Default to first translation for current language
+        setDefaultTranslation(availableTranslations[0]?.id || "");
+      }
+    } else {
+      // Default to first translation for current language
+      setDefaultTranslation(availableTranslations[0]?.id || "");
+    }
+  }, [availableTranslations]);
+
+  // Handle translation change
+  const handleTranslationChange = (translationId: string) => {
+    setDefaultTranslation(translationId);
+    localStorage.setItem(TRANSLATION_PREFERENCE_KEY, translationId);
+    toast.success(t("translationSaved"));
+  };
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -226,9 +270,26 @@ export default function ProfilePage() {
                   {t("translationDescription")}
                 </p>
               </div>
-              <div className="px-3 py-1.5 bg-muted rounded-lg text-sm font-medium">
-                KJV
-              </div>
+              <Select 
+                value={defaultTranslation} 
+                onValueChange={handleTranslationChange}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder={t("selectTranslation")}>
+                    {availableTranslations.find(t => t.id === defaultTranslation)?.abbreviation || t("selectTranslation")}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {availableTranslations.map((trans) => (
+                    <SelectItem key={trans.id} value={trans.id}>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{trans.abbreviation}</span>
+                        <span className="text-muted-foreground text-xs">- {trans.name}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </CardContent>
         </Card>

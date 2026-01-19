@@ -425,6 +425,8 @@
     "system": "Système",
     "defaultTranslation": "Traduction par Défaut",
     "translationDescription": "Votre traduction biblique préférée",
+    "selectTranslation": "Choisir la traduction",
+    "translationSaved": "Préférence de traduction enregistrée",
     "account": "Compte",
     "accountSettings": "Gérez les paramètres de votre compte",
     "continueReading": "Continuez à lire où vous vous êtes arrêté",

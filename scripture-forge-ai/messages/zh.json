@@ -425,6 +425,8 @@
     "system": "系统",
     "defaultTranslation": "默认译本",
     "translationDescription": "您首选的圣经译本",
+    "selectTranslation": "选择译本",
+    "translationSaved": "译本偏好已保存",
     "account": "账户",
     "accountSettings": "管理您的账户设置",
     "continueReading": "继续上次的阅读",
