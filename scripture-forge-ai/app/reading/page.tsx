@@ -23,6 +23,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getDailyReading, type DailyReading } from "@/lib/reading-plans-data";
 
 interface ReadingPlan {
   id: string;
@@ -345,6 +346,34 @@ export default function ReadingPlansPage() {
                         style={{ width: `${progress}%` }}
                       />
                     </div>
+
+                    {/* Today's Reading - Only show for plans with schedule data */}
+                    {(() => {
+                      const todaysReading = getDailyReading(currentActivePlan.planId, currentActivePlan.currentDay);
+                      if (todaysReading) {
+                        return (
+                          <div className="bg-background/50 rounded-lg p-4 mb-4 border">
+                            <h3 className="font-semibold mb-2 flex items-center gap-2">
+                              <BookOpen className="w-4 h-4" />
+                              {t("todaysReading")} - {t("day")} {currentActivePlan.currentDay}
+                            </h3>
+                            <div className="grid gap-2">
+                              {todaysReading.readings.map((reading, idx) => (
+                                <Link 
+                                  key={idx}
+                                  href={`/bible?book=${encodeURIComponent(reading.book)}&chapter=${reading.chapters.split("-")[0]}`}
+                                  className="flex items-center justify-between p-2 rounded hover:bg-muted transition-colors group"
+                                >
+                                  <span className="font-medium">{reading.book} {reading.chapters}</span>
+                                  <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      }
+                      return null;
+                    })()}
                     
                     <div className="flex flex-wrap items-center gap-2 sm:gap-4">
                       <Button onClick={handleCompleteDay} className="gap-2">
