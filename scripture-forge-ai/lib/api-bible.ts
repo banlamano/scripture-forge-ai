@@ -28,6 +28,7 @@ export const LOCALE_TO_API_LANG: Record<string, string> = {
   fr: "fra",
   pt: "por",
   zh: "cmn", // Mandarin Chinese
+  it: "ita", // Italian
 };
 
 // Popular free translations by language (verified working IDs from API.Bible)
@@ -81,6 +82,15 @@ export const BIBLE_TRANSLATIONS: Record<string, { id: string; name: string; abbr
   zh: [
     { id: "7ea794434e9ea7ee-01", name: "当代译本 (简体)", abbreviation: "CCB" },
     { id: "a6e06d2c5b90ad89-01", name: "當代譯本 (繁體)", abbreviation: "CCBT" },
+  ],
+  it: [
+    // Bolls.life Italian translations (free, no API key needed)
+    { id: "bolls:NR2006", name: "Nuova Riveduta 2006", abbreviation: "NR06" },
+    { id: "bolls:NR1994", name: "Nuova Riveduta 1994", abbreviation: "NR94" },
+    { id: "bolls:CEI2008", name: "Conferenza Episcopale Italiana 2008", abbreviation: "CEI" },
+    { id: "bolls:TILC", name: "Traduzione in Lingua Corrente", abbreviation: "TILC" },
+    // API.Bible Italian translations (requires API key)
+    { id: "41aa25bc421df6bc-01", name: "La Sacra Bibbia (Diodati)", abbreviation: "DIO" },
   ],
 };
 

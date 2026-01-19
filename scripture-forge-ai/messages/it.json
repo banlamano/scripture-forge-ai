@@ -1,0 +1,479 @@
+﻿{
+  "common": {
+    "home": "Home",
+    "bible": "Bibbia",
+    "chat": "Chat IA",
+    "search": "Ricerca Intelligente",
+    "devotional": "Devozionale",
+    "prayer": "Diario di Preghiera",
+    "reading": "Piani di Lettura",
+    "profile": "Profilo",
+    "signIn": "Accedi",
+    "signOut": "Esci",
+    "signUp": "Registrati",
+    "loading": "Caricamento...",
+    "error": "Errore",
+    "retry": "Riprova",
+    "cancel": "Annulla",
+    "save": "Salva",
+    "delete": "Elimina",
+    "edit": "Modifica",
+    "share": "Condividi",
+    "copy": "Copia",
+    "copied": "Copiato negli appunti",
+    "language": "Lingua"
+  },
+  "home": {
+    "title": "Your AI-Powered",
+    "subtitle": "Bible Study Companion",
+    "description": "Experience Scripture like never before with intelligent insights, contextual understanding, and personalized devotionals.",
+    "getStarted": "Get Started",
+    "exploreBible": "Explore the Bible",
+    "featuresTitle": "Everything You Need for",
+    "featuresHighlight": "Deeper Study",
+    "featuresDescription": "Powerful tools designed to enhance your spiritual journey, grounded in scripture and powered by AI.",
+    "popularQuestions": "Popular Questions",
+    "popularQuestionsDescription": "Explore what others are asking our AI companion",
+    "testimonialsTitle": "Trusted by Believers Worldwide",
+    "testimonialsDescription": "See how ScriptureForge AI is helping people grow in faith",
+    "ctaTitle": "Start Your Journey Today",
+    "ctaDescription": "Join thousands of believers using AI to deepen their understanding of God's Word. Free to start, no credit card required.",
+    "ctaButton": "Start Chatting Free",
+    "stats": {
+      "booksOfBible": "Books of the Bible",
+      "translations": "Translations",
+      "activeUsers": "Active Users",
+      "userRating": "User Rating"
+    },
+    "testimonials": {
+      "testimonial1": {
+        "quote": "ScriptureForge has transformed my daily quiet time. The AI explanations help me understand passages I've struggled with for years.",
+        "author": "Sarah M.",
+        "role": "Small Group Leader"
+      },
+      "testimonial2": {
+        "quote": "Perfect for sermon preparation. I can quickly find cross-references and get historical context in seconds.",
+        "author": "Pastor David K.",
+        "role": "Community Church"
+      },
+      "testimonial3": {
+        "quote": "As a new believer, having an AI companion that explains things in simple terms has been invaluable.",
+        "author": "Michael T.",
+        "role": "New Christian"
+      }
+    },
+    "features": {
+      "bibleReader": {
+        "title": "Interactive Bible Reader",
+        "description": "Navigate seamlessly through multiple translations with bookmarks, highlights, and personal notes."
+      },
+      "aiChat": {
+        "title": "AI Study Companion",
+        "description": "Ask questions, get scripture-based answers, and deepen your understanding with conversational AI."
+      },
+      "smartSearch": {
+        "title": "Smart Search",
+        "description": "Find verses by topic, theme, or keyword with AI-enhanced semantic search."
+      },
+      "devotional": {
+        "title": "Daily Devotionals",
+        "description": "Start each day with personalized devotionals and guided reading plans tailored to your journey."
+      },
+      "prayerJournal": {
+        "title": "Prayer Journal",
+        "description": "Track your prayers, receive verse suggestions based on your mood, and reflect on answered prayers."
+      },
+      "readingPlans": {
+        "title": "Reading Plans",
+        "description": "Follow structured plans from Bible-in-a-year to topical studies with progress tracking."
+      }
+    },
+    "mockChat": {
+      "userQuestion": "What does John 3:16 mean and why is it so important?",
+      "aiResponse1": "John 3:16 is often called \"the Gospel in a nutshell\" because it beautifully summarizes God's plan of salvation:",
+      "verse": "\"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.\"",
+      "aiResponse2": "This verse reveals three key truths: God's immense love, the gift of Jesus, and the promise of eternal life through faith..."
+    }
+  },
+  "chat": {
+    "title": "AI Chat",
+    "placeholder": "Ask about scripture, request a devotional, or explore biblical topics...",
+    "listening": "Listening... Speak now",
+    "searching": "Searching scriptures...",
+    "disclaimer": "ScriptureForge AI provides insights based on scripture but is not a replacement for pastoral guidance or scholarly study. Always verify with trusted sources.",
+    "welcome": "Welcome to ScriptureForge AI",
+    "welcomeDescription": "Your AI companion for Bible study. Ask questions about scripture, request devotionals, or explore biblical topics.",
+    "suggestedPrompts": "Suggested prompts",
+    "newChat": "New Chat",
+    "history": "History",
+    "regenerate": "Regenerate response",
+    "regenerating": "Regenerating response...",
+    "playAudio": "Play audio",
+    "stopAudio": "Stop audio",
+    "copyResponse": "Copy response",
+    "shareResponse": "Share response",
+    "goodResponse": "Good response",
+    "badResponse": "Bad response",
+    "voiceInput": "Voice input",
+    "stopListening": "Stop listening",
+    "stopGenerating": "Stop generating",
+    "send": "Send message",
+    "speechNotSupported": "Speech recognition not supported in your browser",
+    "speechError": "Speech recognition error. Please try again.",
+    "thanksFeedback": "Thanks for your feedback!",
+    "audioError": "Error playing audio",
+    "ttsNotSupported": "Text-to-speech not supported in your browser",
+    "serviceBusy": "Service is busy",
+    "tryAgainLater": "Please wait a moment and try again.",
+    "errorOccurred": "Something went wrong",
+    "retry": "Riprova",
+    "prompts": {
+      "explainVerse": "Explain a verse",
+      "explainVerseText": "Explain John 3:16 and its significance in Christianity",
+      "dailyDevotional": "Daily devotional",
+      "dailyDevotionalText": "Give me a devotional on the topic of hope for today",
+      "spiritualGuidance": "Spiritual guidance",
+      "spiritualGuidanceText": "What does the Bible say about dealing with anxiety?",
+      "biblicalQuestion": "Biblical question",
+      "biblicalQuestionText": "Who was the apostle Paul and what was his mission?"
+    },
+    "questionTemplates": {
+      "explainWord": "Explain the meaning of the word \"{word}\" as used in {verse}. Focus specifically on this word's biblical/theological meaning, its original Hebrew or Greek meaning if applicable, and its significance in this particular verse context.",
+      "explainVerse": "Explain {verse} and its meaning in context."
+    },
+    "popularQueries": {
+      "q1": "What does John 3:16 mean?",
+      "q2": "How to deal with anxiety according to the Bible?",
+      "q3": "Explain the Beatitudes",
+      "q4": "What is the fruit of the Spirit?",
+      "q5": "Bible verses about hope",
+      "q6": "Who was King David?",
+      "q7": "What is salvation?",
+      "q8": "Explain the parable of the sower"
+    }
+  },
+  "bible": {
+    "title": "Bible Reader",
+    "selectBook": "Select Book",
+    "selectChapter": "Select Chapter",
+    "selectTranslation": "Translation",
+    "oldTestament": "Old Testament",
+    "newTestament": "New Testament",
+    "chapter": "Chapter",
+    "verse": "Verse",
+    "askAI": "Ask AI",
+    "explainWord": "Explain Word",
+    "bookmark": "Bookmark",
+    "highlight": "Highlight",
+    "note": "Add Note",
+    "failedToLoad": "Failed to load chapter. Please try again.",
+    "tryAgain": "Try Again",
+    "aiTranslated": "AI Translated",
+    "aiTranslationDisclaimer": "This text has been translated by AI for reading comprehension. For theological study, please refer to official translations in your language.",
+    "nativeTranslation": "Official Translation",
+    "books": {
+      "Genesis": "Genesis",
+      "Exodus": "Exodus",
+      "Leviticus": "Leviticus",
+      "Numbers": "Numbers",
+      "Deuteronomy": "Deuteronomy",
+      "Joshua": "Joshua",
+      "Judges": "Judges",
+      "Ruth": "Ruth",
+      "1 Samuel": "1 Samuel",
+      "2 Samuel": "2 Samuel",
+      "1 Kings": "1 Kings",
+      "2 Kings": "2 Kings",
+      "1 Chronicles": "1 Chronicles",
+      "2 Chronicles": "2 Chronicles",
+      "Ezra": "Ezra",
+      "Nehemiah": "Nehemiah",
+      "Esther": "Esther",
+      "Job": "Job",
+      "Psalms": "Psalms",
+      "Proverbs": "Proverbs",
+      "Ecclesiastes": "Ecclesiastes",
+      "Song of Solomon": "Song of Solomon",
+      "Isaiah": "Isaiah",
+      "Jeremiah": "Jeremiah",
+      "Lamentations": "Lamentations",
+      "Ezekiel": "Ezekiel",
+      "Daniel": "Daniel",
+      "Hosea": "Hosea",
+      "Joel": "Joel",
+      "Amos": "Amos",
+      "Obadiah": "Obadiah",
+      "Jonah": "Jonah",
+      "Micah": "Micah",
+      "Nahum": "Nahum",
+      "Habakkuk": "Habakkuk",
+      "Zephaniah": "Zephaniah",
+      "Haggai": "Haggai",
+      "Zechariah": "Zechariah",
+      "Malachi": "Malachi",
+      "Matthew": "Matthew",
+      "Mark": "Mark",
+      "Luke": "Luke",
+      "John": "John",
+      "Acts": "Acts",
+      "Romans": "Romans",
+      "1 Corinthians": "1 Corinthians",
+      "2 Corinthians": "2 Corinthians",
+      "Galatians": "Galatians",
+      "Ephesians": "Ephesians",
+      "Philippians": "Philippians",
+      "Colossians": "Colossians",
+      "1 Thessalonians": "1 Thessalonians",
+      "2 Thessalonians": "2 Thessalonians",
+      "1 Timothy": "1 Timothy",
+      "2 Timothy": "2 Timothy",
+      "Titus": "Titus",
+      "Philemon": "Philemon",
+      "Hebrews": "Hebrews",
+      "James": "James",
+      "1 Peter": "1 Peter",
+      "2 Peter": "2 Peter",
+      "1 John": "1 John",
+      "2 John": "2 John",
+      "3 John": "3 John",
+      "Jude": "Jude",
+      "Revelation": "Revelation"
+    }
+  },
+  "search": {
+    "title": "Smart Search",
+    "description": "Search the Bible using natural language. Ask questions, find verses, or explore topics with AI-powered understanding.",
+    "placeholder": "Ask anything about the Bible...",
+    "popularSearches": "Popular Searches",
+    "recentSearches": "Recent Searches",
+    "searchTips": "Search Tips",
+    "tip1": "Ask questions naturally: \"What does Jesus say about worry?\"",
+    "tip2": "Search by topic: \"verses about hope\" or \"scriptures on healing\"",
+    "tip3": "Look up specific passages: \"Romans 8:28\" or \"Psalm 23\"",
+    "tip4": "Explore themes: \"parables of Jesus\" or \"Old Testament prophecies\"",
+    "searches": {
+      "s1": "What does the Bible say about love?",
+      "s2": "Verses about faith",
+      "s3": "Psalms for comfort",
+      "s4": "Proverbs about wisdom",
+      "s5": "Scriptures on forgiveness",
+      "s6": "Bible verses for anxiety",
+      "s7": "What is salvation?",
+      "s8": "Beatitudes meaning"
+    },
+    "recent": {
+      "r1": "John 3:16 meaning",
+      "r2": "Fruits of the Spirit",
+      "r3": "Lord's Prayer"
+    }
+  },
+  "prayer": {
+    "title": "Prayer Journal",
+    "description": "Record your prayers and celebrate answered ones",
+    "samples": {
+      "sample1": {
+        "title": "Guidance for decisions",
+        "content": "Lord, please guide me in making the right decisions this week regarding my career path."
+      },
+      "sample2": {
+        "title": "Family health",
+        "content": "Praying for my mother's recovery from surgery. Thank you Lord for the successful operation."
+      },
+      "sample3": {
+        "title": "Thankful for blessings",
+        "content": "Thank you God for the wonderful friends and community you have blessed me with."
+      }
+    },
+    "newPrayer": "New Prayer",
+    "prayerTitle": "Prayer title...",
+    "writePrayer": "Write your prayer...",
+    "savePrayer": "Save Prayer",
+    "totalPrayers": "Total Prayers",
+    "active": "Active",
+    "answered": "Answered",
+    "all": "All",
+    "markAnswered": "Mark as answered",
+    "markActive": "Mark as active",
+    "deletePrayer": "Delete prayer",
+    "noPrayers": "No prayers found",
+    "startAdding": "Start by adding your first prayer",
+    "categories": {
+      "personal": "Personal",
+      "family": "Family",
+      "health": "Health",
+      "work": "Work",
+      "church": "Church",
+      "world": "World",
+      "gratitude": "Gratitude"
+    },
+    "encouragingVerse": "\"Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.\"",
+    "verseReference": "— Philippians 4:6"
+  },
+  "reading": {
+    "title": "Reading Plans",
+    "description": "Structured Bible reading plans to help you grow in faith and understanding.",
+    "startPlan": "Start Plan",
+    "continuePlan": "Continue Plan",
+    "currentlyActive": "Currently Active",
+    "completeDay": "Complete Day",
+    "openBible": "Open Bible",
+    "openGenesis": "Open Genesis",
+    "openGospel": "Open Gospel",
+    "openPsalms": "Open Psalms",
+    "openProverbs": "Open Proverbs",
+    "openRomans": "Open Romans",
+    "openActs": "Open Acts",
+    "openMatthew": "Open Matthew",
+    "todaysReading": "Today's Reading",
+    "day": "Day",
+    "complete": "Complete",
+    "availablePlans": "Available Plans",
+    "activePlans": "Active Plans",
+    "totalDaysCompleted": "Days Completed",
+    "dayStreak": "Day Streak",
+    "plansCompleted": "Plans Completed",
+    "inProgress": "In Progress",
+    "dayProgress": "{current} / {total} days",
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "categories": {
+      "all": "All",
+      "wholeBible": "Whole Bible",
+      "newTestament": "New Testament",
+      "oldTestament": "Old Testament",
+      "poetry": "Poetry",
+      "wisdom": "Wisdom",
+      "epistles": "Epistles"
+    },
+    "plans": {
+      "bibleInYear": {
+        "title": "Bible in a Year",
+        "description": "Read through the entire Bible in 365 days with daily Old Testament, New Testament, and Psalms readings.",
+        "duration": "365 days"
+      },
+      "gospels30": {
+        "title": "The Gospels in 30 Days",
+        "description": "Journey through Matthew, Mark, Luke, and John to encounter the life and teachings of Jesus.",
+        "duration": "30 days"
+      },
+      "psalmsMonth": {
+        "title": "Psalms in a Month",
+        "description": "Experience the full range of human emotion and divine praise through all 150 Psalms.",
+        "duration": "30 days"
+      },
+      "proverbs31": {
+        "title": "Proverbs: 31 Days of Wisdom",
+        "description": "One chapter of Proverbs each day for practical wisdom in daily life.",
+        "duration": "31 days"
+      },
+      "romansDeep": {
+        "title": "Romans Deep Dive",
+        "description": "A thorough 16-week study through Paul's theological masterpiece.",
+        "duration": "16 weeks"
+      },
+      "genesisExodus": {
+        "title": "Genesis & Exodus Journey",
+        "description": "Explore the foundations of faith through creation, the patriarchs, and the exodus.",
+        "duration": "60 days"
+      },
+      "acts21": {
+        "title": "Acts in 21 Days",
+        "description": "Follow the early church's growth and the spread of the Gospel through the book of Acts.",
+        "duration": "21 days"
+      },
+      "sermonMount": {
+        "title": "Sermon on the Mount",
+        "description": "A 14-day deep dive into Jesus' most famous teaching from Matthew 5-7.",
+        "duration": "14 days"
+      }
+    },
+    "resetPlan": "Reset Progress",
+    "removePlan": "Remove Plan",
+    "confirmReset": "Are you sure you want to reset this plan? All progress will be lost.",
+    "confirmRemove": "Are you sure you want to remove this plan? All progress will be lost."
+  },
+  "devotional": {
+    "title": "Daily Devotional",
+    "todaysDevotional": "Today's Devotional",
+    "reflection": "Reflection",
+    "prayerFocus": "Prayer Focus",
+    "readMore": "Read More",
+    "verseText": "Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid.",
+    "verseReference": "John 14:27",
+    "reflectionContent": "In a world filled with uncertainty and chaos, Jesus offers us something the world cannot provide—His peace. This isn't a temporary calm that fades when circumstances change; it's a deep, abiding peace that transcends understanding. Today, you may be facing challenges that seem overwhelming. Jesus speaks directly to these struggles: \"Do not let your hearts be troubled.\" This is both a comfort and a command. We are invited to actively choose peace by placing our trust in the One who has overcome the world.",
+    "prayerContent": "Lord Jesus, thank You for the gift of Your peace—a peace that the world cannot give and cannot take away. Today, I choose to release my anxieties and fears into Your capable hands. Help me to trust You fully, knowing that You are working all things together for my good. Fill my heart with Your presence and let Your peace guard my mind. Amen.",
+    "reading1": "Philippians 4:6-7",
+    "reading2": "Isaiah 26:3",
+    "reading3": "Psalm 29:11"
+  },
+  "profile": {
+    "title": "Profile",
+    "description": "Manage your account and preferences",
+    "memberSince": "Member since",
+    "freePlan": "Free Plan",
+    "quickLinks": "Quick Links",
+    "jumpBack": "Jump back into your favorite features",
+    "preferences": "Preferences",
+    "customize": "Customize your experience",
+    "theme": "Theme",
+    "themeDescription": "Choose your preferred appearance",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "defaultTranslation": "Default Translation",
+    "translationDescription": "Your preferred Bible translation",
+    "selectTranslation": "Select translation",
+    "translationSaved": "Translation preference saved",
+    "account": "Account",
+    "accountSettings": "Manage your account settings",
+    "continueReading": "Continue reading where you left off",
+    "askQuestions": "Ask questions about Scripture",
+    "dailyInsights": "Daily spiritual insights"
+  },
+  "auth": {
+    "signIn": "Accedi",
+    "signUp": "Registrati",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "orContinueWith": "Or continue with",
+    "google": "Continue with Google",
+    "signingIn": "Signing in...",
+    "createAccount": "Create Account",
+    "welcomeBack": "Welcome back",
+    "signInDescription": "Sign in to your account to continue",
+    "error": "An error occurred. Please try again.",
+    "accountCreated": "Account created! Signing you in...",
+    "invalidCredentials": "Invalid email or password",
+    "demoCredentials": "Demo Credentials",
+    "termsText": "By signing in, you agree to our",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "and": "and"
+  },
+  "footer": {
+    "product": "Product",
+    "resources": "Resources",
+    "company": "Company",
+    "legal": "Legal",
+    "helpCenter": "Help Center",
+    "apiDocs": "API Documentation",
+    "blog": "Blog",
+    "community": "Community",
+    "about": "About",
+    "contact": "Contact",
+    "careers": "Careers",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "cookies": "Cookies",
+    "copyright": "© {year} ScriptureForge AI. All rights reserved.",
+    "tagline": "AI-powered Bible study for everyone"
+  }
+}
+

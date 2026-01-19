@@ -11,6 +11,7 @@ import frMessages from '@/messages/fr.json';
 import deMessages from '@/messages/de.json';
 import ptMessages from '@/messages/pt.json';
 import zhMessages from '@/messages/zh.json';
+import itMessages from '@/messages/it.json';
 
 const messagesMap: Record<Locale, typeof enMessages> = {
   en: enMessages,
@@ -19,6 +20,7 @@ const messagesMap: Record<Locale, typeof enMessages> = {
   de: deMessages,
   pt: ptMessages,
   zh: zhMessages,
+  it: itMessages,
 };
 
 interface LanguageContextType {

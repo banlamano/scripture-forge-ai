@@ -213,6 +213,7 @@ export function ChatInterface() {
       es: "es-ES",
       pt: "pt-BR",
       zh: "zh-CN",
+      it: "it-IT",
     };
     
     recognition.continuous = false;
@@ -474,6 +475,7 @@ function ChatMessage({ role, content, onCopy, onShare, onRetry, isLatest }: Chat
       es: "es",
       pt: "pt",
       zh: "zh",
+      it: "it",
     };
     
     // Get locale from document or default to 'en'

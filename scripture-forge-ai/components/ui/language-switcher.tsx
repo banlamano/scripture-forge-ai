@@ -56,6 +56,7 @@ function getLanguageFlag(locale: string): string {
     de: "🇩🇪",
     pt: "🇧🇷",
     zh: "🇨🇳",
+    it: "🇮🇹",
   };
   return flags[locale] || "🌐";
 }
