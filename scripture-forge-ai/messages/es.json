@@ -266,6 +266,20 @@
   "prayer": {
     "title": "Diario de Oración",
     "description": "Registra tus oraciones y celebra las respondidas",
+    "samples": {
+      "sample1": {
+        "title": "Guía para decisiones",
+        "content": "Señor, por favor guíame en tomar las decisiones correctas esta semana respecto a mi carrera profesional."
+      },
+      "sample2": {
+        "title": "Salud familiar",
+        "content": "Orando por la recuperación de mi madre después de la cirugía. Gracias Señor por la operación exitosa."
+      },
+      "sample3": {
+        "title": "Agradecido por las bendiciones",
+        "content": "Gracias Dios por los maravillosos amigos y la comunidad con la que me has bendecido."
+      }
+    },
     "newPrayer": "Nueva Oración",
     "prayerTitle": "Título de la oración...",
     "writePrayer": "Escribe tu oración...",

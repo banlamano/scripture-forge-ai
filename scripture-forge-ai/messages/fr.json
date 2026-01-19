@@ -266,6 +266,20 @@
   "prayer": {
     "title": "Journal de Prière",
     "description": "Enregistrez vos prières et célébrez celles exaucées",
+    "samples": {
+      "sample1": {
+        "title": "Guidance pour mes décisions",
+        "content": "Seigneur, guide-moi s'il te plaît dans les bonnes décisions cette semaine concernant mon parcours professionnel."
+      },
+      "sample2": {
+        "title": "Santé de la famille",
+        "content": "Je prie pour le rétablissement de ma mère après son opération. Merci Seigneur pour le succès de l'intervention."
+      },
+      "sample3": {
+        "title": "Reconnaissant pour les bénédictions",
+        "content": "Merci mon Dieu pour les merveilleux amis et la communauté dont tu m'as béni."
+      }
+    },
     "newPrayer": "Nouvelle Prière",
     "prayerTitle": "Titre de la prière...",
     "writePrayer": "Écrivez votre prière...",

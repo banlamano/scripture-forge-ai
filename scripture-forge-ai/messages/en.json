@@ -266,6 +266,20 @@
   "prayer": {
     "title": "Prayer Journal",
     "description": "Record your prayers and celebrate answered ones",
+    "samples": {
+      "sample1": {
+        "title": "Guidance for decisions",
+        "content": "Lord, please guide me in making the right decisions this week regarding my career path."
+      },
+      "sample2": {
+        "title": "Family health",
+        "content": "Praying for my mother's recovery from surgery. Thank you Lord for the successful operation."
+      },
+      "sample3": {
+        "title": "Thankful for blessings",
+        "content": "Thank you God for the wonderful friends and community you have blessed me with."
+      }
+    },
     "newPrayer": "New Prayer",
     "prayerTitle": "Prayer title...",
     "writePrayer": "Write your prayer...",

@@ -266,6 +266,20 @@
   "prayer": {
     "title": "Gebetstagebuch",
     "description": "Zeichnen Sie Ihre Gebete auf und feiern Sie die erhörten",
+    "samples": {
+      "sample1": {
+        "title": "Führung bei Entscheidungen",
+        "content": "Herr, bitte führe mich diese Woche bei den richtigen Entscheidungen bezüglich meines Berufsweges."
+      },
+      "sample2": {
+        "title": "Gesundheit der Familie",
+        "content": "Ich bete für die Genesung meiner Mutter nach ihrer Operation. Danke Herr für die erfolgreiche Operation."
+      },
+      "sample3": {
+        "title": "Dankbar für Segnungen",
+        "content": "Danke Gott für die wunderbaren Freunde und die Gemeinschaft, mit der du mich gesegnet hast."
+      }
+    },
     "newPrayer": "Neues Gebet",
     "prayerTitle": "Gebetstitel...",
     "writePrayer": "Schreiben Sie Ihr Gebet...",

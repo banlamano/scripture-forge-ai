@@ -45,39 +45,43 @@ const categoryColors: Record<string, string> = {
   gratitude: "bg-pink-500",
 };
 
-const samplePrayers: PrayerEntry[] = [
-  {
-    id: "1",
-    title: "Guidance for decisions",
-    content: "Lord, please guide me in making the right decisions this week regarding my career path.",
-    category: "personal",
-    isAnswered: false,
-    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-  },
-  {
-    id: "2",
-    title: "Family health",
-    content: "Praying for my mother's recovery from surgery. Thank you Lord for the successful operation.",
-    category: "health",
-    isAnswered: true,
-    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-    answeredAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-  },
-  {
-    id: "3",
-    title: "Thankful for blessings",
-    content: "Thank you God for the wonderful friends and community you have blessed me with.",
-    category: "gratitude",
-    isAnswered: false,
-    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-  },
-];
+// Sample prayers are now loaded from translations
+function getSamplePrayers(t: ReturnType<typeof useTranslations>): PrayerEntry[] {
+  return [
+    {
+      id: "1",
+      title: t("samples.sample1.title"),
+      content: t("samples.sample1.content"),
+      category: "personal",
+      isAnswered: false,
+      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "2",
+      title: t("samples.sample2.title"),
+      content: t("samples.sample2.content"),
+      category: "health",
+      isAnswered: true,
+      createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+      answeredAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "3",
+      title: t("samples.sample3.title"),
+      content: t("samples.sample3.content"),
+      category: "gratitude",
+      isAnswered: false,
+      createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+    },
+  ];
+}
 
 export default function PrayerJournalPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const t = useTranslations("prayer");
   const tCommon = useTranslations("common");
+  const samplePrayers = getSamplePrayers(t);
   const [prayers, setPrayers] = useState<PrayerEntry[]>(samplePrayers);
   const [showNewPrayer, setShowNewPrayer] = useState(false);
   const [newPrayer, setNewPrayer] = useState({ title: "", content: "", category: "personal" });

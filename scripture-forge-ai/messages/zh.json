@@ -265,7 +265,21 @@
   },
   "prayer": {
     "title": "祷告日记",
-    "description": "记录您的祷告并庆祝已蒙应允的祷告",
+    "description": "记录您的祷告并庆祝已应允的祷告",
+    "samples": {
+      "sample1": {
+        "title": "寻求决策指引",
+        "content": "主啊，请在这周引导我在职业道路上做出正确的决定。"
+      },
+      "sample2": {
+        "title": "家人健康",
+        "content": "为母亲手术后的康复祷告。感谢主手术成功。"
+      },
+      "sample3": {
+        "title": "感恩祝福",
+        "content": "感谢上帝赐给我美好的朋友和社区。"
+      }
+    },
     "newPrayer": "新祷告",
     "prayerTitle": "祷告标题...",
     "writePrayer": "写下您的祷告...",
