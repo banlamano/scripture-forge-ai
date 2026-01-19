@@ -1,6 +1,8 @@
 import { Metadata } from "next";
+import { Suspense } from "react";
 import { BibleReader } from "@/components/bible/bible-reader";
 import { Navbar } from "@/components/layout/navbar";
+import { Loading } from "@/components/ui/loading";
 
 export const metadata: Metadata = {
   title: "Bible Reader",
@@ -12,7 +14,9 @@ export default function BiblePage() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
-        <BibleReader />
+        <Suspense fallback={<Loading />}>
+          <BibleReader />
+        </Suspense>
       </main>
     </div>
   );

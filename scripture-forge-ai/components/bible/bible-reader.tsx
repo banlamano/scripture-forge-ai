@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   BookOpen,
@@ -49,14 +50,33 @@ export function BibleReader() {
   const t = useTranslations("bible");
   const tCommon = useTranslations("common");
   const { locale } = useLanguage();
+  const searchParams = useSearchParams();
   
   // Get available translations for the current language
   const availableTranslations = useMemo(() => {
     return BIBLE_TRANSLATIONS[locale] || BIBLE_TRANSLATIONS["en"];
   }, [locale]);
   
-  const [selectedBook, setSelectedBook] = useState("John");
-  const [selectedChapter, setSelectedChapter] = useState(3);
+  // Initialize book and chapter from URL parameters, with defaults
+  const [selectedBook, setSelectedBook] = useState(() => {
+    const bookFromUrl = searchParams.get("book");
+    // Validate that the book exists in BIBLE_BOOKS
+    if (bookFromUrl && (BIBLE_BOOKS as readonly string[]).includes(bookFromUrl)) {
+      return bookFromUrl;
+    }
+    return "John";
+  });
+  
+  const [selectedChapter, setSelectedChapter] = useState(() => {
+    const chapterFromUrl = searchParams.get("chapter");
+    if (chapterFromUrl) {
+      const chapter = parseInt(chapterFromUrl, 10);
+      if (!isNaN(chapter) && chapter >= 1) {
+        return chapter;
+      }
+    }
+    return 3;
+  });
   // Use the first available translation for the current language as default
   const [selectedBibleId, setSelectedBibleId] = useState<string>(() => {
     const translations = BIBLE_TRANSLATIONS[locale] || BIBLE_TRANSLATIONS["en"];
@@ -82,6 +102,23 @@ export function BibleReader() {
       }
     }
   }, [locale, selectedBibleId]);
+
+  // Update book and chapter when URL parameters change (e.g., from reading plans navigation)
+  useEffect(() => {
+    const bookFromUrl = searchParams.get("book");
+    const chapterFromUrl = searchParams.get("chapter");
+    
+    if (bookFromUrl && (BIBLE_BOOKS as readonly string[]).includes(bookFromUrl)) {
+      setSelectedBook(bookFromUrl);
+    }
+    
+    if (chapterFromUrl) {
+      const chapter = parseInt(chapterFromUrl, 10);
+      if (!isNaN(chapter) && chapter >= 1) {
+        setSelectedChapter(chapter);
+      }
+    }
+  }, [searchParams]);
 
   // Fetch chapter data when book, chapter, translation, or language changes
   useEffect(() => {

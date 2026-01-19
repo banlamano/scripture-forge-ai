@@ -25,6 +25,119 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getDailyReading, type DailyReading } from "@/lib/reading-plans-data";
 
+// Configuration for plan-specific navigation
+interface PlanNavConfig {
+  buttonLabelKey: string;  // Translation key for button label
+  defaultBook: string;     // Default/primary book to open (used for book-specific buttons)
+  defaultChapter: number;  // Default chapter to open for new users
+  alwaysUseDefaultBook: boolean; // If true, always navigate to defaultBook regardless of schedule
+}
+
+// Map of plan IDs to their navigation configurations
+const planNavConfigs: Record<string, PlanNavConfig> = {
+  "bible-in-year": {
+    buttonLabelKey: "openGenesis",
+    defaultBook: "Genesis",
+    defaultChapter: 1,
+    alwaysUseDefaultBook: false, // Use schedule's first reading
+  },
+  "gospels-30": {
+    buttonLabelKey: "openGospel",
+    defaultBook: "Matthew",
+    defaultChapter: 1,
+    alwaysUseDefaultBook: false, // Use schedule (Matthew, Mark, Luke, or John based on progress)
+  },
+  "psalms-month": {
+    buttonLabelKey: "openPsalms",
+    defaultBook: "Psalms",
+    defaultChapter: 1,
+    alwaysUseDefaultBook: true, // Always open Psalms
+  },
+  "proverbs-31": {
+    buttonLabelKey: "openProverbs",
+    defaultBook: "Proverbs",
+    defaultChapter: 1,
+    alwaysUseDefaultBook: true, // Always open Proverbs
+  },
+  "romans-deep": {
+    buttonLabelKey: "openRomans",
+    defaultBook: "Romans",
+    defaultChapter: 1,
+    alwaysUseDefaultBook: true, // Always open Romans
+  },
+  "genesis-exodus": {
+    buttonLabelKey: "openGenesis",
+    defaultBook: "Genesis",
+    defaultChapter: 1,
+    alwaysUseDefaultBook: false, // Use schedule (Genesis or Exodus based on progress)
+  },
+  "acts-21": {
+    buttonLabelKey: "openActs",
+    defaultBook: "Acts",
+    defaultChapter: 1,
+    alwaysUseDefaultBook: true, // Always open Acts
+  },
+  "sermon-mount": {
+    buttonLabelKey: "openMatthew",
+    defaultBook: "Matthew",
+    defaultChapter: 5,
+    alwaysUseDefaultBook: true, // Always open Matthew
+  },
+};
+
+// Get the navigation URL for a plan based on user progress
+// For book-specific plans (Psalms, Proverbs, Romans, Acts, Matthew), always open that specific book
+function getPlanNavigationUrl(planId: string, currentDay: number): string {
+  const config = planNavConfigs[planId];
+  
+  // Try to get today's reading from the schedule
+  const todaysReading = getDailyReading(planId, currentDay);
+  
+  if (todaysReading && todaysReading.readings.length > 0 && config) {
+    // For plans that should always open a specific book (like "Open Psalms", "Open Proverbs", etc.)
+    if (config.alwaysUseDefaultBook) {
+      // Find the reading that matches the plan's primary book
+      const matchingReading = todaysReading.readings.find(r => r.book === config.defaultBook);
+      
+      if (matchingReading) {
+        // Extract chapter number (handle formats like "1", "1-3", "1:1-7")
+        const chapterMatch = matchingReading.chapters.match(/^(\d+)/);
+        const chapter = chapterMatch ? chapterMatch[1] : "1";
+        return `/bible?book=${encodeURIComponent(config.defaultBook)}&chapter=${chapter}`;
+      }
+      
+      // If no matching reading found, use default book with current day as chapter (for simple plans)
+      const chapter = Math.min(currentDay, 150); // Cap at 150 for Psalms
+      return `/bible?book=${encodeURIComponent(config.defaultBook)}&chapter=${chapter}`;
+    }
+    
+    // For plans without alwaysUseDefaultBook, use the first reading from the schedule
+    const firstReading = todaysReading.readings[0];
+    const chapterMatch = firstReading.chapters.match(/^(\d+)/);
+    const chapter = chapterMatch ? chapterMatch[1] : "1";
+    return `/bible?book=${encodeURIComponent(firstReading.book)}&chapter=${chapter}`;
+  }
+  
+  // Fallback to default config if no schedule data
+  if (config) {
+    // For book-specific plans without schedule, use current day as chapter
+    if (config.alwaysUseDefaultBook) {
+      const chapter = Math.min(currentDay, 150); // Use day number as chapter
+      return `/bible?book=${encodeURIComponent(config.defaultBook)}&chapter=${chapter}`;
+    }
+    return `/bible?book=${encodeURIComponent(config.defaultBook)}&chapter=${config.defaultChapter}`;
+  }
+  
+  // Ultimate fallback
+  return "/bible";
+}
+
+// Get the button label key for a plan
+function getPlanButtonLabelKey(planId: string): string {
+  const config = planNavConfigs[planId];
+  return config?.buttonLabelKey || "openBible";
+}
+
 interface ReadingPlan {
   id: string;
   titleKey: string;
@@ -380,10 +493,10 @@ export default function ReadingPlansPage() {
                         <CheckCircle2 className="w-4 h-4" />
                         {t("completeDay")} {currentActivePlan.currentDay}
                       </Button>
-                      <Link href="/bible">
+                      <Link href={getPlanNavigationUrl(currentActivePlan.planId, currentActivePlan.currentDay)}>
                         <Button variant="outline" className="gap-2">
                           <BookOpen className="w-4 h-4" />
-                          {t("openBible")}
+                          {t(getPlanButtonLabelKey(currentActivePlan.planId))}
                         </Button>
                       </Link>
                       <div className="flex gap-2 ml-auto">
