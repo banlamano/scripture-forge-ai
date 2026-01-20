@@ -744,15 +744,28 @@
           "articles": [
             {
               "title": "Creating your account",
-              "slug": "creating-account"
+              "slug": "creating-account",
+              "content": "Learn how to create your ScriptureForge AI account using email or Google Sign-In. The process takes less than a minute and gives you access to all features."
             },
             {
               "title": "Navigating the interface",
-              "slug": "navigating-interface"
+              "slug": "navigating-interface",
+              "content": "Discover the main sections of ScriptureForge AI including the Bible reader, AI chat, devotionals, prayer journal, and reading plans."
             },
             {
               "title": "Setting up your preferences",
-              "slug": "setup-preferences"
+              "slug": "setup-preferences",
+              "content": "Customize your experience by setting your preferred Bible translation, theme (light/dark mode), language, and notification settings."
+            },
+            {
+              "title": "Quick start guide",
+              "slug": "quick-start",
+              "content": "Get started in 5 minutes with this quick guide covering the essential features to begin your Bible study journey."
+            },
+            {
+              "title": "Mobile and desktop access",
+              "slug": "mobile-desktop",
+              "content": "Access ScriptureForge AI from any device. Learn about our responsive web app and how to install it on your home screen."
             }
           ]
         },
@@ -763,15 +776,33 @@
           "articles": [
             {
               "title": "Choosing Bible translations",
-              "slug": "bible-translations"
+              "slug": "bible-translations",
+              "content": "Browse and select from multiple Bible translations including KJV, NIV, ESV, NASB, and many more. Compare verses across translations easily."
             },
             {
               "title": "Using bookmarks and highlights",
-              "slug": "bookmarks-highlights"
+              "slug": "bookmarks-highlights",
+              "content": "Save your favorite verses with bookmarks and use color-coded highlights to mark important passages for future reference."
             },
             {
               "title": "Following reading plans",
-              "slug": "reading-plans"
+              "slug": "reading-plans",
+              "content": "Choose from various reading plans including chronological, thematic, and book-by-book options to guide your daily Bible reading."
+            },
+            {
+              "title": "Navigating books and chapters",
+              "slug": "navigation",
+              "content": "Quickly jump to any book, chapter, or verse using the navigation menu, search bar, or keyboard shortcuts."
+            },
+            {
+              "title": "Offline Bible reading",
+              "slug": "offline-reading",
+              "content": "Download Bible translations for offline access. Read Scripture anywhere, even without an internet connection."
+            },
+            {
+              "title": "Verse of the day",
+              "slug": "verse-of-day",
+              "content": "Start each day with an inspiring verse. Customize your verse of the day preferences and share verses with others."
             }
           ]
         },
@@ -782,15 +813,33 @@
           "articles": [
             {
               "title": "Asking effective questions",
-              "slug": "effective-questions"
+              "slug": "effective-questions",
+              "content": "Learn how to phrase questions to get the most helpful responses. Include context, be specific, and ask follow-up questions for deeper understanding."
             },
             {
               "title": "Understanding AI responses",
-              "slug": "ai-responses"
+              "slug": "ai-responses",
+              "content": "AI responses are based on biblical scholarship but should be verified with trusted sources. Learn how to interpret and apply AI insights wisely."
             },
             {
               "title": "Chat history and context",
-              "slug": "chat-history"
+              "slug": "chat-history",
+              "content": "Your chat history is saved for easy reference. The AI remembers context within a conversation to provide more relevant responses."
+            },
+            {
+              "title": "Exploring biblical topics",
+              "slug": "biblical-topics",
+              "content": "Ask about theological concepts, historical context, word meanings, cross-references, and practical applications of Scripture."
+            },
+            {
+              "title": "Getting verse explanations",
+              "slug": "verse-explanations",
+              "content": "Select any verse and ask the AI to explain its meaning, context, and significance in the broader biblical narrative."
+            },
+            {
+              "title": "Devotional insights",
+              "slug": "devotional-insights",
+              "content": "Request personalized devotional thoughts, prayer prompts, and application questions based on your current reading."
             }
           ]
         },
@@ -801,34 +850,33 @@
           "articles": [
             {
               "title": "Updating your profile",
-              "slug": "update-profile"
+              "slug": "update-profile",
+              "content": "Edit your display name, profile picture, and bio. Your profile helps personalize your ScriptureForge AI experience."
             },
             {
               "title": "Changing your password",
-              "slug": "change-password"
+              "slug": "change-password",
+              "content": "Update your password regularly for security. Use a strong, unique password with a mix of letters, numbers, and symbols."
+            },
+            {
+              "title": "Managing email preferences",
+              "slug": "email-preferences",
+              "content": "Control which emails you receive including daily devotionals, reading reminders, and product updates."
+            },
+            {
+              "title": "Language and region settings",
+              "slug": "language-region",
+              "content": "Change your interface language and date/time format preferences to match your location."
+            },
+            {
+              "title": "Connected accounts",
+              "slug": "connected-accounts",
+              "content": "Manage your Google Sign-In connection and other linked accounts for easy access."
             },
             {
               "title": "Deleting your account",
-              "slug": "delete-account"
-            }
-          ]
-        },
-        {
-          "id": "subscription",
-          "title": "Subscription & Billing",
-          "description": "Manage your subscription and payments",
-          "articles": [
-            {
-              "title": "Subscription plans",
-              "slug": "subscription-plans"
-            },
-            {
-              "title": "Payment methods",
-              "slug": "payment-methods"
-            },
-            {
-              "title": "Canceling your subscription",
-              "slug": "cancel-subscription"
+              "slug": "delete-account",
+              "content": "If you wish to delete your account, you can do so from settings. This will permanently remove all your data."
             }
           ]
         },
@@ -839,15 +887,33 @@
           "articles": [
             {
               "title": "Data privacy overview",
-              "slug": "data-privacy"
+              "slug": "data-privacy",
+              "content": "Learn how we collect, use, and protect your personal information. We never sell your data to third parties."
             },
             {
               "title": "Two-factor authentication",
-              "slug": "two-factor-auth"
+              "slug": "two-factor-auth",
+              "content": "Add an extra layer of security to your account by enabling two-factor authentication (2FA) with your phone."
             },
             {
               "title": "Exporting your data",
-              "slug": "export-data"
+              "slug": "export-data",
+              "content": "Download a copy of all your data including bookmarks, highlights, notes, and chat history at any time."
+            },
+            {
+              "title": "Managing cookies",
+              "slug": "managing-cookies",
+              "content": "Understand how we use cookies and how to manage your cookie preferences in your browser settings."
+            },
+            {
+              "title": "Secure connection",
+              "slug": "secure-connection",
+              "content": "All data is transmitted securely using HTTPS encryption. Your conversations and personal data are protected."
+            },
+            {
+              "title": "Reporting security issues",
+              "slug": "security-issues",
+              "content": "If you discover a security vulnerability, please report it to security@scriptureforge.ai immediately."
             }
           ]
         }
@@ -855,7 +921,7 @@
       "faqs": [
         {
           "question": "Is ScriptureForge AI free to use?",
-          "answer": "Yes! ScriptureForge AI offers a free tier with basic features. Premium features are available through our subscription plans."
+          "answer": "Yes! ScriptureForge AI is completely free to use with all features available to everyone."
         },
         {
           "question": "Which Bible translations are available?",
@@ -872,6 +938,10 @@
         {
           "question": "How do I report an issue?",
           "answer": "You can report issues through our Contact Support page or email us at support@scriptureforge.ai."
+        },
+        {
+          "question": "Is my data private and secure?",
+          "answer": "Absolutely. We use industry-standard encryption and never sell your personal data. See our Privacy Policy for details."
         }
       ]
     },

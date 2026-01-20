@@ -744,15 +744,28 @@
           "articles": [
             {
               "title": "创建您的账户",
-              "slug": "creating-account"
+              "slug": "creating-account",
+              "content": "了解如何使用电子邮件或Google登录创建ScriptureForge AI账户。"
             },
             {
               "title": "导航界面",
-              "slug": "navigating-interface"
+              "slug": "navigating-interface",
+              "content": "发现主要部分，包括圣经阅读器、AI聊天、灵修和阅读计划。"
             },
             {
               "title": "设置偏好",
-              "slug": "setup-preferences"
+              "slug": "setup-preferences",
+              "content": "通过设置首选圣经译本、主题和语言来个性化您的体验。"
+            },
+            {
+              "title": "快速入门指南",
+              "slug": "quick-start",
+              "content": "通过这个关于基本功能的快速指南，5分钟内开始使用。"
+            },
+            {
+              "title": "移动和桌面访问",
+              "slug": "mobile-desktop",
+              "content": "从任何设备访问ScriptureForge AI。"
             }
           ]
         },
@@ -763,15 +776,33 @@
           "articles": [
             {
               "title": "选择圣经译本",
-              "slug": "bible-translations"
+              "slug": "bible-translations",
+              "content": "浏览并选择多种译本。轻松比较经文。"
             },
             {
               "title": "书签和高亮",
-              "slug": "bookmarks-highlights"
+              "slug": "bookmarks-highlights",
+              "content": "用书签和彩色高亮保存您喜爱的经文。"
             },
             {
               "title": "阅读计划",
-              "slug": "reading-plans"
+              "slug": "reading-plans",
+              "content": "从各种阅读计划中选择，指导您的每日圣经阅读。"
+            },
+            {
+              "title": "导航书卷和章节",
+              "slug": "navigation",
+              "content": "快速跳转到任何书卷、章节或经文。"
+            },
+            {
+              "title": "离线圣经阅读",
+              "slug": "offline-reading",
+              "content": "下载译本以供离线访问。"
+            },
+            {
+              "title": "每日经文",
+              "slug": "verse-of-day",
+              "content": "每天以一节鼓舞人心的经文开始。"
             }
           ]
         },
@@ -782,15 +813,33 @@
           "articles": [
             {
               "title": "提出有效问题",
-              "slug": "effective-questions"
+              "slug": "effective-questions",
+              "content": "学习如何提问以获得最有帮助的回答。"
             },
             {
               "title": "理解AI回复",
-              "slug": "ai-responses"
+              "slug": "ai-responses",
+              "content": "AI回复基于圣经研究，但应与可信来源核实。"
             },
             {
               "title": "聊天历史",
-              "slug": "chat-history"
+              "slug": "chat-history",
+              "content": "您的聊天历史会保存以便参考。"
+            },
+            {
+              "title": "探索圣经主题",
+              "slug": "biblical-topics",
+              "content": "询问神学概念和历史背景。"
+            },
+            {
+              "title": "经文解释",
+              "slug": "verse-explanations",
+              "content": "选择任何经文，让AI解释其含义。"
+            },
+            {
+              "title": "灵修见解",
+              "slug": "devotional-insights",
+              "content": "请求基于您阅读的个性化灵修思考。"
             }
           ]
         },
@@ -801,34 +850,33 @@
           "articles": [
             {
               "title": "更新个人资料",
-              "slug": "update-profile"
+              "slug": "update-profile",
+              "content": "编辑您的姓名、头像和简介。"
             },
             {
               "title": "更改密码",
-              "slug": "change-password"
+              "slug": "change-password",
+              "content": "定期更新密码以确保安全。"
+            },
+            {
+              "title": "邮件偏好",
+              "slug": "email-preferences",
+              "content": "控制您接收哪些邮件。"
+            },
+            {
+              "title": "语言设置",
+              "slug": "language-region",
+              "content": "更改界面语言。"
+            },
+            {
+              "title": "已连接的账户",
+              "slug": "connected-accounts",
+              "content": "管理您的Google登录连接。"
             },
             {
               "title": "删除账户",
-              "slug": "delete-account"
-            }
-          ]
-        },
-        {
-          "id": "subscription",
-          "title": "订阅与付款",
-          "description": "管理您的订阅",
-          "articles": [
-            {
-              "title": "订阅计划",
-              "slug": "subscription-plans"
-            },
-            {
-              "title": "付款方式",
-              "slug": "payment-methods"
-            },
-            {
-              "title": "取消订阅",
-              "slug": "cancel-subscription"
+              "slug": "delete-account",
+              "content": "如果您想删除账户，可以在设置中操作。"
             }
           ]
         },
@@ -839,15 +887,33 @@
           "articles": [
             {
               "title": "数据隐私概述",
-              "slug": "data-privacy"
+              "slug": "data-privacy",
+              "content": "了解我们如何收集、使用和保护您的信息。"
             },
             {
               "title": "双因素认证",
-              "slug": "two-factor-auth"
+              "slug": "two-factor-auth",
+              "content": "为您的账户添加额外的安全层。"
             },
             {
               "title": "导出数据",
-              "slug": "export-data"
+              "slug": "export-data",
+              "content": "随时下载您所有数据的副本。"
+            },
+            {
+              "title": "管理Cookie",
+              "slug": "managing-cookies",
+              "content": "了解我们如何使用Cookie。"
+            },
+            {
+              "title": "安全连接",
+              "slug": "secure-connection",
+              "content": "所有数据都使用HTTPS加密安全传输。"
+            },
+            {
+              "title": "报告安全问题",
+              "slug": "security-issues",
+              "content": "请将漏洞报告发送至security@scriptureforge.ai。"
             }
           ]
         }
@@ -855,23 +921,27 @@
       "faqs": [
         {
           "question": "ScriptureForge AI是免费的吗？",
-          "answer": "是的！ScriptureForge AI提供基本功能的免费版本。高级功能可通过我们的订阅计划获得。"
+          "answer": "是的！ScriptureForge AI完全免费，所有功能对所有人开放。"
         },
         {
           "question": "有哪些圣经译本可用？",
-          "answer": "我们提供多种译本，包括和合本、新译本等多种选择。"
+          "answer": "我们提供多种译本，包括和合本、新译本等。"
         },
         {
           "question": "AI的回答准确吗？",
-          "answer": "我们的AI基于圣经研究进行训练。我们建议用可靠来源验证重要的解释。"
+          "answer": "我们的AI基于圣经研究训练。我们建议验证重要的解释。"
         },
         {
           "question": "我可以离线使用ScriptureForge AI吗？",
-          "answer": "可以！您可以下载译本进行离线阅读。某些AI功能需要互联网连接。"
+          "answer": "可以！您可以下载译本进行离线阅读。"
         },
         {
           "question": "如何报告问题？",
-          "answer": "您可以通过我们的支持页面或发送邮件至support@scriptureforge.ai报告问题。"
+          "answer": "您可以通过支持页面或电子邮件报告问题。"
+        },
+        {
+          "question": "我的数据是否私密和安全？",
+          "answer": "绝对是的。我们使用行业标准加密，绝不出售您的数据。"
         }
       ]
     },

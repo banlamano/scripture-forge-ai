@@ -744,15 +744,28 @@
           "articles": [
             {
               "title": "Crear tu cuenta",
-              "slug": "creating-account"
+              "slug": "creating-account",
+              "content": "Aprende a crear tu cuenta de ScriptureForge AI usando correo electrónico o Google Sign-In. El proceso toma menos de un minuto."
             },
             {
               "title": "Navegar la interfaz",
-              "slug": "navigating-interface"
+              "slug": "navigating-interface",
+              "content": "Descubre las secciones principales incluyendo el lector de la Biblia, chat de IA, devocionales, diario de oración y planes de lectura."
             },
             {
               "title": "Configurar tus preferencias",
-              "slug": "setup-preferences"
+              "slug": "setup-preferences",
+              "content": "Personaliza tu experiencia configurando tu traducción bíblica preferida, tema, idioma y notificaciones."
+            },
+            {
+              "title": "Guía de inicio rápido",
+              "slug": "quick-start",
+              "content": "Comienza en 5 minutos con esta guía rápida que cubre las funciones esenciales."
+            },
+            {
+              "title": "Acceso móvil y escritorio",
+              "slug": "mobile-desktop",
+              "content": "Accede a ScriptureForge AI desde cualquier dispositivo. Aprende sobre nuestra aplicación web responsiva."
             }
           ]
         },
@@ -763,15 +776,33 @@
           "articles": [
             {
               "title": "Elegir traducciones bíblicas",
-              "slug": "bible-translations"
+              "slug": "bible-translations",
+              "content": "Navega y selecciona entre múltiples traducciones incluyendo RV, NVI y más. Compara versículos fácilmente."
             },
             {
               "title": "Usar marcadores y resaltados",
-              "slug": "bookmarks-highlights"
+              "slug": "bookmarks-highlights",
+              "content": "Guarda tus versículos favoritos con marcadores y usa resaltados de colores para marcar pasajes importantes."
             },
             {
               "title": "Seguir planes de lectura",
-              "slug": "reading-plans"
+              "slug": "reading-plans",
+              "content": "Elige entre varios planes de lectura para guiar tu lectura bíblica diaria."
+            },
+            {
+              "title": "Navegar libros y capítulos",
+              "slug": "navigation",
+              "content": "Salta rápidamente a cualquier libro, capítulo o versículo usando el menú de navegación."
+            },
+            {
+              "title": "Lectura bíblica sin conexión",
+              "slug": "offline-reading",
+              "content": "Descarga traducciones bíblicas para acceso sin conexión."
+            },
+            {
+              "title": "Versículo del día",
+              "slug": "verse-of-day",
+              "content": "Comienza cada día con un versículo inspirador."
             }
           ]
         },
@@ -782,15 +813,33 @@
           "articles": [
             {
               "title": "Hacer preguntas efectivas",
-              "slug": "effective-questions"
+              "slug": "effective-questions",
+              "content": "Aprende a formular preguntas para obtener las respuestas más útiles."
             },
             {
               "title": "Entender las respuestas de IA",
-              "slug": "ai-responses"
+              "slug": "ai-responses",
+              "content": "Las respuestas de IA se basan en estudios bíblicos pero deben verificarse con fuentes confiables."
             },
             {
               "title": "Historial y contexto del chat",
-              "slug": "chat-history"
+              "slug": "chat-history",
+              "content": "Tu historial de chat se guarda para fácil referencia."
+            },
+            {
+              "title": "Explorar temas bíblicos",
+              "slug": "biblical-topics",
+              "content": "Pregunta sobre conceptos teológicos, contexto histórico y aplicaciones prácticas."
+            },
+            {
+              "title": "Obtener explicaciones de versículos",
+              "slug": "verse-explanations",
+              "content": "Selecciona cualquier versículo y pide a la IA que explique su significado."
+            },
+            {
+              "title": "Insights devocionales",
+              "slug": "devotional-insights",
+              "content": "Solicita pensamientos devocionales personalizados basados en tu lectura."
             }
           ]
         },
@@ -801,34 +850,33 @@
           "articles": [
             {
               "title": "Actualizar tu perfil",
-              "slug": "update-profile"
+              "slug": "update-profile",
+              "content": "Edita tu nombre, foto de perfil y biografía."
             },
             {
               "title": "Cambiar tu contraseña",
-              "slug": "change-password"
+              "slug": "change-password",
+              "content": "Actualiza tu contraseña regularmente para seguridad."
+            },
+            {
+              "title": "Gestionar preferencias de correo",
+              "slug": "email-preferences",
+              "content": "Controla qué correos recibes incluyendo devocionales diarios y recordatorios."
+            },
+            {
+              "title": "Configuración de idioma y región",
+              "slug": "language-region",
+              "content": "Cambia el idioma de la interfaz y preferencias de formato."
+            },
+            {
+              "title": "Cuentas conectadas",
+              "slug": "connected-accounts",
+              "content": "Gestiona tu conexión de Google Sign-In."
             },
             {
               "title": "Eliminar tu cuenta",
-              "slug": "delete-account"
-            }
-          ]
-        },
-        {
-          "id": "subscription",
-          "title": "Suscripción y Facturación",
-          "description": "Administra tu suscripción y pagos",
-          "articles": [
-            {
-              "title": "Planes de suscripción",
-              "slug": "subscription-plans"
-            },
-            {
-              "title": "Métodos de pago",
-              "slug": "payment-methods"
-            },
-            {
-              "title": "Cancelar tu suscripción",
-              "slug": "cancel-subscription"
+              "slug": "delete-account",
+              "content": "Si deseas eliminar tu cuenta, puedes hacerlo desde configuración."
             }
           ]
         },
@@ -839,15 +887,33 @@
           "articles": [
             {
               "title": "Resumen de privacidad de datos",
-              "slug": "data-privacy"
+              "slug": "data-privacy",
+              "content": "Aprende cómo recopilamos, usamos y protegemos tu información personal."
             },
             {
               "title": "Autenticación de dos factores",
-              "slug": "two-factor-auth"
+              "slug": "two-factor-auth",
+              "content": "Añade una capa extra de seguridad a tu cuenta."
             },
             {
               "title": "Exportar tus datos",
-              "slug": "export-data"
+              "slug": "export-data",
+              "content": "Descarga una copia de todos tus datos en cualquier momento."
+            },
+            {
+              "title": "Gestionar cookies",
+              "slug": "managing-cookies",
+              "content": "Entiende cómo usamos cookies y gestiona tus preferencias."
+            },
+            {
+              "title": "Conexión segura",
+              "slug": "secure-connection",
+              "content": "Todos los datos se transmiten de forma segura usando encriptación HTTPS."
+            },
+            {
+              "title": "Reportar problemas de seguridad",
+              "slug": "security-issues",
+              "content": "Si descubres una vulnerabilidad, repórtala a security@scriptureforge.ai."
             }
           ]
         }
@@ -855,23 +921,27 @@
       "faqs": [
         {
           "question": "¿Es gratis usar ScriptureForge AI?",
-          "answer": "¡Sí! ScriptureForge AI ofrece un nivel gratuito con funciones básicas. Las funciones premium están disponibles a través de nuestros planes de suscripción."
+          "answer": "¡Sí! ScriptureForge AI es completamente gratis con todas las funciones disponibles para todos."
         },
         {
           "question": "¿Qué traducciones bíblicas están disponibles?",
-          "answer": "Ofrecemos múltiples traducciones incluyendo RV, NVI, y muchas más. Puedes cambiar entre traducciones en cualquier momento."
+          "answer": "Ofrecemos múltiples traducciones incluyendo RV, NVI y muchas más. Puedes cambiar entre traducciones en cualquier momento."
         },
         {
           "question": "¿Qué tan precisas son las respuestas de IA?",
-          "answer": "Nuestra IA está entrenada en estudios bíblicos y busca proporcionar insights útiles. Sin embargo, siempre recomendamos verificar interpretaciones importantes con fuentes confiables y líderes espirituales."
+          "answer": "Nuestra IA está entrenada en estudios bíblicos. Siempre recomendamos verificar interpretaciones importantes con fuentes confiables."
         },
         {
           "question": "¿Puedo usar ScriptureForge AI sin conexión?",
-          "answer": "¡Sí! Puedes descargar traducciones bíblicas para lectura sin conexión. Algunas funciones de IA requieren conexión a internet."
+          "answer": "¡Sí! Puedes descargar traducciones bíblicas para lectura sin conexión."
         },
         {
           "question": "¿Cómo reporto un problema?",
-          "answer": "Puedes reportar problemas a través de nuestra página de Contactar Soporte o enviarnos un email a support@scriptureforge.ai."
+          "answer": "Puedes reportar problemas a través de nuestra página de soporte o enviarnos un email a support@scriptureforge.ai."
+        },
+        {
+          "question": "¿Mis datos son privados y seguros?",
+          "answer": "Absolutamente. Usamos encriptación estándar de la industria y nunca vendemos tus datos personales."
         }
       ]
     },

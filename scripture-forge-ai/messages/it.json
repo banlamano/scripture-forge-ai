@@ -744,15 +744,28 @@
           "articles": [
             {
               "title": "Creare il tuo account",
-              "slug": "creating-account"
+              "slug": "creating-account",
+              "content": "Scopri come creare il tuo account ScriptureForge AI usando email o Google Sign-In."
             },
             {
               "title": "Navigare l'interfaccia",
-              "slug": "navigating-interface"
+              "slug": "navigating-interface",
+              "content": "Scopri le sezioni principali inclusi lettore biblico, chat IA, devozionali e piani di lettura."
             },
             {
               "title": "Configurare le preferenze",
-              "slug": "setup-preferences"
+              "slug": "setup-preferences",
+              "content": "Personalizza la tua esperienza impostando la traduzione preferita, il tema e la lingua."
+            },
+            {
+              "title": "Guida rapida",
+              "slug": "quick-start",
+              "content": "Inizia in 5 minuti con questa guida rapida sulle funzionalità essenziali."
+            },
+            {
+              "title": "Accesso mobile e desktop",
+              "slug": "mobile-desktop",
+              "content": "Accedi a ScriptureForge AI da qualsiasi dispositivo."
             }
           ]
         },
@@ -763,15 +776,33 @@
           "articles": [
             {
               "title": "Scegliere le traduzioni",
-              "slug": "bible-translations"
+              "slug": "bible-translations",
+              "content": "Sfoglia e seleziona tra diverse traduzioni. Confronta i versetti facilmente."
             },
             {
               "title": "Segnalibri e evidenziazioni",
-              "slug": "bookmarks-highlights"
+              "slug": "bookmarks-highlights",
+              "content": "Salva i tuoi versetti preferiti con segnalibri ed evidenziazioni colorate."
             },
             {
               "title": "Piani di lettura",
-              "slug": "reading-plans"
+              "slug": "reading-plans",
+              "content": "Scegli tra vari piani di lettura per guidare la tua lettura quotidiana."
+            },
+            {
+              "title": "Navigare libri e capitoli",
+              "slug": "navigation",
+              "content": "Vai rapidamente a qualsiasi libro, capitolo o versetto."
+            },
+            {
+              "title": "Lettura biblica offline",
+              "slug": "offline-reading",
+              "content": "Scarica traduzioni per l'accesso offline."
+            },
+            {
+              "title": "Versetto del giorno",
+              "slug": "verse-of-day",
+              "content": "Inizia ogni giorno con un versetto ispiratore."
             }
           ]
         },
@@ -782,15 +813,33 @@
           "articles": [
             {
               "title": "Fare domande efficaci",
-              "slug": "effective-questions"
+              "slug": "effective-questions",
+              "content": "Impara a formulare domande per ottenere le risposte più utili."
             },
             {
               "title": "Capire le risposte IA",
-              "slug": "ai-responses"
+              "slug": "ai-responses",
+              "content": "Le risposte IA sono basate su studi biblici ma devono essere verificate."
             },
             {
               "title": "Cronologia chat",
-              "slug": "chat-history"
+              "slug": "chat-history",
+              "content": "La cronologia chat è salvata per facile riferimento."
+            },
+            {
+              "title": "Esplorare temi biblici",
+              "slug": "biblical-topics",
+              "content": "Chiedi di concetti teologici e contesto storico."
+            },
+            {
+              "title": "Spiegazioni dei versetti",
+              "slug": "verse-explanations",
+              "content": "Seleziona qualsiasi versetto e chiedi all'IA di spiegarne il significato."
+            },
+            {
+              "title": "Insight devozionali",
+              "slug": "devotional-insights",
+              "content": "Richiedi pensieri devozionali personalizzati."
             }
           ]
         },
@@ -801,34 +850,33 @@
           "articles": [
             {
               "title": "Aggiornare il profilo",
-              "slug": "update-profile"
+              "slug": "update-profile",
+              "content": "Modifica il tuo nome, foto profilo e bio."
             },
             {
               "title": "Cambiare password",
-              "slug": "change-password"
+              "slug": "change-password",
+              "content": "Aggiorna la password regolarmente per sicurezza."
+            },
+            {
+              "title": "Preferenze email",
+              "slug": "email-preferences",
+              "content": "Controlla quali email ricevi."
+            },
+            {
+              "title": "Impostazioni lingua",
+              "slug": "language-region",
+              "content": "Cambia la lingua dell'interfaccia."
+            },
+            {
+              "title": "Account collegati",
+              "slug": "connected-accounts",
+              "content": "Gestisci la connessione Google Sign-In."
             },
             {
               "title": "Eliminare account",
-              "slug": "delete-account"
-            }
-          ]
-        },
-        {
-          "id": "subscription",
-          "title": "Abbonamento e Pagamenti",
-          "description": "Gestisci il tuo abbonamento",
-          "articles": [
-            {
-              "title": "Piani di abbonamento",
-              "slug": "subscription-plans"
-            },
-            {
-              "title": "Metodi di pagamento",
-              "slug": "payment-methods"
-            },
-            {
-              "title": "Annullare abbonamento",
-              "slug": "cancel-subscription"
+              "slug": "delete-account",
+              "content": "Se desideri eliminare il tuo account, puoi farlo dalle impostazioni."
             }
           ]
         },
@@ -839,15 +887,33 @@
           "articles": [
             {
               "title": "Panoramica privacy",
-              "slug": "data-privacy"
+              "slug": "data-privacy",
+              "content": "Scopri come raccogliamo, usiamo e proteggiamo le tue informazioni."
             },
             {
               "title": "Autenticazione a due fattori",
-              "slug": "two-factor-auth"
+              "slug": "two-factor-auth",
+              "content": "Aggiungi un livello extra di sicurezza al tuo account."
             },
             {
               "title": "Esportare i dati",
-              "slug": "export-data"
+              "slug": "export-data",
+              "content": "Scarica una copia di tutti i tuoi dati in qualsiasi momento."
+            },
+            {
+              "title": "Gestire i cookie",
+              "slug": "managing-cookies",
+              "content": "Comprendi come usiamo i cookie."
+            },
+            {
+              "title": "Connessione sicura",
+              "slug": "secure-connection",
+              "content": "Tutti i dati sono trasmessi in modo sicuro con crittografia HTTPS."
+            },
+            {
+              "title": "Segnalare problemi di sicurezza",
+              "slug": "security-issues",
+              "content": "Segnala vulnerabilità a security@scriptureforge.ai."
             }
           ]
         }
@@ -855,7 +921,7 @@
       "faqs": [
         {
           "question": "ScriptureForge AI è gratuito?",
-          "answer": "Sì! ScriptureForge AI offre un piano gratuito con funzionalità di base. Le funzionalità premium sono disponibili tramite i nostri piani di abbonamento."
+          "answer": "Sì! ScriptureForge AI è completamente gratuito con tutte le funzionalità disponibili per tutti."
         },
         {
           "question": "Quali traduzioni bibliche sono disponibili?",
@@ -863,15 +929,19 @@
         },
         {
           "question": "Le risposte dell'IA sono accurate?",
-          "answer": "La nostra IA è addestrata su studi biblici. Raccomandiamo di verificare interpretazioni importanti con fonti affidabili."
+          "answer": "La nostra IA è addestrata su studi biblici. Raccomandiamo di verificare interpretazioni importanti."
         },
         {
           "question": "Posso usare ScriptureForge AI offline?",
-          "answer": "Sì! Puoi scaricare traduzioni per la lettura offline. Alcune funzioni IA richiedono internet."
+          "answer": "Sì! Puoi scaricare traduzioni per la lettura offline."
         },
         {
           "question": "Come segnalo un problema?",
-          "answer": "Puoi segnalare problemi tramite la nostra pagina di supporto o via email a support@scriptureforge.ai."
+          "answer": "Puoi segnalare problemi tramite la nostra pagina di supporto o via email."
+        },
+        {
+          "question": "I miei dati sono privati e sicuri?",
+          "answer": "Assolutamente. Usiamo crittografia standard del settore e non vendiamo mai i tuoi dati."
         }
       ]
     },
