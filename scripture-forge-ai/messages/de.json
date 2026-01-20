@@ -726,5 +726,418 @@
         "Nutzungsbedingungen"
       ]
     }
+  },
+  "resources": {
+    "helpCenter": {
+      "title": "Hilfezentrum",
+      "subtitle": "Finden Sie Antworten auf Ihre Fragen und lernen Sie, ScriptureForge AI optimal zu nutzen",
+      "searchPlaceholder": "Hilfeartikel suchen...",
+      "faqTitle": "Häufig Gestellte Fragen",
+      "contactTitle": "Noch Hilfe benötigt?",
+      "contactDescription": "Unser Support-Team hilft Ihnen gerne weiter.",
+      "contactButton": "Support Kontaktieren",
+      "categories": [
+        {
+          "id": "gettingStarted",
+          "title": "Erste Schritte",
+          "description": "Lernen Sie die Grundlagen von ScriptureForge AI",
+          "articles": [
+            {
+              "title": "Konto erstellen",
+              "slug": "creating-account"
+            },
+            {
+              "title": "Navigation der Oberfläche",
+              "slug": "navigating-interface"
+            },
+            {
+              "title": "Einstellungen konfigurieren",
+              "slug": "setup-preferences"
+            }
+          ]
+        },
+        {
+          "id": "bibleReading",
+          "title": "Bibellesen",
+          "description": "Meistern Sie die Lesefunktionen",
+          "articles": [
+            {
+              "title": "Bibelübersetzungen wählen",
+              "slug": "bible-translations"
+            },
+            {
+              "title": "Lesezeichen und Markierungen",
+              "slug": "bookmarks-highlights"
+            },
+            {
+              "title": "Lesepläne folgen",
+              "slug": "reading-plans"
+            }
+          ]
+        },
+        {
+          "id": "aiChat",
+          "title": "KI-Chat",
+          "description": "Holen Sie das Beste aus der KI",
+          "articles": [
+            {
+              "title": "Effektive Fragen stellen",
+              "slug": "effective-questions"
+            },
+            {
+              "title": "KI-Antworten verstehen",
+              "slug": "ai-responses"
+            },
+            {
+              "title": "Chat-Verlauf",
+              "slug": "chat-history"
+            }
+          ]
+        },
+        {
+          "id": "account",
+          "title": "Kontoeinstellungen",
+          "description": "Verwalten Sie Ihr Konto",
+          "articles": [
+            {
+              "title": "Profil aktualisieren",
+              "slug": "update-profile"
+            },
+            {
+              "title": "Passwort ändern",
+              "slug": "change-password"
+            },
+            {
+              "title": "Konto löschen",
+              "slug": "delete-account"
+            }
+          ]
+        },
+        {
+          "id": "subscription",
+          "title": "Abonnement und Zahlung",
+          "description": "Verwalten Sie Ihr Abonnement",
+          "articles": [
+            {
+              "title": "Abonnementpläne",
+              "slug": "subscription-plans"
+            },
+            {
+              "title": "Zahlungsmethoden",
+              "slug": "payment-methods"
+            },
+            {
+              "title": "Abonnement kündigen",
+              "slug": "cancel-subscription"
+            }
+          ]
+        },
+        {
+          "id": "privacy",
+          "title": "Datenschutz und Sicherheit",
+          "description": "Schützen Sie Ihre Daten",
+          "articles": [
+            {
+              "title": "Datenschutzübersicht",
+              "slug": "data-privacy"
+            },
+            {
+              "title": "Zwei-Faktor-Authentifizierung",
+              "slug": "two-factor-auth"
+            },
+            {
+              "title": "Daten exportieren",
+              "slug": "export-data"
+            }
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Ist ScriptureForge AI kostenlos?",
+          "answer": "Ja! ScriptureForge AI bietet eine kostenlose Stufe mit Grundfunktionen. Premium-Funktionen sind über unsere Abonnementpläne verfügbar."
+        },
+        {
+          "question": "Welche Bibelübersetzungen sind verfügbar?",
+          "answer": "Wir bieten mehrere Übersetzungen an, darunter Luther, Elberfelder und viele mehr."
+        },
+        {
+          "question": "Wie genau sind die KI-Antworten?",
+          "answer": "Unsere KI ist auf biblischen Studien trainiert. Wir empfehlen, wichtige Interpretationen mit vertrauenswürdigen Quellen zu überprüfen."
+        },
+        {
+          "question": "Kann ich ScriptureForge AI offline nutzen?",
+          "answer": "Ja! Sie können Übersetzungen für das Offline-Lesen herunterladen. Einige KI-Funktionen benötigen Internet."
+        },
+        {
+          "question": "Wie melde ich ein Problem?",
+          "answer": "Sie können Probleme über unsere Support-Seite oder per E-Mail an support@scriptureforge.ai melden."
+        }
+      ]
+    },
+    "apiDocs": {
+      "title": "API-Dokumentation",
+      "subtitle": "Integrieren Sie ScriptureForge AI in Ihre Anwendungen mit unserer leistungsstarken REST-API",
+      "features": {
+        "fast": {
+          "title": "Blitzschnell",
+          "description": "Antwortzeiten unter 100ms mit globalem Caching"
+        },
+        "secure": {
+          "title": "Standardmäßig Sicher",
+          "description": "Branchenübliche Verschlüsselung und Authentifizierung"
+        },
+        "global": {
+          "title": "Globales CDN",
+          "description": "Von Standorten weltweit bereitgestellt"
+        }
+      },
+      "auth": {
+        "title": "Authentifizierung",
+        "description": "Alle API-Anfragen erfordern einen API-Schlüssel.",
+        "example": "Authorization: Bearer IHR_API_SCHLUESSEL"
+      },
+      "baseUrl": {
+        "title": "Basis-URL",
+        "description": "Alle API-Endpunkte sind relativ zur Basis-URL:"
+      },
+      "endpointsTitle": "API-Endpunkte",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/bible/versions",
+          "description": "Liste aller verfügbaren Bibelversionen abrufen.",
+          "example": "curl -X GET https://api.scriptureforge.ai/v1/bible/versions"
+        },
+        {
+          "method": "GET",
+          "path": "/bible/verse/{version}/{book}/{chapter}/{verse}",
+          "description": "Einen bestimmten Vers abrufen.",
+          "example": "curl -X GET https://api.scriptureforge.ai/v1/bible/verse/Luther/Johannes/3/16"
+        },
+        {
+          "method": "GET",
+          "path": "/bible/chapter/{version}/{book}/{chapter}",
+          "description": "Ein ganzes Kapitel abrufen.",
+          "example": "curl -X GET https://api.scriptureforge.ai/v1/bible/chapter/Elberfelder/Psalmen/23"
+        },
+        {
+          "method": "POST",
+          "path": "/chat/completions",
+          "description": "Nachricht an die KI senden.",
+          "example": "curl -X POST https://api.scriptureforge.ai/v1/chat/completions"
+        },
+        {
+          "method": "GET",
+          "path": "/search?q={query}",
+          "description": "Verse suchen.",
+          "example": "curl -X GET \"https://api.scriptureforge.ai/v1/search?q=Liebe\""
+        }
+      ],
+      "rateLimits": {
+        "title": "Ratenbegrenzungen",
+        "description": "API-Limits variieren je nach Plan:",
+        "plan": "Plan",
+        "requests": "Anfragen",
+        "burst": "Burst-Limit"
+      },
+      "sdks": {
+        "title": "SDKs und Bibliotheken",
+        "description": "Offizielle SDKs für beliebte Programmiersprachen:",
+        "comingSoon": "Demnächst Verfügbar"
+      }
+    },
+    "community": {
+      "title": "Treten Sie Unserer Community Bei",
+      "subtitle": "Verbinden Sie sich mit Tausenden von Gläubigen, die gemeinsam mit KI die Schrift studieren",
+      "channelsTitle": "Community-Kanäle",
+      "contributeTitle": "Möglichkeiten zu Beitragen",
+      "contributorsTitle": "Top-Mitwirkende",
+      "ctaTitle": "Bereit Beizutreten?",
+      "ctaDescription": "Werden Sie Teil einer wachsenden Gemeinschaft von Gläubigen.",
+      "joinDiscord": "Discord Beitreten",
+      "viewGithub": "GitHub Ansehen",
+      "stats": [
+        {
+          "value": "10K+",
+          "label": "Community-Mitglieder"
+        },
+        {
+          "value": "500+",
+          "label": "Tägliche Diskussionen"
+        },
+        {
+          "value": "50+",
+          "label": "Mitwirkende"
+        },
+        {
+          "value": "24/7",
+          "label": "Aktiver Support"
+        }
+      ],
+      "channels": [
+        {
+          "id": "discord",
+          "title": "Discord-Server",
+          "description": "Echtzeit-Diskussionen und Verbindung mit anderen Nutzern.",
+          "link": "https://discord.gg/scriptureforge",
+          "icon": "discord"
+        },
+        {
+          "id": "github",
+          "title": "GitHub",
+          "description": "Tragen Sie zu unseren Open-Source-Projekten bei.",
+          "link": "https://github.com/scriptureforge",
+          "icon": "github"
+        },
+        {
+          "id": "twitter",
+          "title": "Twitter/X",
+          "description": "Folgen Sie uns für Updates.",
+          "link": "https://twitter.com/scriptureforge",
+          "icon": "twitter"
+        },
+        {
+          "id": "forum",
+          "title": "Community-Forum",
+          "description": "Stellen Sie Fragen und teilen Sie Erkenntnisse.",
+          "link": "https://community.scriptureforge.ai",
+          "icon": "forum"
+        }
+      ],
+      "contribute": {
+        "ideas": {
+          "title": "Ideen Teilen",
+          "description": "Schlagen Sie neue Funktionen vor."
+        },
+        "code": {
+          "title": "Code Beitragen",
+          "description": "Helfen Sie beim Aufbau unserer Open-Source-Tools."
+        },
+        "docs": {
+          "title": "Dokumentation Verbessern",
+          "description": "Machen Sie unsere Dokumentation klarer."
+        }
+      },
+      "contributors": [
+        {
+          "name": "David M.",
+          "role": "Hauptmitwirkender",
+          "avatar": "DM"
+        },
+        {
+          "name": "Sarah L.",
+          "role": "Dokumentation",
+          "avatar": "SL"
+        },
+        {
+          "name": "James K.",
+          "role": "Moderator",
+          "avatar": "JK"
+        },
+        {
+          "name": "Rachel P.",
+          "role": "Übersetzerin",
+          "avatar": "RP"
+        },
+        {
+          "name": "Michael T.",
+          "role": "Bug-Jäger",
+          "avatar": "MT"
+        }
+      ]
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Einblicke in Bibelstudium, KI-Technologie und geistliches Wachstum",
+      "allPosts": "Alle Beiträge",
+      "featured": "Empfohlen",
+      "readMore": "Mehr Lesen",
+      "categories": [
+        {
+          "id": "bible-study",
+          "name": "Bibelstudium"
+        },
+        {
+          "id": "ai-technology",
+          "name": "KI und Technologie"
+        },
+        {
+          "id": "spiritual-growth",
+          "name": "Geistliches Wachstum"
+        },
+        {
+          "id": "tutorials",
+          "name": "Tutorials"
+        },
+        {
+          "id": "news",
+          "name": "Neuigkeiten"
+        }
+      ],
+      "posts": [
+        {
+          "slug": "how-ai-is-transforming-bible-study",
+          "title": "Wie KI das Bibelstudium 2026 Transformiert",
+          "excerpt": "Entdecken Sie, wie künstliche Intelligenz Millionen von Gläubigen hilft, tiefere Einblicke in die Schrift zu gewinnen.",
+          "author": "Dr. Sarah Mitchell",
+          "date": "15. Jan 2026",
+          "readTime": "8 Min. Lesezeit",
+          "category": "ai-technology",
+          "featured": true
+        },
+        {
+          "slug": "5-ways-to-study-bible-effectively",
+          "title": "5 Wege, die Bibel Effektiver zu Studieren",
+          "excerpt": "Praktische Tipps, um mehr aus Ihrer täglichen Bibellesung herauszuholen.",
+          "author": "Pastor James Wilson",
+          "date": "12. Jan 2026",
+          "readTime": "6 Min. Lesezeit",
+          "category": "bible-study"
+        },
+        {
+          "slug": "understanding-biblical-context",
+          "title": "Biblischen Kontext Verstehen: Ein Leitfaden für Anfänger",
+          "excerpt": "Lernen Sie, warum Kontext wichtig ist und wie man Passagen richtig interpretiert.",
+          "author": "Dr. Emily Chen",
+          "date": "10. Jan 2026",
+          "readTime": "10 Min. Lesezeit",
+          "category": "bible-study"
+        },
+        {
+          "slug": "new-features-january-2026",
+          "title": "Neue Funktionen: Januar 2026 Update",
+          "excerpt": "Entdecken Sie die neuesten Funktionen von ScriptureForge AI.",
+          "author": "ScriptureForge Team",
+          "date": "8. Jan 2026",
+          "readTime": "4 Min. Lesezeit",
+          "category": "news"
+        },
+        {
+          "slug": "daily-devotional-habit",
+          "title": "Eine Tägliche Andachts-Gewohnheit Aufbauen",
+          "excerpt": "Praktische Strategien für eine konsistente tägliche Andachtspraxis.",
+          "author": "Rachel Thompson",
+          "date": "5. Jan 2026",
+          "readTime": "7 Min. Lesezeit",
+          "category": "spiritual-growth"
+        },
+        {
+          "slug": "getting-started-with-api",
+          "title": "Erste Schritte mit der ScriptureForge API",
+          "excerpt": "Ein Schritt-für-Schritt-Tutorial zur Integration von ScriptureForge AI.",
+          "author": "Michael Park",
+          "date": "3. Jan 2026",
+          "readTime": "12 Min. Lesezeit",
+          "category": "tutorials"
+        }
+      ],
+      "newsletter": {
+        "title": "Newsletter Abonnieren",
+        "description": "Erhalten Sie die neuesten Artikel und Updates.",
+        "placeholder": "E-Mail eingeben",
+        "button": "Abonnieren"
+      }
+    }
   }
 }

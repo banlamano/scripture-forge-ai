@@ -726,5 +726,418 @@
         "服务条款"
       ]
     }
+  },
+  "resources": {
+    "helpCenter": {
+      "title": "帮助中心",
+      "subtitle": "找到您问题的答案，学习如何充分利用ScriptureForge AI",
+      "searchPlaceholder": "搜索帮助文章...",
+      "faqTitle": "常见问题",
+      "contactTitle": "还需要帮助？",
+      "contactDescription": "我们的支持团队随时为您提供帮助。",
+      "contactButton": "联系支持",
+      "categories": [
+        {
+          "id": "gettingStarted",
+          "title": "入门指南",
+          "description": "学习ScriptureForge AI的基础知识",
+          "articles": [
+            {
+              "title": "创建您的账户",
+              "slug": "creating-account"
+            },
+            {
+              "title": "导航界面",
+              "slug": "navigating-interface"
+            },
+            {
+              "title": "设置偏好",
+              "slug": "setup-preferences"
+            }
+          ]
+        },
+        {
+          "id": "bibleReading",
+          "title": "圣经阅读",
+          "description": "掌握阅读功能",
+          "articles": [
+            {
+              "title": "选择圣经译本",
+              "slug": "bible-translations"
+            },
+            {
+              "title": "书签和高亮",
+              "slug": "bookmarks-highlights"
+            },
+            {
+              "title": "阅读计划",
+              "slug": "reading-plans"
+            }
+          ]
+        },
+        {
+          "id": "aiChat",
+          "title": "AI聊天",
+          "description": "充分利用AI功能",
+          "articles": [
+            {
+              "title": "提出有效问题",
+              "slug": "effective-questions"
+            },
+            {
+              "title": "理解AI回复",
+              "slug": "ai-responses"
+            },
+            {
+              "title": "聊天历史",
+              "slug": "chat-history"
+            }
+          ]
+        },
+        {
+          "id": "account",
+          "title": "账户设置",
+          "description": "管理您的账户",
+          "articles": [
+            {
+              "title": "更新个人资料",
+              "slug": "update-profile"
+            },
+            {
+              "title": "更改密码",
+              "slug": "change-password"
+            },
+            {
+              "title": "删除账户",
+              "slug": "delete-account"
+            }
+          ]
+        },
+        {
+          "id": "subscription",
+          "title": "订阅与付款",
+          "description": "管理您的订阅",
+          "articles": [
+            {
+              "title": "订阅计划",
+              "slug": "subscription-plans"
+            },
+            {
+              "title": "付款方式",
+              "slug": "payment-methods"
+            },
+            {
+              "title": "取消订阅",
+              "slug": "cancel-subscription"
+            }
+          ]
+        },
+        {
+          "id": "privacy",
+          "title": "隐私与安全",
+          "description": "保护您的数据",
+          "articles": [
+            {
+              "title": "数据隐私概述",
+              "slug": "data-privacy"
+            },
+            {
+              "title": "双因素认证",
+              "slug": "two-factor-auth"
+            },
+            {
+              "title": "导出数据",
+              "slug": "export-data"
+            }
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "ScriptureForge AI是免费的吗？",
+          "answer": "是的！ScriptureForge AI提供基本功能的免费版本。高级功能可通过我们的订阅计划获得。"
+        },
+        {
+          "question": "有哪些圣经译本可用？",
+          "answer": "我们提供多种译本，包括和合本、新译本等多种选择。"
+        },
+        {
+          "question": "AI的回答准确吗？",
+          "answer": "我们的AI基于圣经研究进行训练。我们建议用可靠来源验证重要的解释。"
+        },
+        {
+          "question": "我可以离线使用ScriptureForge AI吗？",
+          "answer": "可以！您可以下载译本进行离线阅读。某些AI功能需要互联网连接。"
+        },
+        {
+          "question": "如何报告问题？",
+          "answer": "您可以通过我们的支持页面或发送邮件至support@scriptureforge.ai报告问题。"
+        }
+      ]
+    },
+    "apiDocs": {
+      "title": "API文档",
+      "subtitle": "使用我们强大的REST API将ScriptureForge AI集成到您的应用程序中",
+      "features": {
+        "fast": {
+          "title": "超快速度",
+          "description": "全球边缘缓存实现低于100毫秒的响应时间"
+        },
+        "secure": {
+          "title": "默认安全",
+          "description": "行业标准的加密和认证"
+        },
+        "global": {
+          "title": "全球CDN",
+          "description": "从全球各地的位置提供服务"
+        }
+      },
+      "auth": {
+        "title": "认证",
+        "description": "所有API请求都需要API密钥。",
+        "example": "Authorization: Bearer 您的API密钥"
+      },
+      "baseUrl": {
+        "title": "基础URL",
+        "description": "所有API端点都相对于基础URL："
+      },
+      "endpointsTitle": "API端点",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/bible/versions",
+          "description": "获取可用圣经版本列表。",
+          "example": "curl -X GET https://api.scriptureforge.ai/v1/bible/versions"
+        },
+        {
+          "method": "GET",
+          "path": "/bible/verse/{version}/{book}/{chapter}/{verse}",
+          "description": "获取特定经文。",
+          "example": "curl -X GET https://api.scriptureforge.ai/v1/bible/verse/CUV/约翰福音/3/16"
+        },
+        {
+          "method": "GET",
+          "path": "/bible/chapter/{version}/{book}/{chapter}",
+          "description": "获取整章内容。",
+          "example": "curl -X GET https://api.scriptureforge.ai/v1/bible/chapter/CUV/诗篇/23"
+        },
+        {
+          "method": "POST",
+          "path": "/chat/completions",
+          "description": "向AI发送消息。",
+          "example": "curl -X POST https://api.scriptureforge.ai/v1/chat/completions"
+        },
+        {
+          "method": "GET",
+          "path": "/search?q={query}",
+          "description": "搜索经文。",
+          "example": "curl -X GET \"https://api.scriptureforge.ai/v1/search?q=爱\""
+        }
+      ],
+      "rateLimits": {
+        "title": "速率限制",
+        "description": "API限制因计划而异：",
+        "plan": "计划",
+        "requests": "请求数",
+        "burst": "突发限制"
+      },
+      "sdks": {
+        "title": "SDK和库",
+        "description": "流行编程语言的官方SDK：",
+        "comingSoon": "即将推出"
+      }
+    },
+    "community": {
+      "title": "加入我们的社区",
+      "subtitle": "与数千名信徒一起用AI学习圣经",
+      "channelsTitle": "社区频道",
+      "contributeTitle": "贡献方式",
+      "contributorsTitle": "顶级贡献者",
+      "ctaTitle": "准备加入了吗？",
+      "ctaDescription": "成为不断壮大的信徒社区的一部分，以新方式探索圣经。",
+      "joinDiscord": "加入Discord",
+      "viewGithub": "查看GitHub",
+      "stats": [
+        {
+          "value": "10K+",
+          "label": "社区成员"
+        },
+        {
+          "value": "500+",
+          "label": "每日讨论"
+        },
+        {
+          "value": "50+",
+          "label": "贡献者"
+        },
+        {
+          "value": "24/7",
+          "label": "活跃支持"
+        }
+      ],
+      "channels": [
+        {
+          "id": "discord",
+          "title": "Discord服务器",
+          "description": "实时讨论和与其他用户连接。",
+          "link": "https://discord.gg/scriptureforge",
+          "icon": "discord"
+        },
+        {
+          "id": "github",
+          "title": "GitHub",
+          "description": "为我们的开源项目做贡献。",
+          "link": "https://github.com/scriptureforge",
+          "icon": "github"
+        },
+        {
+          "id": "twitter",
+          "title": "Twitter/X",
+          "description": "关注我们获取更新。",
+          "link": "https://twitter.com/scriptureforge",
+          "icon": "twitter"
+        },
+        {
+          "id": "forum",
+          "title": "社区论坛",
+          "description": "提问和分享见解。",
+          "link": "https://community.scriptureforge.ai",
+          "icon": "forum"
+        }
+      ],
+      "contribute": {
+        "ideas": {
+          "title": "分享想法",
+          "description": "建议新功能。"
+        },
+        "code": {
+          "title": "贡献代码",
+          "description": "帮助构建我们的开源工具。"
+        },
+        "docs": {
+          "title": "改进文档",
+          "description": "使我们的文档更清晰。"
+        }
+      },
+      "contributors": [
+        {
+          "name": "David M.",
+          "role": "核心贡献者",
+          "avatar": "DM"
+        },
+        {
+          "name": "Sarah L.",
+          "role": "文档",
+          "avatar": "SL"
+        },
+        {
+          "name": "James K.",
+          "role": "版主",
+          "avatar": "JK"
+        },
+        {
+          "name": "Rachel P.",
+          "role": "翻译",
+          "avatar": "RP"
+        },
+        {
+          "name": "Michael T.",
+          "role": "Bug猎人",
+          "avatar": "MT"
+        }
+      ]
+    },
+    "blog": {
+      "title": "博客",
+      "subtitle": "关于圣经学习、AI技术和灵性成长的见解",
+      "allPosts": "所有文章",
+      "featured": "精选",
+      "readMore": "阅读更多",
+      "categories": [
+        {
+          "id": "bible-study",
+          "name": "圣经学习"
+        },
+        {
+          "id": "ai-technology",
+          "name": "AI与技术"
+        },
+        {
+          "id": "spiritual-growth",
+          "name": "灵性成长"
+        },
+        {
+          "id": "tutorials",
+          "name": "教程"
+        },
+        {
+          "id": "news",
+          "name": "新闻动态"
+        }
+      ],
+      "posts": [
+        {
+          "slug": "how-ai-is-transforming-bible-study",
+          "title": "AI如何在2026年改变圣经学习",
+          "excerpt": "了解人工智能如何帮助数百万信徒更深入地理解圣经。",
+          "author": "Sarah Mitchell博士",
+          "date": "2026年1月15日",
+          "readTime": "8分钟阅读",
+          "category": "ai-technology",
+          "featured": true
+        },
+        {
+          "slug": "5-ways-to-study-bible-effectively",
+          "title": "更有效学习圣经的5种方法",
+          "excerpt": "实用技巧帮助您更好地利用每日圣经阅读时间。",
+          "author": "James Wilson牧师",
+          "date": "2026年1月12日",
+          "readTime": "6分钟阅读",
+          "category": "bible-study"
+        },
+        {
+          "slug": "understanding-biblical-context",
+          "title": "理解圣经背景：初学者指南",
+          "excerpt": "了解为什么背景很重要以及如何正确解释经文。",
+          "author": "Emily Chen博士",
+          "date": "2026年1月10日",
+          "readTime": "10分钟阅读",
+          "category": "bible-study"
+        },
+        {
+          "slug": "new-features-january-2026",
+          "title": "新功能：2026年1月更新",
+          "excerpt": "探索ScriptureForge AI的最新功能。",
+          "author": "ScriptureForge团队",
+          "date": "2026年1月8日",
+          "readTime": "4分钟阅读",
+          "category": "news"
+        },
+        {
+          "slug": "daily-devotional-habit",
+          "title": "建立持久的每日灵修习惯",
+          "excerpt": "建立持续每日灵修实践的实用策略。",
+          "author": "Rachel Thompson",
+          "date": "2026年1月5日",
+          "readTime": "7分钟阅读",
+          "category": "spiritual-growth"
+        },
+        {
+          "slug": "getting-started-with-api",
+          "title": "ScriptureForge API入门",
+          "excerpt": "将ScriptureForge AI集成到您应用程序的分步教程。",
+          "author": "Michael Park",
+          "date": "2026年1月3日",
+          "readTime": "12分钟阅读",
+          "category": "tutorials"
+        }
+      ],
+      "newsletter": {
+        "title": "订阅我们的通讯",
+        "description": "获取最新文章和更新。",
+        "placeholder": "输入您的邮箱",
+        "button": "订阅"
+      }
+    }
   }
 }

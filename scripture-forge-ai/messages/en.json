@@ -493,21 +493,51 @@
       "section2Title": "2. Information We Collect",
       "section2_1Title": "2.1 Personal Information",
       "section2_1Text": "When you create an account, we may collect:",
-      "section2_1Items": ["Name and email address", "Profile information you choose to provide", "Authentication data (when using Google Sign-In)"],
+      "section2_1Items": [
+        "Name and email address",
+        "Profile information you choose to provide",
+        "Authentication data (when using Google Sign-In)"
+      ],
       "section2_2Title": "2.2 Usage Information",
       "section2_2Text": "We automatically collect certain information when you use our service:",
-      "section2_2Items": ["Bible reading history and preferences", "Chat conversations with our AI assistant", "Saved verses, bookmarks, and highlights", "Prayer journal entries (stored securely)", "Device information and browser type", "IP address and general location data"],
+      "section2_2Items": [
+        "Bible reading history and preferences",
+        "Chat conversations with our AI assistant",
+        "Saved verses, bookmarks, and highlights",
+        "Prayer journal entries (stored securely)",
+        "Device information and browser type",
+        "IP address and general location data"
+      ],
       "section3Title": "3. How We Use Your Information",
       "section3Text": "We use the information we collect to:",
-      "section3Items": ["Provide and personalize our Bible study services", "Generate AI-powered insights and devotionals", "Save your reading progress and preferences", "Improve our AI models and service quality", "Send important service updates and notifications", "Ensure security and prevent fraud", "Comply with legal obligations"],
+      "section3Items": [
+        "Provide and personalize our Bible study services",
+        "Generate AI-powered insights and devotionals",
+        "Save your reading progress and preferences",
+        "Improve our AI models and service quality",
+        "Send important service updates and notifications",
+        "Ensure security and prevent fraud",
+        "Comply with legal obligations"
+      ],
       "section4Title": "4. Data Sharing and Disclosure",
       "section4Text": "We do not sell your personal information. We may share your data with:",
-      "section4Items": ["Service Providers: Third-party services that help us operate (hosting, analytics, AI processing)", "AI Partners: Your chat queries may be processed by AI providers (OpenAI, Anthropic) to generate responses", "Legal Requirements: When required by law or to protect our rights"],
+      "section4Items": [
+        "Service Providers: Third-party services that help us operate (hosting, analytics, AI processing)",
+        "AI Partners: Your chat queries may be processed by AI providers (OpenAI, Anthropic) to generate responses",
+        "Legal Requirements: When required by law or to protect our rights"
+      ],
       "section5Title": "5. Data Security",
       "section5Text": "We implement industry-standard security measures to protect your information, including encryption in transit and at rest, secure authentication, and regular security audits. However, no method of transmission over the Internet is 100% secure, and we cannot guarantee absolute security.",
       "section6Title": "6. Your Rights and Choices",
       "section6Text": "Depending on your location, you may have the right to:",
-      "section6Items": ["Access and receive a copy of your personal data", "Correct inaccurate information", "Delete your account and associated data", "Object to or restrict certain processing", "Data portability", "Withdraw consent at any time"],
+      "section6Items": [
+        "Access and receive a copy of your personal data",
+        "Correct inaccurate information",
+        "Delete your account and associated data",
+        "Object to or restrict certain processing",
+        "Data portability",
+        "Withdraw consent at any time"
+      ],
       "section7Title": "7. Children's Privacy",
       "section7Text": "ScriptureForge AI is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us.",
       "section8Title": "8. International Data Transfers",
@@ -526,7 +556,14 @@
       "section1Text": "By accessing or using ScriptureForge AI (\"the Service\"), you agree to be bound by these Terms of Service (\"Terms\"). If you do not agree to these Terms, please do not use the Service. We reserve the right to modify these Terms at any time, and your continued use of the Service constitutes acceptance of any modifications.",
       "section2Title": "2. Description of Service",
       "section2Text": "ScriptureForge AI is an AI-powered Bible study companion that provides:",
-      "section2Items": ["Interactive Bible reading with multiple translations", "AI-powered chat for biblical questions and insights", "Daily devotionals and reading plans", "Prayer journal functionality", "Smart search capabilities", "Verse bookmarking and highlighting"],
+      "section2Items": [
+        "Interactive Bible reading with multiple translations",
+        "AI-powered chat for biblical questions and insights",
+        "Daily devotionals and reading plans",
+        "Prayer journal functionality",
+        "Smart search capabilities",
+        "Verse bookmarking and highlighting"
+      ],
       "section3Title": "3. User Accounts",
       "section3_1Title": "3.1 Registration",
       "section3_1Text": "To access certain features, you may need to create an account. You agree to provide accurate, current, and complete information during registration and to update such information to keep it accurate.",
@@ -534,10 +571,24 @@
       "section3_2Text": "You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. Please notify us immediately of any unauthorized use of your account.",
       "section4Title": "4. Acceptable Use",
       "section4Text": "You agree not to:",
-      "section4Items": ["Use the Service for any unlawful purpose or in violation of any applicable laws", "Attempt to gain unauthorized access to any part of the Service", "Interfere with or disrupt the Service or servers", "Upload or transmit viruses, malware, or other harmful code", "Use the Service to harass, abuse, or harm others", "Scrape, data mine, or use automated systems to access the Service without permission", "Reproduce, duplicate, or resell any part of the Service without authorization", "Use AI responses for purposes that misrepresent them as human-generated theological guidance"],
+      "section4Items": [
+        "Use the Service for any unlawful purpose or in violation of any applicable laws",
+        "Attempt to gain unauthorized access to any part of the Service",
+        "Interfere with or disrupt the Service or servers",
+        "Upload or transmit viruses, malware, or other harmful code",
+        "Use the Service to harass, abuse, or harm others",
+        "Scrape, data mine, or use automated systems to access the Service without permission",
+        "Reproduce, duplicate, or resell any part of the Service without authorization",
+        "Use AI responses for purposes that misrepresent them as human-generated theological guidance"
+      ],
       "section5Title": "5. AI-Generated Content Disclaimer",
       "section5Text": "Important: ScriptureForge AI uses artificial intelligence to provide insights, explanations, and devotional content. Please understand that:",
-      "section5Items": ["AI responses are generated based on training data and may not always be accurate or complete", "The Service is not a substitute for professional pastoral guidance, theological education, or scholarly study", "We encourage you to verify AI-generated content with trusted biblical sources and spiritual leaders", "Different Christian traditions may interpret scripture differently; our AI aims to be informative but not denominationally prescriptive"],
+      "section5Items": [
+        "AI responses are generated based on training data and may not always be accurate or complete",
+        "The Service is not a substitute for professional pastoral guidance, theological education, or scholarly study",
+        "We encourage you to verify AI-generated content with trusted biblical sources and spiritual leaders",
+        "Different Christian traditions may interpret scripture differently; our AI aims to be informative but not denominationally prescriptive"
+      ],
       "section6Title": "6. Intellectual Property",
       "section6_1Title": "6.1 Our Content",
       "section6_1Text": "The Service, including its design, features, and original content (excluding Bible text), is owned by ScriptureForge AI and protected by intellectual property laws. You may not copy, modify, or distribute our proprietary content without permission.",
@@ -549,7 +600,11 @@
       "section7Text": "Your privacy is important to us. Please review our Privacy Policy to understand how we collect, use, and protect your information.",
       "section8Title": "8. Subscription and Payments",
       "section8Text": "Some features may require a paid subscription. By subscribing, you agree to:",
-      "section8Items": ["Pay all applicable fees as described at the time of purchase", "Automatic renewal unless cancelled before the renewal date", "Our refund policy as described on our pricing page"],
+      "section8Items": [
+        "Pay all applicable fees as described at the time of purchase",
+        "Automatic renewal unless cancelled before the renewal date",
+        "Our refund policy as described on our pricing page"
+      ],
       "section9Title": "9. Limitation of Liability",
       "section9Text": "TO THE MAXIMUM EXTENT PERMITTED BY LAW, SCRIPTUREFORGE AI SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES RESULTING FROM YOUR USE OF THE SERVICE.",
       "section10Title": "10. Disclaimer of Warranties",
@@ -571,36 +626,79 @@
       "section2Text": "ScriptureForge AI uses cookies and similar technologies for several purposes:",
       "section2_1Title": "2.1 Essential Cookies",
       "section2_1Text": "These cookies are necessary for the website to function properly. They enable core functionality such as:",
-      "section2_1Items": ["User authentication and session management", "Security features and fraud prevention", "Remembering your login status", "Loading balancing and server optimization"],
+      "section2_1Items": [
+        "User authentication and session management",
+        "Security features and fraud prevention",
+        "Remembering your login status",
+        "Loading balancing and server optimization"
+      ],
       "section2_2Title": "2.2 Preference Cookies",
       "section2_2Text": "These cookies remember your settings and preferences:",
-      "section2_2Items": ["Language preferences", "Theme settings (light/dark mode)", "Default Bible translation", "Reading progress and bookmarks", "Font size and display preferences"],
+      "section2_2Items": [
+        "Language preferences",
+        "Theme settings (light/dark mode)",
+        "Default Bible translation",
+        "Reading progress and bookmarks",
+        "Font size and display preferences"
+      ],
       "section2_3Title": "2.3 Analytics Cookies",
       "section2_3Text": "We use analytics cookies to understand how visitors interact with our website:",
-      "section2_3Items": ["Pages visited and time spent on each page", "Features used most frequently", "Error tracking and performance monitoring", "General usage patterns to improve our service"],
+      "section2_3Items": [
+        "Pages visited and time spent on each page",
+        "Features used most frequently",
+        "Error tracking and performance monitoring",
+        "General usage patterns to improve our service"
+      ],
       "section2_3Extra": "We use Vercel Analytics, which is privacy-focused and does not use cookies that track individuals across websites.",
       "section2_4Title": "2.4 Functional Cookies",
       "section2_4Text": "These cookies enable enhanced functionality:",
-      "section2_4Items": ["Chat history storage", "Offline Bible reading capabilities", "Progressive Web App (PWA) functionality"],
+      "section2_4Items": [
+        "Chat history storage",
+        "Offline Bible reading capabilities",
+        "Progressive Web App (PWA) functionality"
+      ],
       "section3Title": "3. Third-Party Cookies",
       "section3Text": "Some cookies are placed by third-party services that appear on our pages:",
       "thirdPartyTable": {
         "provider": "Provider",
         "purpose": "Purpose",
         "type": "Type",
-        "vercel": { "name": "Vercel", "purpose": "Hosting and analytics", "type": "Essential/Analytics" },
-        "google": { "name": "Google (OAuth)", "purpose": "Authentication", "type": "Essential" },
-        "stripe": { "name": "Stripe", "purpose": "Payment processing", "type": "Essential" }
+        "vercel": {
+          "name": "Vercel",
+          "purpose": "Hosting and analytics",
+          "type": "Essential/Analytics"
+        },
+        "google": {
+          "name": "Google (OAuth)",
+          "purpose": "Authentication",
+          "type": "Essential"
+        },
+        "stripe": {
+          "name": "Stripe",
+          "purpose": "Payment processing",
+          "type": "Essential"
+        }
       },
       "section4Title": "4. Local Storage and IndexedDB",
       "section4Text": "In addition to cookies, we use browser local storage and IndexedDB to store data locally on your device. This enables features like:",
-      "section4Items": ["Offline Bible reading", "Cached chat conversations", "Saved verses and notes", "Reading plan progress"],
+      "section4Items": [
+        "Offline Bible reading",
+        "Cached chat conversations",
+        "Saved verses and notes",
+        "Reading plan progress"
+      ],
       "section4Extra": "This data remains on your device and is not transmitted to our servers unless you are signed in and choose to sync your data.",
       "section5Title": "5. Managing Cookies",
       "section5Text": "You can control and manage cookies in several ways:",
       "section5_1Title": "5.1 Browser Settings",
       "section5_1Text": "Most browsers allow you to:",
-      "section5_1Items": ["View what cookies are stored and delete them individually", "Block third-party cookies", "Block all cookies from specific sites", "Block all cookies from being set", "Delete all cookies when you close your browser"],
+      "section5_1Items": [
+        "View what cookies are stored and delete them individually",
+        "Block third-party cookies",
+        "Block all cookies from specific sites",
+        "Block all cookies from being set",
+        "Delete all cookies when you close your browser"
+      ],
       "section5_1Extra": "Please note that blocking essential cookies may affect the functionality of our website.",
       "section5_2Title": "5.2 Browser-Specific Instructions",
       "browserInstructions": {
@@ -611,14 +709,435 @@
       },
       "section6Title": "6. Cookie Retention",
       "section6Text": "Different cookies have different retention periods:",
-      "section6Items": ["Session cookies: Deleted when you close your browser", "Persistent cookies: Remain until they expire or you delete them", "Authentication cookies: Typically 30 days (or until you sign out)", "Preference cookies: Up to 1 year"],
+      "section6Items": [
+        "Session cookies: Deleted when you close your browser",
+        "Persistent cookies: Remain until they expire or you delete them",
+        "Authentication cookies: Typically 30 days (or until you sign out)",
+        "Preference cookies: Up to 1 year"
+      ],
       "section7Title": "7. Updates to This Policy",
       "section7Text": "We may update this Cookie Policy from time to time to reflect changes in technology, legislation, or our data practices. When we make changes, we will update the \"Last updated\" date at the top of this page. We encourage you to review this policy periodically.",
       "section8Title": "8. Contact Us",
       "section8Text": "If you have questions about our use of cookies or this Cookie Policy, please contact us at:",
       "section9Title": "9. Related Policies",
       "section9Text": "For more information about how we handle your data, please also review our:",
-      "relatedPolicies": ["Privacy Policy", "Terms of Service"]
+      "relatedPolicies": [
+        "Privacy Policy",
+        "Terms of Service"
+      ]
+    }
+  },
+  "resources": {
+    "helpCenter": {
+      "title": "Help Center",
+      "subtitle": "Find answers to your questions and learn how to get the most out of ScriptureForge AI",
+      "searchPlaceholder": "Search for help articles...",
+      "faqTitle": "Frequently Asked Questions",
+      "contactTitle": "Still need help?",
+      "contactDescription": "Our support team is here to help you with any questions.",
+      "contactButton": "Contact Support",
+      "categories": [
+        {
+          "id": "gettingStarted",
+          "title": "Getting Started",
+          "description": "Learn the basics of using ScriptureForge AI",
+          "articles": [
+            {
+              "title": "Creating your account",
+              "slug": "creating-account"
+            },
+            {
+              "title": "Navigating the interface",
+              "slug": "navigating-interface"
+            },
+            {
+              "title": "Setting up your preferences",
+              "slug": "setup-preferences"
+            }
+          ]
+        },
+        {
+          "id": "bibleReading",
+          "title": "Bible Reading",
+          "description": "Master the Bible reading features",
+          "articles": [
+            {
+              "title": "Choosing Bible translations",
+              "slug": "bible-translations"
+            },
+            {
+              "title": "Using bookmarks and highlights",
+              "slug": "bookmarks-highlights"
+            },
+            {
+              "title": "Following reading plans",
+              "slug": "reading-plans"
+            }
+          ]
+        },
+        {
+          "id": "aiChat",
+          "title": "AI Chat",
+          "description": "Get the most from AI-powered insights",
+          "articles": [
+            {
+              "title": "Asking effective questions",
+              "slug": "effective-questions"
+            },
+            {
+              "title": "Understanding AI responses",
+              "slug": "ai-responses"
+            },
+            {
+              "title": "Chat history and context",
+              "slug": "chat-history"
+            }
+          ]
+        },
+        {
+          "id": "account",
+          "title": "Account Settings",
+          "description": "Manage your account and preferences",
+          "articles": [
+            {
+              "title": "Updating your profile",
+              "slug": "update-profile"
+            },
+            {
+              "title": "Changing your password",
+              "slug": "change-password"
+            },
+            {
+              "title": "Deleting your account",
+              "slug": "delete-account"
+            }
+          ]
+        },
+        {
+          "id": "subscription",
+          "title": "Subscription & Billing",
+          "description": "Manage your subscription and payments",
+          "articles": [
+            {
+              "title": "Subscription plans",
+              "slug": "subscription-plans"
+            },
+            {
+              "title": "Payment methods",
+              "slug": "payment-methods"
+            },
+            {
+              "title": "Canceling your subscription",
+              "slug": "cancel-subscription"
+            }
+          ]
+        },
+        {
+          "id": "privacy",
+          "title": "Privacy & Security",
+          "description": "Keep your data safe and secure",
+          "articles": [
+            {
+              "title": "Data privacy overview",
+              "slug": "data-privacy"
+            },
+            {
+              "title": "Two-factor authentication",
+              "slug": "two-factor-auth"
+            },
+            {
+              "title": "Exporting your data",
+              "slug": "export-data"
+            }
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Is ScriptureForge AI free to use?",
+          "answer": "Yes! ScriptureForge AI offers a free tier with basic features. Premium features are available through our subscription plans."
+        },
+        {
+          "question": "Which Bible translations are available?",
+          "answer": "We offer multiple translations including KJV, NIV, ESV, NASB, and many more. You can switch between translations at any time."
+        },
+        {
+          "question": "How accurate are the AI responses?",
+          "answer": "Our AI is trained on biblical scholarship and aims to provide helpful insights. However, we always recommend verifying important interpretations with trusted sources and spiritual leaders."
+        },
+        {
+          "question": "Can I use ScriptureForge AI offline?",
+          "answer": "Yes! You can download Bible translations for offline reading. Some AI features require an internet connection."
+        },
+        {
+          "question": "How do I report an issue?",
+          "answer": "You can report issues through our Contact Support page or email us at support@scriptureforge.ai."
+        }
+      ]
+    },
+    "apiDocs": {
+      "title": "API Documentation",
+      "subtitle": "Integrate ScriptureForge AI into your applications with our powerful REST API",
+      "features": {
+        "fast": {
+          "title": "Lightning Fast",
+          "description": "Sub-100ms response times with global edge caching"
+        },
+        "secure": {
+          "title": "Secure by Default",
+          "description": "Industry-standard encryption and authentication"
+        },
+        "global": {
+          "title": "Global CDN",
+          "description": "Served from edge locations worldwide"
+        }
+      },
+      "auth": {
+        "title": "Authentication",
+        "description": "All API requests require an API key. Include your key in the Authorization header.",
+        "example": "Authorization: Bearer YOUR_API_KEY"
+      },
+      "baseUrl": {
+        "title": "Base URL",
+        "description": "All API endpoints are relative to the base URL:"
+      },
+      "endpointsTitle": "API Endpoints",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/bible/versions",
+          "description": "Get a list of all available Bible versions and translations.",
+          "example": "curl -X GET https://api.scriptureforge.ai/v1/bible/versions -H \"Authorization: Bearer YOUR_API_KEY\""
+        },
+        {
+          "method": "GET",
+          "path": "/bible/verse/{version}/{book}/{chapter}/{verse}",
+          "description": "Retrieve a specific verse from the Bible.",
+          "example": "curl -X GET https://api.scriptureforge.ai/v1/bible/verse/KJV/John/3/16 -H \"Authorization: Bearer YOUR_API_KEY\""
+        },
+        {
+          "method": "GET",
+          "path": "/bible/chapter/{version}/{book}/{chapter}",
+          "description": "Retrieve an entire chapter from the Bible.",
+          "example": "curl -X GET https://api.scriptureforge.ai/v1/bible/chapter/NIV/Psalms/23 -H \"Authorization: Bearer YOUR_API_KEY\""
+        },
+        {
+          "method": "POST",
+          "path": "/chat/completions",
+          "description": "Send a message to the AI and receive biblical insights.",
+          "example": "curl -X POST https://api.scriptureforge.ai/v1/chat/completions -H \"Authorization: Bearer YOUR_API_KEY\" -d \"{message: What does John 3:16 mean?}\""
+        },
+        {
+          "method": "GET",
+          "path": "/search?q={query}",
+          "description": "Search for verses across all Bible translations.",
+          "example": "curl -X GET \"https://api.scriptureforge.ai/v1/search?q=love\" -H \"Authorization: Bearer YOUR_API_KEY\""
+        }
+      ],
+      "rateLimits": {
+        "title": "Rate Limits",
+        "description": "API rate limits vary by subscription plan:",
+        "plan": "Plan",
+        "requests": "Requests",
+        "burst": "Burst Limit"
+      },
+      "sdks": {
+        "title": "SDKs & Libraries",
+        "description": "Official SDKs for popular programming languages:",
+        "comingSoon": "Coming Soon"
+      }
+    },
+    "community": {
+      "title": "Join Our Community",
+      "subtitle": "Connect with thousands of believers studying Scripture together with AI",
+      "channelsTitle": "Community Channels",
+      "contributeTitle": "Ways to Contribute",
+      "contributorsTitle": "Top Contributors",
+      "ctaTitle": "Ready to Join?",
+      "ctaDescription": "Become part of a growing community of believers exploring Scripture in new ways.",
+      "joinDiscord": "Join Discord",
+      "viewGithub": "View GitHub",
+      "stats": [
+        {
+          "value": "10K+",
+          "label": "Community Members"
+        },
+        {
+          "value": "500+",
+          "label": "Daily Discussions"
+        },
+        {
+          "value": "50+",
+          "label": "Contributors"
+        },
+        {
+          "value": "24/7",
+          "label": "Active Support"
+        }
+      ],
+      "channels": [
+        {
+          "id": "discord",
+          "title": "Discord Server",
+          "description": "Join real-time discussions, get help, and connect with other users.",
+          "link": "https://discord.gg/scriptureforge",
+          "icon": "discord"
+        },
+        {
+          "id": "github",
+          "title": "GitHub",
+          "description": "Contribute to our open-source projects and report issues.",
+          "link": "https://github.com/scriptureforge",
+          "icon": "github"
+        },
+        {
+          "id": "twitter",
+          "title": "Twitter/X",
+          "description": "Follow us for updates, tips, and community highlights.",
+          "link": "https://twitter.com/scriptureforge",
+          "icon": "twitter"
+        },
+        {
+          "id": "forum",
+          "title": "Community Forum",
+          "description": "Ask questions, share insights, and discuss Bible study topics.",
+          "link": "https://community.scriptureforge.ai",
+          "icon": "forum"
+        }
+      ],
+      "contribute": {
+        "ideas": {
+          "title": "Share Ideas",
+          "description": "Suggest new features and improvements for ScriptureForge AI."
+        },
+        "code": {
+          "title": "Contribute Code",
+          "description": "Help build and improve our open-source tools and libraries."
+        },
+        "docs": {
+          "title": "Improve Docs",
+          "description": "Help us make our documentation clearer and more helpful."
+        }
+      },
+      "contributors": [
+        {
+          "name": "David M.",
+          "role": "Core Contributor",
+          "avatar": "DM"
+        },
+        {
+          "name": "Sarah L.",
+          "role": "Documentation",
+          "avatar": "SL"
+        },
+        {
+          "name": "James K.",
+          "role": "Community Mod",
+          "avatar": "JK"
+        },
+        {
+          "name": "Rachel P.",
+          "role": "Translator",
+          "avatar": "RP"
+        },
+        {
+          "name": "Michael T.",
+          "role": "Bug Hunter",
+          "avatar": "MT"
+        }
+      ]
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Insights on Bible study, AI technology, and spiritual growth",
+      "allPosts": "All Posts",
+      "featured": "Featured",
+      "readMore": "Read More",
+      "categories": [
+        {
+          "id": "bible-study",
+          "name": "Bible Study"
+        },
+        {
+          "id": "ai-technology",
+          "name": "AI & Technology"
+        },
+        {
+          "id": "spiritual-growth",
+          "name": "Spiritual Growth"
+        },
+        {
+          "id": "tutorials",
+          "name": "Tutorials"
+        },
+        {
+          "id": "news",
+          "name": "News & Updates"
+        }
+      ],
+      "posts": [
+        {
+          "slug": "how-ai-is-transforming-bible-study",
+          "title": "How AI is Transforming Bible Study in 2026",
+          "excerpt": "Discover how artificial intelligence is helping millions of believers gain deeper insights into Scripture while maintaining theological integrity.",
+          "author": "Dr. Sarah Mitchell",
+          "date": "Jan 15, 2026",
+          "readTime": "8 min read",
+          "category": "ai-technology",
+          "featured": true
+        },
+        {
+          "slug": "5-ways-to-study-bible-effectively",
+          "title": "5 Ways to Study the Bible More Effectively",
+          "excerpt": "Practical tips and techniques to help you get more out of your daily Bible reading and study time.",
+          "author": "Pastor James Wilson",
+          "date": "Jan 12, 2026",
+          "readTime": "6 min read",
+          "category": "bible-study"
+        },
+        {
+          "slug": "understanding-biblical-context",
+          "title": "Understanding Biblical Context: A Beginners Guide",
+          "excerpt": "Learn why context matters when studying Scripture and how to properly interpret passages in their historical setting.",
+          "author": "Dr. Emily Chen",
+          "date": "Jan 10, 2026",
+          "readTime": "10 min read",
+          "category": "bible-study"
+        },
+        {
+          "slug": "new-features-january-2026",
+          "title": "New Features: January 2026 Update",
+          "excerpt": "Explore the latest features we have added to ScriptureForge AI, including enhanced search, new translations, and more.",
+          "author": "ScriptureForge Team",
+          "date": "Jan 8, 2026",
+          "readTime": "4 min read",
+          "category": "news"
+        },
+        {
+          "slug": "daily-devotional-habit",
+          "title": "Building a Daily Devotional Habit That Sticks",
+          "excerpt": "Practical strategies for establishing and maintaining a consistent daily devotional practice.",
+          "author": "Rachel Thompson",
+          "date": "Jan 5, 2026",
+          "readTime": "7 min read",
+          "category": "spiritual-growth"
+        },
+        {
+          "slug": "getting-started-with-api",
+          "title": "Getting Started with the ScriptureForge API",
+          "excerpt": "A step-by-step tutorial on integrating ScriptureForge AI into your own applications.",
+          "author": "Michael Park",
+          "date": "Jan 3, 2026",
+          "readTime": "12 min read",
+          "category": "tutorials"
+        }
+      ],
+      "newsletter": {
+        "title": "Subscribe to Our Newsletter",
+        "description": "Get the latest articles, tips, and updates delivered to your inbox.",
+        "placeholder": "Enter your email",
+        "button": "Subscribe"
+      }
     }
   }
 }
