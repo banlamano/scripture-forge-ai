@@ -15,7 +15,6 @@ const productLinks = [
 
 const resourceLinks = [
   { key: "helpCenter", href: "/help" },
-  { key: "apiDocs", href: "/docs/api" },
   { key: "blog", href: "/blog" },
   { key: "community", href: "/community" },
 ];
