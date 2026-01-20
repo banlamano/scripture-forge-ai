@@ -78,13 +78,13 @@ export function VerseOfTheDay() {
         verseText = verse?.text || "";
       }
       
-      // Clean HTML tags and verse numbers (like [1], (1), superscripts, etc.)
+      // Clean HTML tags, Strong's numbers, and verse numbers
       verseText = verseText
-        .replace(/<[^>]+>/g, "")  // Remove HTML tags
+        .replace(/<S>\d+<\/S>/gi, "")  // Remove Strong's Concordance numbers <S>1234</S>
+        .replace(/<[^>]+>/g, "")  // Remove other HTML tags
         .replace(/\[\d+\]/g, "")  // Remove [1], [2], etc.
         .replace(/\(\d+\)/g, "")  // Remove (1), (2), etc.
         .replace(/^\d+\s*/g, "")  // Remove leading verse numbers
-        .replace(/\s+\d+\s+/g, " ")  // Remove standalone numbers between spaces
         .replace(/\s+/g, " ")  // Normalize whitespace
         .trim();
       
