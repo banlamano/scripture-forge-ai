@@ -7,6 +7,7 @@ import { RefreshCw, Share2, BookmarkPlus, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/components/providers/language-provider";
+import { toast } from "sonner";
 
 // Popular verses with their references (book, chapter, verse)
 const verseReferences = [
@@ -142,6 +143,62 @@ export function VerseOfTheDay() {
     }
   };
 
+  const handleSave = () => {
+    if (!currentVerse) return;
+    
+    // Save to localStorage for bookmarks
+    const savedVerses = JSON.parse(localStorage.getItem("savedVerses") || "[]");
+    const verseToSave = {
+      text: currentVerse.text,
+      reference: currentVerse.reference,
+      translation: currentVerse.translation,
+      savedAt: new Date().toISOString(),
+    };
+    
+    // Check if already saved
+    const alreadySaved = savedVerses.some(
+      (v: { reference: string }) => v.reference === currentVerse.reference
+    );
+    
+    if (alreadySaved) {
+      toast.info(t("alreadySaved") || "Verse already saved");
+    } else {
+      savedVerses.push(verseToSave);
+      localStorage.setItem("savedVerses", JSON.stringify(savedVerses));
+      toast.success(t("verseSaved") || "Verse saved!");
+    }
+  };
+
+  const handleShare = async () => {
+    if (!currentVerse) return;
+    
+    const shareText = `"${currentVerse.text}" — ${currentVerse.reference} (${currentVerse.translation})`;
+    const shareData = {
+      title: "ScriptureForge AI - Verse of the Day",
+      text: shareText,
+      url: window.location.href,
+    };
+
+    // Try native share API first (mobile/supported browsers)
+    if (navigator.share && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+        toast.success(t("shared") || "Shared successfully!");
+      } catch (err) {
+        // User cancelled - don't show error
+        if ((err as Error).name !== "AbortError") {
+          // Fallback to copy
+          await navigator.clipboard.writeText(shareText);
+          toast.success(t("copied"));
+        }
+      }
+    } else {
+      // Fallback: copy to clipboard
+      await navigator.clipboard.writeText(shareText);
+      toast.success(t("copied"));
+    }
+  };
+
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-0">
@@ -190,11 +247,11 @@ export function VerseOfTheDay() {
                   </span>
                 </p>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={handleSave}>
                     <BookmarkPlus className="w-4 h-4 mr-2" />
                     {t("save")}
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={handleShare}>
                     <Share2 className="w-4 h-4 mr-2" />
                     {t("share")}
                   </Button>

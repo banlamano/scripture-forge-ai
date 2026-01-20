@@ -175,7 +175,7 @@ export function ChatInterface() {
     if (navigator.share && navigator.canShare(shareData)) {
       try {
         await navigator.share(shareData);
-        toast.success(tCommon("copied"));
+        toast.success(tCommon("shared") || "Shared successfully!");
       } catch (err) {
         // User cancelled or error
         if ((err as Error).name !== "AbortError") {

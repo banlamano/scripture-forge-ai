@@ -21,6 +21,9 @@
     "share": "分享",
     "copy": "复制",
     "copied": "已复制到剪贴板",
+    "shared": "分享成功！",
+    "verseSaved": "经文已保存！",
+    "alreadySaved": "经文已保存过",
     "language": "语言"
   },
   "home": {

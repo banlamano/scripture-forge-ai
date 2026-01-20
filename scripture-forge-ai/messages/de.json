@@ -21,6 +21,9 @@
     "share": "Teilen",
     "copy": "Kopieren",
     "copied": "In Zwischenablage kopiert",
+    "shared": "Erfolgreich geteilt!",
+    "verseSaved": "Vers gespeichert!",
+    "alreadySaved": "Vers bereits gespeichert",
     "language": "Sprache"
   },
   "home": {

@@ -21,6 +21,9 @@
     "share": "Share",
     "copy": "Copy",
     "copied": "Copied to clipboard",
+    "shared": "Shared successfully!",
+    "verseSaved": "Verse saved!",
+    "alreadySaved": "Verse already saved",
     "language": "Language"
   },
   "home": {
