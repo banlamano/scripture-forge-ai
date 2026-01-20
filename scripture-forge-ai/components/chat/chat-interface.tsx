@@ -36,6 +36,7 @@ import { MessageContent } from "./message-content";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { useLanguage } from "@/components/providers/language-provider";
+import { ShareModal } from "@/components/ui/share-modal";
 
 export function ChatInterface() {
   const searchParams = useSearchParams();
@@ -65,6 +66,8 @@ export function ChatInterface() {
   const [isListening, setIsListening] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [shareContent, setShareContent] = useState("");
 
   // Check for speech recognition support
   useEffect(() => {
@@ -165,30 +168,9 @@ export function ChatInterface() {
     toast.success(tCommon("copied"));
   };
 
-  const handleShare = async (content: string) => {
-    const shareData = {
-      title: "ScriptureForge AI",
-      text: content,
-      url: window.location.href,
-    };
-
-    if (navigator.share && navigator.canShare(shareData)) {
-      try {
-        await navigator.share(shareData);
-        toast.success(tCommon("shared") || "Shared successfully!");
-      } catch (err) {
-        // User cancelled or error
-        if ((err as Error).name !== "AbortError") {
-          // Fallback to copy
-          await navigator.clipboard.writeText(content);
-          toast.success(tCommon("copied"));
-        }
-      }
-    } else {
-      // Fallback: copy to clipboard
-      await navigator.clipboard.writeText(content);
-      toast.success(tCommon("copied"));
-    }
+  const handleShare = (content: string) => {
+    setShareContent(content);
+    setShowShareModal(true);
   };
 
   const handleNewChat = () => {
@@ -262,6 +244,18 @@ export function ChatInterface() {
   };
 
   return (
+    <>
+    <ShareModal
+      isOpen={showShareModal}
+      onClose={() => setShowShareModal(false)}
+      text={shareContent}
+      title="ScriptureForge AI"
+      translations={{
+        shareTitle: tCommon("share"),
+        copyLink: tCommon("copy"),
+        copied: tCommon("copied"),
+      }}
+    />
     <div className="flex-1 flex h-[calc(100vh-4rem)]">
       {/* Sidebar */}
       <ChatSidebar
@@ -401,6 +395,7 @@ export function ChatInterface() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

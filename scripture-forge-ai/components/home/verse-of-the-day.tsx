@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/components/providers/language-provider";
 import { toast } from "sonner";
+import { ShareModal } from "@/components/ui/share-modal";
 
 // Popular verses with their references (book, chapter, verse)
 const verseReferences = [
@@ -43,6 +44,7 @@ export function VerseOfTheDay() {
   const [currentVerse, setCurrentVerse] = useState<VerseData | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   const fetchVerse = useCallback(async (index: number) => {
     const ref = verseReferences[index];
@@ -169,37 +171,29 @@ export function VerseOfTheDay() {
     }
   };
 
-  const handleShare = async () => {
+  const handleShare = () => {
     if (!currentVerse) return;
-    
-    const shareText = `"${currentVerse.text}" — ${currentVerse.reference} (${currentVerse.translation})`;
-    const shareData = {
-      title: "ScriptureForge AI - Verse of the Day",
-      text: shareText,
-      url: window.location.href,
-    };
+    setShowShareModal(true);
+  };
 
-    // Try native share API first (mobile/supported browsers)
-    if (navigator.share && navigator.canShare(shareData)) {
-      try {
-        await navigator.share(shareData);
-        toast.success(t("shared") || "Shared successfully!");
-      } catch (err) {
-        // User cancelled - don't show error
-        if ((err as Error).name !== "AbortError") {
-          // Fallback to copy
-          await navigator.clipboard.writeText(shareText);
-          toast.success(t("copied"));
-        }
-      }
-    } else {
-      // Fallback: copy to clipboard
-      await navigator.clipboard.writeText(shareText);
-      toast.success(t("copied"));
-    }
+  const getShareText = () => {
+    if (!currentVerse) return "";
+    return `"${currentVerse.text}" — ${currentVerse.reference} (${currentVerse.translation})`;
   };
 
   return (
+    <>
+    <ShareModal
+      isOpen={showShareModal}
+      onClose={() => setShowShareModal(false)}
+      text={getShareText()}
+      title="ScriptureForge AI - Verse of the Day"
+      translations={{
+        shareTitle: t("share"),
+        copyLink: t("copy"),
+        copied: t("copied"),
+      }}
+    />
     <Card className="overflow-hidden">
       <CardContent className="p-0">
         <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-6 md:p-8">
@@ -268,5 +262,6 @@ export function VerseOfTheDay() {
         </div>
       </CardContent>
     </Card>
+    </>
   );
 }
