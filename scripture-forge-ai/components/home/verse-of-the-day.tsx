@@ -27,6 +27,7 @@ const defaultTranslations: Record<string, { id: string; name: string }> = {
   es: { id: "RVR09", name: "RVR" },
   pt: { id: "ARA", name: "ARA" },
   zh: { id: "KJV", name: "KJV" }, // Fallback to English for Chinese
+  it: { id: "NR2006", name: "NR06" },
 };
 
 interface VerseData {
@@ -87,13 +88,21 @@ export function VerseOfTheDay() {
       });
     } catch (error) {
       console.error("Error fetching verse:", error);
-      // Fallback to a default message
+      // Fallback to a default message in the user's language
+      const fallbackTexts: Record<string, { text: string; translation: string }> = {
+        en: { text: "For I know the plans I have for you, declares the Lord, plans for welfare and not for evil, to give you a future and a hope.", translation: "KJV" },
+        fr: { text: "Car je connais les projets que j'ai formés sur vous, dit l'Éternel, projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance.", translation: "LSG" },
+        de: { text: "Denn ich weiß, was für Gedanken ich über euch habe, spricht der HERR, Gedanken des Friedens und nicht des Leides, euch eine Zukunft und eine Hoffnung zu geben.", translation: "Luther" },
+        es: { text: "Porque yo sé los pensamientos que tengo acerca de vosotros, dice Jehová, pensamientos de paz, y no de mal, para daros el fin que esperáis.", translation: "RVR" },
+        pt: { text: "Porque eu sei os planos que tenho para vocês, diz o Senhor, planos de fazê-los prosperar e não de causar dano, planos de dar a vocês esperança e um futuro.", translation: "ARA" },
+        it: { text: "«Io, infatti, conosco i progetti che ho fatto a vostro riguardo», dice il Signore, «progetti di pace e non di sventura, per darvi un avvenire e una speranza.»", translation: "NR06" },
+        zh: { text: "耶和华说：我知道我向你们所怀的意念，是赐平安的意念，不是降灾祸的意念，要叫你们末后有指望。", translation: "CCB" },
+      };
+      const fallback = fallbackTexts[locale] || fallbackTexts.en;
       setCurrentVerse({
-        text: locale === "fr" 
-          ? "Car je connais les projets que j'ai formés sur vous, dit l'Éternel, projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance."
-          : "For I know the plans I have for you, declares the Lord, plans for welfare and not for evil, to give you a future and a hope.",
+        text: fallback.text,
         reference: "Jeremiah 29:11",
-        translation: locale === "fr" ? "LSG" : "KJV",
+        translation: fallback.translation,
       });
     }
   }, [locale]);
@@ -119,7 +128,7 @@ export function VerseOfTheDay() {
       utterance.rate = 0.9;
       // Set language for better pronunciation
       const langMap: Record<string, string> = {
-        en: "en-US", fr: "fr-FR", de: "de-DE", es: "es-ES", pt: "pt-BR", zh: "zh-CN"
+        en: "en-US", fr: "fr-FR", de: "de-DE", es: "es-ES", pt: "pt-BR", zh: "zh-CN", it: "it-IT"
       };
       utterance.lang = langMap[locale] || "en-US";
       speechSynthesis.speak(utterance);

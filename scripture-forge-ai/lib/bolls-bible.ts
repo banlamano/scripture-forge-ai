@@ -130,6 +130,12 @@ export const BOLLS_TRANSLATIONS: Record<string, { id: string; name: string; abbr
     { id: "WEB", name: "World English Bible", abbreviation: "WEB" },
     { id: "KJV", name: "King James Version", abbreviation: "KJV" },
   ],
+  it: [
+    { id: "NR2006", name: "Nuova Riveduta 2006", abbreviation: "NR06" },
+    { id: "NR1994", name: "Nuova Riveduta 1994", abbreviation: "NR94" },
+    { id: "CEI2008", name: "Conferenza Episcopale Italiana 2008", abbreviation: "CEI" },
+    { id: "TILC", name: "Traduzione in Lingua Corrente", abbreviation: "TILC" },
+  ],
 };
 
 /**

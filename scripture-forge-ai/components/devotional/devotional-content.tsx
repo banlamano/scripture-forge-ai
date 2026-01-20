@@ -15,6 +15,7 @@ const localeMap: Record<string, string> = {
   fr: "fr-FR",
   pt: "pt-BR",
   zh: "zh-CN",
+  it: "it-IT",
 };
 
 export function DevotionalContent() {
