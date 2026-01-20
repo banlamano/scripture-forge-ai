@@ -24,10 +24,10 @@ const defaultTranslations: Record<string, { id: string; name: string }> = {
   en: { id: "KJV", name: "KJV" },
   fr: { id: "FRLSG", name: "LSG" },
   de: { id: "LUT", name: "Luther" },
-  es: { id: "RVR09", name: "RVR" },
+  es: { id: "RV1960", name: "RV60" },
   pt: { id: "ARA", name: "ARA" },
   zh: { id: "KJV", name: "KJV" }, // Fallback to English for Chinese
-  it: { id: "NR2006", name: "NR06" },
+  it: { id: "NR06", name: "NR06" },
 };
 
 interface VerseData {
@@ -78,8 +78,15 @@ export function VerseOfTheDay() {
         verseText = verse?.text || "";
       }
       
-      // Clean HTML tags
-      verseText = verseText.replace(/<[^>]+>/g, "").trim();
+      // Clean HTML tags and verse numbers (like [1], (1), superscripts, etc.)
+      verseText = verseText
+        .replace(/<[^>]+>/g, "")  // Remove HTML tags
+        .replace(/\[\d+\]/g, "")  // Remove [1], [2], etc.
+        .replace(/\(\d+\)/g, "")  // Remove (1), (2), etc.
+        .replace(/^\d+\s*/g, "")  // Remove leading verse numbers
+        .replace(/\s+\d+\s+/g, " ")  // Remove standalone numbers between spaces
+        .replace(/\s+/g, " ")  // Normalize whitespace
+        .trim();
       
       setCurrentVerse({
         text: verseText,

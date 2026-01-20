@@ -85,10 +85,8 @@ export const BIBLE_TRANSLATIONS: Record<string, { id: string; name: string; abbr
   ],
   it: [
     // Bolls.life Italian translations (free, no API key needed)
-    { id: "bolls:NR2006", name: "Nuova Riveduta 2006", abbreviation: "NR06" },
-    { id: "bolls:NR1994", name: "Nuova Riveduta 1994", abbreviation: "NR94" },
-    { id: "bolls:CEI2008", name: "Conferenza Episcopale Italiana 2008", abbreviation: "CEI" },
-    { id: "bolls:TILC", name: "Traduzione in Lingua Corrente", abbreviation: "TILC" },
+    { id: "bolls:NR06", name: "Nuova Riveduta 2006", abbreviation: "NR06" },
+    { id: "bolls:VULG", name: "Biblia Sacra Vulgata (Latin)", abbreviation: "VULG" },
     // API.Bible Italian translations (requires API key)
     { id: "41aa25bc421df6bc-01", name: "La Sacra Bibbia (Diodati)", abbreviation: "DIO" },
   ],
