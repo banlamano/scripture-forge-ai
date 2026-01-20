@@ -482,5 +482,249 @@
     "cookies": "Cookies",
     "copyright": "© {year} ScriptureForge AI. Alle Rechte vorbehalten.",
     "tagline": "KI-gestütztes Bibelstudium für alle"
+  },
+  "legal": {
+    "lastUpdated": "Letzte Aktualisierung: 20. Januar 2026",
+    "privacy": {
+      "title": "Datenschutzrichtlinie",
+      "description": "Erfahren Sie, wie ScriptureForge AI Ihre personlichen Daten sammelt, verwendet und schutzt.",
+      "intro": "Welcome to ScriptureForge AI (\"we,\" \"our,\" or \"us\"). We are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our AI-powered Bible study application.",
+      "section1Title": "1. Einleitung",
+      "section2Title": "2. Informationen, die wir sammeln",
+      "section2_1Title": "2.1 Personliche Informationen",
+      "section2_1Text": "Wenn Sie ein Konto erstellen, konnen wir Folgendes sammeln:",
+      "section2_1Items": [
+        "Name and email address",
+        "Profile information you choose to provide",
+        "Authentication data (when using Google Sign-In)"
+      ],
+      "section2_2Title": "2.2 Nutzungsinformationen",
+      "section2_2Text": "Wir sammeln automatisch bestimmte Informationen, wenn Sie unseren Dienst nutzen:",
+      "section2_2Items": [
+        "Bible reading history and preferences",
+        "Chat conversations with our AI assistant",
+        "Saved verses, bookmarks, and highlights",
+        "Prayer journal entries (stored securely)",
+        "Device information and browser type",
+        "IP address and general location data"
+      ],
+      "section3Title": "3. Wie wir Ihre Informationen verwenden",
+      "section3Text": "Wir verwenden die gesammelten Informationen, um:",
+      "section3Items": [
+        "Provide and personalize our Bible study services",
+        "Generate AI-powered insights and devotionals",
+        "Save your reading progress and preferences",
+        "Improve our AI models and service quality",
+        "Send important service updates and notifications",
+        "Ensure security and prevent fraud",
+        "Comply with legal obligations"
+      ],
+      "section4Title": "4. Datenweitergabe und Offenlegung",
+      "section4Text": "Wir verkaufen Ihre personlichen Daten nicht. Wir konnen Ihre Daten teilen mit:",
+      "section4Items": [
+        "Service Providers: Third-party services that help us operate (hosting, analytics, AI processing)",
+        "AI Partners: Your chat queries may be processed by AI providers (OpenAI, Anthropic) to generate responses",
+        "Legal Requirements: When required by law or to protect our rights"
+      ],
+      "section5Title": "5. Datensicherheit",
+      "section5Text": "We implement industry-standard security measures to protect your information, including encryption in transit and at rest, secure authentication, and regular security audits. However, no method of transmission over the Internet is 100% secure, and we cannot guarantee absolute security.",
+      "section6Title": "6. Ihre Rechte und Wahlmoglichkeiten",
+      "section6Text": "Je nach Ihrem Standort haben Sie moglicherweise das Recht:",
+      "section6Items": [
+        "Access and receive a copy of your personal data",
+        "Correct inaccurate information",
+        "Delete your account and associated data",
+        "Object to or restrict certain processing",
+        "Data portability",
+        "Withdraw consent at any time"
+      ],
+      "section7Title": "7. Datenschutz fur Kinder",
+      "section7Text": "ScriptureForge AI is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us.",
+      "section8Title": "8. Internationale Datenubertragungen",
+      "section8Text": "Your information may be transferred to and processed in countries other than your own. We ensure appropriate safeguards are in place to protect your information in accordance with this Privacy Policy.",
+      "section9Title": "9. Anderungen dieser Richtlinie",
+      "section9Text": "We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the \"Last updated\" date. We encourage you to review this Privacy Policy periodically.",
+      "section10Title": "10. Kontaktieren Sie uns",
+      "section10Text": "Wenn Sie Fragen zu dieser Datenschutzrichtlinie oder unseren Datenpraktiken haben, kontaktieren Sie uns bitte unter:",
+      "contactEmail": "privacy@scriptureforge.ai",
+      "contactWebsite": "https://scriptureforge.ai/contact"
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "description": "Read the terms and conditions for using ScriptureForge AI services.",
+      "section1Title": "1. Acceptance of Terms",
+      "section1Text": "By accessing or using ScriptureForge AI (\"the Service\"), you agree to be bound by these Terms of Service (\"Terms\"). If you do not agree to these Terms, please do not use the Service. We reserve the right to modify these Terms at any time, and your continued use of the Service constitutes acceptance of any modifications.",
+      "section2Title": "2. Description of Service",
+      "section2Text": "ScriptureForge AI is an AI-powered Bible study companion that provides:",
+      "section2Items": [
+        "Interactive Bible reading with multiple translations",
+        "AI-powered chat for biblical questions and insights",
+        "Daily devotionals and reading plans",
+        "Prayer journal functionality",
+        "Smart search capabilities",
+        "Verse bookmarking and highlighting"
+      ],
+      "section3Title": "3. User Accounts",
+      "section3_1Title": "3.1 Registration",
+      "section3_1Text": "To access certain features, you may need to create an account. You agree to provide accurate, current, and complete information during registration and to update such information to keep it accurate.",
+      "section3_2Title": "3.2 Account Security",
+      "section3_2Text": "You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. Please notify us immediately of any unauthorized use of your account.",
+      "section4Title": "4. Acceptable Use",
+      "section4Text": "You agree not to:",
+      "section4Items": [
+        "Use the Service for any unlawful purpose or in violation of any applicable laws",
+        "Attempt to gain unauthorized access to any part of the Service",
+        "Interfere with or disrupt the Service or servers",
+        "Upload or transmit viruses, malware, or other harmful code",
+        "Use the Service to harass, abuse, or harm others",
+        "Scrape, data mine, or use automated systems to access the Service without permission",
+        "Reproduce, duplicate, or resell any part of the Service without authorization",
+        "Use AI responses for purposes that misrepresent them as human-generated theological guidance"
+      ],
+      "section5Title": "5. AI-Generated Content Disclaimer",
+      "section5Text": "Important: ScriptureForge AI uses artificial intelligence to provide insights, explanations, and devotional content. Please understand that:",
+      "section5Items": [
+        "AI responses are generated based on training data and may not always be accurate or complete",
+        "The Service is not a substitute for professional pastoral guidance, theological education, or scholarly study",
+        "We encourage you to verify AI-generated content with trusted biblical sources and spiritual leaders",
+        "Different Christian traditions may interpret scripture differently; our AI aims to be informative but not denominationally prescriptive"
+      ],
+      "section6Title": "6. Intellectual Property",
+      "section6_1Title": "6.1 Our Content",
+      "section6_1Text": "The Service, including its design, features, and original content (excluding Bible text), is owned by ScriptureForge AI and protected by intellectual property laws. You may not copy, modify, or distribute our proprietary content without permission.",
+      "section6_2Title": "6.2 Bible Text",
+      "section6_2Text": "Bible translations are provided through licensed APIs and are subject to their respective copyright holders' terms. Public domain translations (such as KJV) are freely available.",
+      "section6_3Title": "6.3 Your Content",
+      "section6_3Text": "You retain ownership of content you create (such as prayer entries and notes). By using the Service, you grant us a limited license to store and display your content to provide the Service to you.",
+      "section7Title": "7. Privacy",
+      "section7Text": "Your privacy is important to us. Please review our Privacy Policy to understand how we collect, use, and protect your information.",
+      "section8Title": "8. Subscription and Payments",
+      "section8Text": "Some features may require a paid subscription. By subscribing, you agree to:",
+      "section8Items": [
+        "Pay all applicable fees as described at the time of purchase",
+        "Automatic renewal unless cancelled before the renewal date",
+        "Our refund policy as described on our pricing page"
+      ],
+      "section9Title": "9. Limitation of Liability",
+      "section9Text": "TO THE MAXIMUM EXTENT PERMITTED BY LAW, SCRIPTUREFORGE AI SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES RESULTING FROM YOUR USE OF THE SERVICE.",
+      "section10Title": "10. Disclaimer of Warranties",
+      "section10Text": "THE SERVICE IS PROVIDED \"AS IS\" AND \"AS AVAILABLE\" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED. WE DO NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, SECURE, OR ERROR-FREE.",
+      "section11Title": "11. Termination",
+      "section11Text": "We may terminate or suspend your account and access to the Service at our sole discretion, without prior notice, for conduct that we believe violates these Terms or is harmful to other users, us, or third parties, or for any other reason.",
+      "section12Title": "12. Governing Law",
+      "section12Text": "These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which ScriptureForge AI operates, without regard to its conflict of law provisions.",
+      "section13Title": "13. Contact Information",
+      "section13Text": "If you have any questions about these Terms, please contact us at:",
+      "contactEmail": "legal@scriptureforge.ai"
+    },
+    "cookies": {
+      "title": "Cookie Policy",
+      "description": "Learn about how ScriptureForge AI uses cookies and similar technologies.",
+      "section1Title": "1. What Are Cookies?",
+      "section1Text": "Cookies are small text files that are stored on your device (computer, tablet, or mobile) when you visit a website. They are widely used to make websites work more efficiently, provide a better user experience, and give website owners information about how their site is being used.",
+      "section2Title": "2. How We Use Cookies",
+      "section2Text": "ScriptureForge AI uses cookies and similar technologies for several purposes:",
+      "section2_1Title": "2.1 Essential Cookies",
+      "section2_1Text": "These cookies are necessary for the website to function properly. They enable core functionality such as:",
+      "section2_1Items": [
+        "User authentication and session management",
+        "Security features and fraud prevention",
+        "Remembering your login status",
+        "Loading balancing and server optimization"
+      ],
+      "section2_2Title": "2.2 Preference Cookies",
+      "section2_2Text": "These cookies remember your settings and preferences:",
+      "section2_2Items": [
+        "Language preferences",
+        "Theme settings (light/dark mode)",
+        "Default Bible translation",
+        "Reading progress and bookmarks",
+        "Font size and display preferences"
+      ],
+      "section2_3Title": "2.3 Analytics Cookies",
+      "section2_3Text": "We use analytics cookies to understand how visitors interact with our website:",
+      "section2_3Items": [
+        "Pages visited and time spent on each page",
+        "Features used most frequently",
+        "Error tracking and performance monitoring",
+        "General usage patterns to improve our service"
+      ],
+      "section2_3Extra": "We use Vercel Analytics, which is privacy-focused and does not use cookies that track individuals across websites.",
+      "section2_4Title": "2.4 Functional Cookies",
+      "section2_4Text": "These cookies enable enhanced functionality:",
+      "section2_4Items": [
+        "Chat history storage",
+        "Offline Bible reading capabilities",
+        "Progressive Web App (PWA) functionality"
+      ],
+      "section3Title": "3. Third-Party Cookies",
+      "section3Text": "Some cookies are placed by third-party services that appear on our pages:",
+      "thirdPartyTable": {
+        "provider": "Provider",
+        "purpose": "Purpose",
+        "type": "Type",
+        "vercel": {
+          "name": "Vercel",
+          "purpose": "Hosting and analytics",
+          "type": "Essential/Analytics"
+        },
+        "google": {
+          "name": "Google (OAuth)",
+          "purpose": "Authentication",
+          "type": "Essential"
+        },
+        "stripe": {
+          "name": "Stripe",
+          "purpose": "Payment processing",
+          "type": "Essential"
+        }
+      },
+      "section4Title": "4. Local Storage and IndexedDB",
+      "section4Text": "In addition to cookies, we use browser local storage and IndexedDB to store data locally on your device. This enables features like:",
+      "section4Items": [
+        "Offline Bible reading",
+        "Cached chat conversations",
+        "Saved verses and notes",
+        "Reading plan progress"
+      ],
+      "section4Extra": "This data remains on your device and is not transmitted to our servers unless you are signed in and choose to sync your data.",
+      "section5Title": "5. Managing Cookies",
+      "section5Text": "You can control and manage cookies in several ways:",
+      "section5_1Title": "5.1 Browser Settings",
+      "section5_1Text": "Most browsers allow you to:",
+      "section5_1Items": [
+        "View what cookies are stored and delete them individually",
+        "Block third-party cookies",
+        "Block all cookies from specific sites",
+        "Block all cookies from being set",
+        "Delete all cookies when you close your browser"
+      ],
+      "section5_1Extra": "Please note that blocking essential cookies may affect the functionality of our website.",
+      "section5_2Title": "5.2 Browser-Specific Instructions",
+      "browserInstructions": {
+        "chrome": "Chrome: Settings → Privacy and Security → Cookies",
+        "firefox": "Firefox: Options → Privacy & Security → Cookies",
+        "safari": "Safari: Preferences → Privacy → Cookies",
+        "edge": "Edge: Settings → Privacy & Security → Cookies"
+      },
+      "section6Title": "6. Cookie Retention",
+      "section6Text": "Different cookies have different retention periods:",
+      "section6Items": [
+        "Session cookies: Deleted when you close your browser",
+        "Persistent cookies: Remain until they expire or you delete them",
+        "Authentication cookies: Typically 30 days (or until you sign out)",
+        "Preference cookies: Up to 1 year"
+      ],
+      "section7Title": "7. Updates to This Policy",
+      "section7Text": "We may update this Cookie Policy from time to time to reflect changes in technology, legislation, or our data practices. When we make changes, we will update the \"Last updated\" date at the top of this page. We encourage you to review this policy periodically.",
+      "section8Title": "8. Contact Us",
+      "section8Text": "If you have questions about our use of cookies or this Cookie Policy, please contact us at:",
+      "section9Title": "9. Related Policies",
+      "section9Text": "For more information about how we handle your data, please also review our:",
+      "relatedPolicies": [
+        "Privacy Policy",
+        "Terms of Service"
+      ]
+    }
   }
 }
