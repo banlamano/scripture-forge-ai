@@ -432,6 +432,11 @@
     "translationSaved": "译本偏好已保存",
     "account": "账户",
     "accountSettings": "管理您的账户设置",
+    "savedVerses": "已保存经文",
+    "savedVersesDescription": "您从每日经文中保存的最爱经文",
+    "noSavedVerses": "暂无保存的经文",
+    "saveVersesHint": "从主页保存经文以在此处查看",
+    "verseDeleted": "经文已删除",
     "continueReading": "继续上次的阅读",
     "askQuestions": "提出关于圣经的问题",
     "dailyInsights": "每日属灵洞见"

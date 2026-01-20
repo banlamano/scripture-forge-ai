@@ -432,6 +432,11 @@
     "translationSaved": "Préférence de traduction enregistrée",
     "account": "Compte",
     "accountSettings": "Gérez les paramètres de votre compte",
+    "savedVerses": "Versets Sauvegardés",
+    "savedVersesDescription": "Vos versets préférés sauvegardés du verset du jour",
+    "noSavedVerses": "Aucun verset sauvegardé",
+    "saveVersesHint": "Sauvegardez des versets depuis la page d'accueil pour les voir ici",
+    "verseDeleted": "Verset supprimé",
     "continueReading": "Continuez à lire où vous vous êtes arrêté",
     "askQuestions": "Posez des questions sur les Écritures",
     "dailyInsights": "Perspectives spirituelles quotidiennes"

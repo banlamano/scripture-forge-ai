@@ -21,7 +21,10 @@ import {
   Sun,
   Moon,
   Monitor,
-  Check
+  Check,
+  Heart,
+  Trash2,
+  Share2
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -39,6 +42,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { ShareModal } from "@/components/ui/share-modal";
+
+// Type for saved verses
+interface SavedVerse {
+  text: string;
+  reference: string;
+  translation: string;
+  savedAt: string;
+}
 
 // Local storage key for default translation preference
 const TRANSLATION_PREFERENCE_KEY = "scripture-forge-default-translation";
@@ -50,6 +62,9 @@ export default function ProfilePage() {
   const { locale } = useLanguage();
   const [mounted, setMounted] = useState(false);
   const [defaultTranslation, setDefaultTranslation] = useState<string>("");
+  const [savedVerses, setSavedVerses] = useState<SavedVerse[]>([]);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [shareContent, setShareContent] = useState("");
   const t = useTranslations("profile");
   const tCommon = useTranslations("common");
 
@@ -58,7 +73,7 @@ export default function ProfilePage() {
     return BIBLE_TRANSLATIONS[locale] || BIBLE_TRANSLATIONS["en"];
   }, [locale]);
 
-  // Load saved translation preference on mount
+  // Load saved translation preference and saved verses on mount
   useEffect(() => {
     setMounted(true);
     // Load saved preference from localStorage
@@ -76,7 +91,25 @@ export default function ProfilePage() {
       // Default to first translation for current language
       setDefaultTranslation(availableTranslations[0]?.id || "");
     }
+    
+    // Load saved verses from localStorage
+    const verses = JSON.parse(localStorage.getItem("savedVerses") || "[]");
+    setSavedVerses(verses);
   }, [availableTranslations]);
+
+  // Delete a saved verse
+  const handleDeleteVerse = (reference: string) => {
+    const updatedVerses = savedVerses.filter(v => v.reference !== reference);
+    setSavedVerses(updatedVerses);
+    localStorage.setItem("savedVerses", JSON.stringify(updatedVerses));
+    toast.success(t("verseDeleted") || "Verse removed");
+  };
+
+  // Share a saved verse
+  const handleShareVerse = (verse: SavedVerse) => {
+    setShareContent(`"${verse.text}" — ${verse.reference} (${verse.translation})`);
+    setShowShareModal(true);
+  };
 
   // Handle translation change
   const handleTranslationChange = (translationId: string) => {
@@ -141,6 +174,18 @@ export default function ProfilePage() {
   ];
 
   return (
+    <>
+    <ShareModal
+      isOpen={showShareModal}
+      onClose={() => setShowShareModal(false)}
+      text={shareContent}
+      title="ScriptureForge AI - Saved Verse"
+      translations={{
+        shareTitle: tCommon("share"),
+        copyLink: tCommon("copy"),
+        copied: tCommon("copied"),
+      }}
+    />
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 bg-gradient-to-b from-background to-muted/30">
@@ -210,6 +255,63 @@ export default function ProfilePage() {
                 </div>
               </Link>
             ))}
+          </CardContent>
+        </Card>
+
+        {/* Saved Verses */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Heart className="w-5 h-5 text-red-500" />
+              {t("savedVerses") || "Saved Verses"}
+            </CardTitle>
+            <CardDescription>{t("savedVersesDescription") || "Your favorite verses saved from the verse of the day"}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {savedVerses.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                <Bookmark className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                <p>{t("noSavedVerses") || "No saved verses yet"}</p>
+                <p className="text-sm mt-1">{t("saveVersesHint") || "Save verses from the home page to see them here"}</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {savedVerses.map((verse, index) => (
+                  <div key={index} className="p-4 rounded-lg border bg-muted/30">
+                    <p className="text-sm italic mb-2">&ldquo;{verse.text}&rdquo;</p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span className="font-medium text-primary">{verse.reference}</span>
+                        <span>•</span>
+                        <span>{verse.translation}</span>
+                        <span>•</span>
+                        <span>{new Date(verse.savedAt).toLocaleDateString()}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => handleShareVerse(verse)}
+                          title={tCommon("share")}
+                        >
+                          <Share2 className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
+                          onClick={() => handleDeleteVerse(verse.reference)}
+                          title={tCommon("delete")}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -327,5 +429,6 @@ export default function ProfilePage() {
       </main>
       <Footer />
     </div>
+    </>
   );
 }

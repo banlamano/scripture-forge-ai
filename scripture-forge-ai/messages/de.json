@@ -432,6 +432,11 @@
     "translationSaved": "Uebersetzungseinstellung gespeichert",
     "account": "Konto",
     "accountSettings": "Verwalten Sie Ihre Kontoeinstellungen",
+    "savedVerses": "Gespeicherte Verse",
+    "savedVersesDescription": "Ihre Lieblingsverse aus dem Vers des Tages",
+    "noSavedVerses": "Noch keine gespeicherten Verse",
+    "saveVersesHint": "Speichern Sie Verse von der Startseite, um sie hier zu sehen",
+    "verseDeleted": "Vers entfernt",
     "continueReading": "Weiterlesen, wo Sie aufgehört haben",
     "askQuestions": "Stellen Sie Fragen zur Schrift",
     "dailyInsights": "Tägliche spirituelle Einblicke"

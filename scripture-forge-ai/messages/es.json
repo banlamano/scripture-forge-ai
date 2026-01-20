@@ -432,6 +432,11 @@
     "translationSaved": "Preferencia de traducción guardada",
     "account": "Cuenta",
     "accountSettings": "Administra la configuración de tu cuenta",
+    "savedVerses": "Versículos Guardados",
+    "savedVersesDescription": "Tus versículos favoritos guardados del versículo del día",
+    "noSavedVerses": "No hay versículos guardados",
+    "saveVersesHint": "Guarda versículos desde la página principal para verlos aquí",
+    "verseDeleted": "Versículo eliminado",
     "continueReading": "Continúa leyendo donde lo dejaste",
     "askQuestions": "Haz preguntas sobre las Escrituras",
     "dailyInsights": "Perspectivas espirituales diarias"

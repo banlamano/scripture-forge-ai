@@ -432,6 +432,11 @@
     "translationSaved": "Translation preference saved",
     "account": "Account",
     "accountSettings": "Manage your account settings",
+    "savedVerses": "Saved Verses",
+    "savedVersesDescription": "Your favorite verses saved from the verse of the day",
+    "noSavedVerses": "No saved verses yet",
+    "saveVersesHint": "Save verses from the home page to see them here",
+    "verseDeleted": "Verse removed",
     "continueReading": "Continue reading where you left off",
     "askQuestions": "Ask questions about Scripture",
     "dailyInsights": "Daily spiritual insights"
