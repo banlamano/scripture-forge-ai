@@ -4,8 +4,10 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Calendar, BookOpen, Heart } from "lucide-react";
+import { Sparkles, Calendar, BookOpen, Heart, RefreshCw } from "lucide-react";
 import { useLanguage } from "@/components/providers/language-provider";
+import { getDailyDevotional, type Devotional } from "@/lib/devotionals-data";
+import { useMemo, useState } from "react";
 
 // Locale mapping for date formatting
 const localeMap: Record<string, string> = {
@@ -23,6 +25,7 @@ export function DevotionalContent() {
   const tCommon = useTranslations("common");
   const { locale } = useLanguage();
   
+  // Get today's date for display
   const todayDate = new Date().toLocaleDateString(localeMap[locale] || "en-US", { 
     weekday: "long", 
     year: "numeric", 
@@ -30,8 +33,8 @@ export function DevotionalContent() {
     day: "numeric" 
   });
 
-  // Get translated further reading references
-  const furtherReadingKeys = ["reading1", "reading2", "reading3"] as const;
+  // Get the daily devotional based on current date
+  const dailyDevotional = useMemo(() => getDailyDevotional(new Date()), []);
 
   return (
     <div className="container max-w-3xl mx-auto">
@@ -45,7 +48,7 @@ export function DevotionalContent() {
           {t("title")}
         </h1>
         <p className="text-muted-foreground">
-          {t("todaysDevotional")}
+          {dailyDevotional.theme}
         </p>
       </div>
 
@@ -53,10 +56,10 @@ export function DevotionalContent() {
       <Card className="mb-8 bg-gradient-to-br from-primary/5 to-transparent">
         <CardContent className="pt-6">
           <blockquote className="scripture-text text-xl md:text-2xl text-center italic mb-4">
-            &ldquo;{t("verseText")}&rdquo;
+            &ldquo;{dailyDevotional.verseText}&rdquo;
           </blockquote>
           <p className="text-center text-primary font-medium">
-            — {t("verseReference")} (NIV)
+            — {dailyDevotional.verseReference} (NIV)
           </p>
         </CardContent>
       </Card>
@@ -72,7 +75,7 @@ export function DevotionalContent() {
         <CardContent>
           <div className="prose-scripture">
             <p className="mb-4 leading-relaxed">
-              {t("reflectionContent")}
+              {dailyDevotional.reflection}
             </p>
           </div>
         </CardContent>
@@ -87,7 +90,7 @@ export function DevotionalContent() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="italic leading-relaxed">{t("prayerContent")}</p>
+          <p className="italic leading-relaxed">{dailyDevotional.prayer}</p>
         </CardContent>
       </Card>
 
@@ -101,13 +104,13 @@ export function DevotionalContent() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-2">
-            {furtherReadingKeys.map((key) => (
+            {dailyDevotional.furtherReading.map((reference) => (
               <Link
-                key={key}
-                href={`/bible?ref=${encodeURIComponent(t(key))}`}
+                key={reference}
+                href={`/bible?ref=${encodeURIComponent(reference)}`}
                 className="px-3 py-1.5 rounded-full bg-muted hover:bg-muted/80 text-sm font-medium transition-colors"
               >
-                {t(key)}
+                {reference}
               </Link>
             ))}
           </div>
