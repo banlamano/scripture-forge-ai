@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { locales, defaultLocale, localeNames, type Locale } from '@/lib/i18n';
 
@@ -23,11 +23,15 @@ const messagesMap: Record<Locale, typeof enMessages> = {
   it: itMessages,
 };
 
+// Export messagesMap for direct access in components
+export { messagesMap };
+
 interface LanguageContextType {
   locale: Locale;
   setLocale: (locale: Locale) => void;
   locales: readonly Locale[];
   localeNames: Record<Locale, string>;
+  messages: typeof enMessages;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -41,9 +45,24 @@ export function useLanguage() {
       setLocale: () => {},
       locales,
       localeNames,
+      messages: messagesMap[defaultLocale],
     };
   }
   return context;
+}
+
+// Custom hook to get raw translations that updates with locale changes
+export function useRawTranslations<T>(namespace: string): T {
+  const { locale, messages } = useLanguage();
+  
+  // Navigate to the namespace in messages
+  const parts = namespace.split('.');
+  let result: any = messages;
+  for (const part of parts) {
+    result = result?.[part];
+  }
+  
+  return result as T;
 }
 
 // Detect browser language
@@ -111,8 +130,8 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
   }
 
   return (
-    <LanguageContext.Provider value={{ locale, setLocale, locales, localeNames }}>
-      <NextIntlClientProvider locale={locale} messages={messages}>
+    <LanguageContext.Provider value={{ locale, setLocale, locales, localeNames, messages }}>
+      <NextIntlClientProvider key={locale} locale={locale} messages={messages}>
         {children}
       </NextIntlClientProvider>
     </LanguageContext.Provider>

@@ -736,6 +736,105 @@
       "contactTitle": "还需要帮助？",
       "contactDescription": "我们的支持团队随时为您提供帮助。",
       "contactButton": "联系支持",
+      "articleNotFound": "文章未找到",
+      "returnToHelpCenter": "返回帮助中心",
+      "backToHelpCenter": "返回帮助中心",
+      "relatedArticles": "相关文章",
+      "needMoreHelp": "还需要帮助？",
+      "needMoreHelpDescription": "如果您对此主题有其他问题，请随时联系我们的支持团队或探索下面的相关文章。",
+      "articleContent": {
+        "creatingAccount": {
+          "howToCreate": "如何创建您的账户",
+          "steps": [
+            "访问 ScriptureForge AI 网站或打开应用程序",
+            "点击右上角的「登录」按钮",
+            "选择使用电子邮件注册或使用 Google 登录以更快注册",
+            "如果使用电子邮件，请输入您的姓名、电子邮件并创建安全密码",
+            "点击发送到您收件箱的链接验证您的电子邮件地址",
+            "通过添加个人资料照片和简介完善您的个人资料（可选）"
+          ],
+          "benefitsTitle": "创建账户的好处",
+          "benefits": [
+            "在所有设备上保存您的书签和高亮",
+            "访问与 AI 助手的聊天记录",
+            "跟踪您的阅读进度和计划",
+            "同步您的祷告日记条目",
+            "个性化您的圣经学习体验"
+          ]
+        },
+        "navigatingInterface": {
+          "mainSections": "ScriptureForge AI 的主要部分",
+          "sections": {
+            "bibleReader": {
+              "title": "📖 圣经阅读器",
+              "description": "使用书签、高亮和笔记工具阅读多种译本的圣经。"
+            },
+            "aiChat": {
+              "title": "💬 AI 聊天",
+              "description": "询问有关圣经的问题，获得由 AI 驱动的深刻且有上下文的答案。"
+            },
+            "prayerJournal": {
+              "title": "🙏 祷告日记",
+              "description": "记录您的祷告，跟踪已应允的祷告，反思您的灵性旅程。"
+            },
+            "readingPlans": {
+              "title": "📅 阅读计划",
+              "description": "遵循结构化的阅读计划来指导您的每日圣经学习。"
+            },
+            "devotionals": {
+              "title": "✨ 灵修",
+              "description": "访问每日灵修内容，激励和指导您的灵性成长。"
+            },
+            "search": {
+              "title": "🔍 搜索",
+              "description": "搜索所有圣经译本以查找特定的经文、词语或主题。"
+            }
+          },
+          "navigationTips": "导航提示",
+          "tips": [
+            "使用顶部导航栏快速切换主要部分",
+            "从右上角的用户菜单访问您的个人资料和设置",
+            "使用搜索功能查找经文或导航到特定书卷",
+            "使用主题切换器在明暗模式之间切换"
+          ]
+        },
+        "setupPreferences": {
+          "customizing": "自定义您的体验",
+          "preferences": {
+            "bibleTranslation": {
+              "title": "圣经译本",
+              "description": "从以下选项中选择您的默认圣经译本：",
+              "options": [
+                "和合本",
+                "新标点和合本",
+                "现代中文译本",
+                "当代圣经",
+                "还有更多译本"
+              ]
+            },
+            "theme": {
+              "title": "主题设置",
+              "description": "根据您的偏好在明暗模式之间切换，或设置为跟随系统设置。"
+            },
+            "language": {
+              "title": "语言",
+              "description": "ScriptureForge AI 支持多种界面语言，包括英语、西班牙语、法语、德语、葡萄牙语、意大利语和中文。"
+            },
+            "notifications": {
+              "title": "通知",
+              "description": "配置您接收的通知，包括每日经文提醒、阅读计划更新和祷告提醒。"
+            }
+          },
+          "howToAccess": "如何访问设置",
+          "accessSteps": [
+            "点击右上角的个人资料图标",
+            "从下拉菜单中选择「设置」或「个人资料」",
+            "浏览不同的设置标签",
+            "进行所需的更改",
+            "更改会自动保存"
+          ]
+        }
+      },
       "categories": [
         {
           "id": "gettingStarted",
@@ -1120,6 +1219,7 @@
     "blog": {
       "title": "博客",
       "subtitle": "关于圣经学习、AI技术和灵性成长的见解",
+      "blogSubtitleDescription": "探索文章、指南和见解，加深您对圣经的理解，在信仰之旅中成长。",
       "allPosts": "所有文章",
       "featured": "精选",
       "readMore": "阅读更多",
@@ -1149,57 +1249,83 @@
         {
           "slug": "how-ai-is-transforming-bible-study",
           "title": "AI如何在2026年改变圣经学习",
-          "excerpt": "了解人工智能如何帮助数百万信徒更深入地理解圣经。",
+          "excerpt": "了解人工智能如何帮助数百万信徒更深入地理解圣经，同时保持神学的完整性。",
           "author": "Sarah Mitchell博士",
+          "authorRole": "神学教授",
           "date": "2026年1月15日",
-          "readTime": "8分钟阅读",
+          "readTime": "8分钟",
           "category": "ai-technology",
           "featured": true
         },
         {
           "slug": "5-ways-to-study-bible-effectively",
           "title": "更有效学习圣经的5种方法",
-          "excerpt": "实用技巧帮助您更好地利用每日圣经阅读时间。",
+          "excerpt": "实用技巧和经过验证的方法，帮助您更好地利用每日圣经阅读时间。",
           "author": "James Wilson牧师",
+          "authorRole": "主任牧师",
           "date": "2026年1月12日",
-          "readTime": "6分钟阅读",
+          "readTime": "6分钟",
           "category": "bible-study"
         },
         {
           "slug": "understanding-biblical-context",
           "title": "理解圣经背景：初学者指南",
-          "excerpt": "了解为什么背景很重要以及如何正确解释经文。",
+          "excerpt": "了解为什么背景很重要，以及如何在历史背景下正确解释经文。",
           "author": "Emily Chen博士",
+          "authorRole": "圣经学者",
           "date": "2026年1月10日",
-          "readTime": "10分钟阅读",
+          "readTime": "10分钟",
           "category": "bible-study"
+        },
+        {
+          "slug": "daily-devotional-habit",
+          "title": "建立持久的每日灵修习惯",
+          "excerpt": "建立持续每日灵修实践的实用策略，转变您与神同行的生命。",
+          "author": "Rachel Thompson",
+          "authorRole": "属灵导师",
+          "date": "2026年1月8日",
+          "readTime": "7分钟",
+          "category": "spiritual-growth"
+        },
+        {
+          "slug": "power-of-prayer",
+          "title": "祷告的力量：每日与神连接",
+          "excerpt": "探索祷告的转化力量，学习加深祷告生活的实用方法。",
+          "author": "Michael Roberts牧师",
+          "authorRole": "祷告事工负责人",
+          "date": "2026年1月5日",
+          "readTime": "9分钟",
+          "category": "spiritual-growth"
+        },
+        {
+          "slug": "community-bible-study",
+          "title": "团体圣经学习的益处",
+          "excerpt": "发现为什么在团体中学习圣经能丰富您的理解并坚固您的信心。",
+          "author": "Jennifer Adams",
+          "authorRole": "小组事工主任",
+          "date": "2026年1月3日",
+          "readTime": "6分钟",
+          "category": "bible-study"
+        },
+        {
+          "slug": "finding-hope-in-difficult-times",
+          "title": "在困难时期通过圣经找到希望",
+          "excerpt": "如何在人生最具挑战性的季节中，从神的话语中找到安慰、力量和希望。",
+          "author": "David Park牧师",
+          "authorRole": "教牧辅导",
+          "date": "2026年1月1日",
+          "readTime": "8分钟",
+          "category": "spiritual-growth"
         },
         {
           "slug": "new-features-january-2026",
           "title": "新功能：2026年1月更新",
           "excerpt": "探索ScriptureForge AI的最新功能。",
           "author": "ScriptureForge团队",
-          "date": "2026年1月8日",
-          "readTime": "4分钟阅读",
+          "authorRole": "产品团队",
+          "date": "2025年12月28日",
+          "readTime": "4分钟",
           "category": "news"
-        },
-        {
-          "slug": "daily-devotional-habit",
-          "title": "建立持久的每日灵修习惯",
-          "excerpt": "建立持续每日灵修实践的实用策略。",
-          "author": "Rachel Thompson",
-          "date": "2026年1月5日",
-          "readTime": "7分钟阅读",
-          "category": "spiritual-growth"
-        },
-        {
-          "slug": "getting-started-with-api",
-          "title": "ScriptureForge API入门",
-          "excerpt": "将ScriptureForge AI集成到您应用程序的分步教程。",
-          "author": "Michael Park",
-          "date": "2026年1月3日",
-          "readTime": "12分钟阅读",
-          "category": "tutorials"
         }
       ],
       "newsletter": {

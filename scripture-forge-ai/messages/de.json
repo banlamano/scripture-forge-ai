@@ -736,6 +736,105 @@
       "contactTitle": "Noch Hilfe benötigt?",
       "contactDescription": "Unser Support-Team hilft Ihnen gerne weiter.",
       "contactButton": "Support Kontaktieren",
+      "articleNotFound": "Artikel nicht gefunden",
+      "returnToHelpCenter": "Zurück zum Hilfezentrum",
+      "backToHelpCenter": "Zurück zum Hilfezentrum",
+      "relatedArticles": "Verwandte Artikel",
+      "needMoreHelp": "Noch Hilfe benötigt?",
+      "needMoreHelpDescription": "Wenn Sie weitere Fragen zu diesem Thema haben, wenden Sie sich gerne an unser Support-Team oder erkunden Sie verwandte Artikel unten.",
+      "articleContent": {
+        "creatingAccount": {
+          "howToCreate": "So erstellen Sie Ihr Konto",
+          "steps": [
+            "Besuchen Sie die ScriptureForge AI-Website oder öffnen Sie die App",
+            "Klicken Sie auf die Schaltfläche \"Anmelden\" in der oberen rechten Ecke",
+            "Wählen Sie die Registrierung mit Ihrer E-Mail-Adresse oder nutzen Sie Google Sign-In für eine schnellere Registrierung",
+            "Bei E-Mail-Registrierung: Geben Sie Ihren Namen, E-Mail und ein sicheres Passwort ein",
+            "Bestätigen Sie Ihre E-Mail-Adresse durch Klicken auf den Link in Ihrem Posteingang",
+            "Vervollständigen Sie Ihr Profil mit einem Profilbild und einer Bio (optional)"
+          ],
+          "benefitsTitle": "Vorteile eines Kontos",
+          "benefits": [
+            "Speichern Sie Ihre Lesezeichen und Markierungen geräteübergreifend",
+            "Greifen Sie auf Ihren Chat-Verlauf mit dem KI-Assistenten zu",
+            "Verfolgen Sie Ihren Lesefortschritt und Ihre Pläne",
+            "Synchronisieren Sie Ihre Gebetstagebuch-Einträge",
+            "Personalisieren Sie Ihr Bibelstudium-Erlebnis"
+          ]
+        },
+        "navigatingInterface": {
+          "mainSections": "Hauptbereiche von ScriptureForge AI",
+          "sections": {
+            "bibleReader": {
+              "title": "📖 Bibel-Leser",
+              "description": "Lesen Sie die Heilige Schrift in mehreren Übersetzungen mit Werkzeugen zum Setzen von Lesezeichen, Markieren und Notizen."
+            },
+            "aiChat": {
+              "title": "💬 KI-Chat",
+              "description": "Stellen Sie Fragen zur Bibel und erhalten Sie aufschlussreiche, kontextbezogene Antworten durch KI."
+            },
+            "prayerJournal": {
+              "title": "🙏 Gebetstagebuch",
+              "description": "Zeichnen Sie Ihre Gebete auf, verfolgen Sie erhörte Gebete und reflektieren Sie Ihre spirituelle Reise."
+            },
+            "readingPlans": {
+              "title": "📅 Lesepläne",
+              "description": "Folgen Sie strukturierten Leseplänen für Ihr tägliches Bibelstudium."
+            },
+            "devotionals": {
+              "title": "✨ Andachten",
+              "description": "Greifen Sie auf tägliche Andachtsinhalte zu, die Ihr spirituelles Wachstum inspirieren und leiten."
+            },
+            "search": {
+              "title": "🔍 Suche",
+              "description": "Durchsuchen Sie alle Bibelübersetzungen, um bestimmte Verse, Wörter oder Themen zu finden."
+            }
+          },
+          "navigationTips": "Navigationstipps",
+          "tips": [
+            "Nutzen Sie die obere Navigationsleiste, um schnell zwischen Hauptbereichen zu wechseln",
+            "Greifen Sie auf Ihr Profil und die Einstellungen über das Benutzermenü oben rechts zu",
+            "Nutzen Sie die Suchfunktion, um Verse zu finden oder zu bestimmten Büchern zu navigieren",
+            "Wechseln Sie zwischen Hell-/Dunkelmodus mit dem Theme-Umschalter"
+          ]
+        },
+        "setupPreferences": {
+          "customizing": "Ihre Erfahrung anpassen",
+          "preferences": {
+            "bibleTranslation": {
+              "title": "Bibelübersetzung",
+              "description": "Wählen Sie Ihre bevorzugte Standard-Bibelübersetzung aus Optionen wie:",
+              "options": [
+                "King James Version (KJV)",
+                "Lutherbibel",
+                "Einheitsübersetzung",
+                "Elberfelder Bibel",
+                "Und viele weitere Übersetzungen"
+              ]
+            },
+            "theme": {
+              "title": "Theme-Einstellungen",
+              "description": "Wechseln Sie zwischen hellem und dunklem Modus nach Ihrer Vorliebe oder folgen Sie den Systemeinstellungen."
+            },
+            "language": {
+              "title": "Sprache",
+              "description": "ScriptureForge AI unterstützt mehrere Schnittstellensprachen, darunter Englisch, Spanisch, Französisch, Deutsch, Portugiesisch, Italienisch und Chinesisch."
+            },
+            "notifications": {
+              "title": "Benachrichtigungen",
+              "description": "Konfigurieren Sie, welche Benachrichtigungen Sie erhalten, einschließlich täglicher Vers-Erinnerungen, Leseplan-Updates und Gebetserinnerungen."
+            }
+          },
+          "howToAccess": "So greifen Sie auf die Einstellungen zu",
+          "accessSteps": [
+            "Klicken Sie auf Ihr Profilsymbol in der oberen rechten Ecke",
+            "Wählen Sie \"Einstellungen\" oder \"Profil\" aus dem Dropdown-Menü",
+            "Navigieren Sie durch die verschiedenen Einstellungs-Tabs",
+            "Nehmen Sie Ihre gewünschten Änderungen vor",
+            "Änderungen werden automatisch gespeichert"
+          ]
+        }
+      },
       "categories": [
         {
           "id": "gettingStarted",
@@ -1120,6 +1219,7 @@
     "blog": {
       "title": "Blog",
       "subtitle": "Einblicke in Bibelstudium, KI-Technologie und geistliches Wachstum",
+      "blogSubtitleDescription": "Entdecken Sie Artikel, Anleitungen und Einblicke, um Ihr Verständnis der Schrift zu vertiefen und in Ihrem Glauben zu wachsen.",
       "allPosts": "Alle Beiträge",
       "featured": "Empfohlen",
       "readMore": "Mehr Lesen",
@@ -1151,55 +1251,81 @@
           "title": "Wie KI das Bibelstudium 2026 Transformiert",
           "excerpt": "Entdecken Sie, wie künstliche Intelligenz Millionen von Gläubigen hilft, tiefere Einblicke in die Schrift zu gewinnen.",
           "author": "Dr. Sarah Mitchell",
+          "authorRole": "Theologieprofessorin",
           "date": "15. Jan 2026",
-          "readTime": "8 Min. Lesezeit",
+          "readTime": "8 Min.",
           "category": "ai-technology",
           "featured": true
         },
         {
           "slug": "5-ways-to-study-bible-effectively",
           "title": "5 Wege, die Bibel Effektiver zu Studieren",
-          "excerpt": "Praktische Tipps, um mehr aus Ihrer täglichen Bibellesung herauszuholen.",
+          "excerpt": "Praktische Tipps und bewährte Techniken, um mehr aus Ihrer täglichen Bibellektüre herauszuholen.",
           "author": "Pastor James Wilson",
+          "authorRole": "Hauptpastor",
           "date": "12. Jan 2026",
-          "readTime": "6 Min. Lesezeit",
+          "readTime": "6 Min.",
           "category": "bible-study"
         },
         {
           "slug": "understanding-biblical-context",
           "title": "Biblischen Kontext Verstehen: Ein Leitfaden für Anfänger",
-          "excerpt": "Lernen Sie, warum Kontext wichtig ist und wie man Passagen richtig interpretiert.",
+          "excerpt": "Lernen Sie, warum Kontext wichtig ist und wie man Passagen richtig in ihrem historischen Umfeld interpretiert.",
           "author": "Dr. Emily Chen",
+          "authorRole": "Bibelwissenschaftlerin",
           "date": "10. Jan 2026",
-          "readTime": "10 Min. Lesezeit",
+          "readTime": "10 Min.",
           "category": "bible-study"
+        },
+        {
+          "slug": "daily-devotional-habit",
+          "title": "Eine Tägliche Andachts-Gewohnheit Aufbauen",
+          "excerpt": "Praktische Strategien für eine konsistente tägliche Andachtspraxis, die Ihren Weg mit Gott transformiert.",
+          "author": "Rachel Thompson",
+          "authorRole": "Geistliche Leiterin",
+          "date": "8. Jan 2026",
+          "readTime": "7 Min.",
+          "category": "spiritual-growth"
+        },
+        {
+          "slug": "power-of-prayer",
+          "title": "Die Kraft des Gebets: Täglich mit Gott Verbinden",
+          "excerpt": "Erkunden Sie die transformierende Kraft des Gebets und lernen Sie praktische Wege, Ihr Gebetsleben zu vertiefen.",
+          "author": "Pastor Michael Roberts",
+          "authorRole": "Gebetsdienstleiter",
+          "date": "5. Jan 2026",
+          "readTime": "9 Min.",
+          "category": "spiritual-growth"
+        },
+        {
+          "slug": "community-bible-study",
+          "title": "Die Vorteile des Gemeinsamen Bibelstudiums",
+          "excerpt": "Entdecken Sie, warum das Studium der Schrift in Gemeinschaft Ihr Verständnis bereichert und Ihren Glauben stärkt.",
+          "author": "Jennifer Adams",
+          "authorRole": "Kleingruppenleiterin",
+          "date": "3. Jan 2026",
+          "readTime": "6 Min.",
+          "category": "bible-study"
+        },
+        {
+          "slug": "finding-hope-in-difficult-times",
+          "title": "Hoffnung in Schwierigen Zeiten Finden",
+          "excerpt": "Wie man Trost, Stärke und Hoffnung in Gottes Wort während der schwierigsten Lebenszeiten findet.",
+          "author": "Pfr. David Park",
+          "authorRole": "Seelsorger",
+          "date": "1. Jan 2026",
+          "readTime": "8 Min.",
+          "category": "spiritual-growth"
         },
         {
           "slug": "new-features-january-2026",
           "title": "Neue Funktionen: Januar 2026 Update",
           "excerpt": "Entdecken Sie die neuesten Funktionen von ScriptureForge AI.",
           "author": "ScriptureForge Team",
-          "date": "8. Jan 2026",
-          "readTime": "4 Min. Lesezeit",
+          "authorRole": "Produktteam",
+          "date": "28. Dez 2025",
+          "readTime": "4 Min.",
           "category": "news"
-        },
-        {
-          "slug": "daily-devotional-habit",
-          "title": "Eine Tägliche Andachts-Gewohnheit Aufbauen",
-          "excerpt": "Praktische Strategien für eine konsistente tägliche Andachtspraxis.",
-          "author": "Rachel Thompson",
-          "date": "5. Jan 2026",
-          "readTime": "7 Min. Lesezeit",
-          "category": "spiritual-growth"
-        },
-        {
-          "slug": "getting-started-with-api",
-          "title": "Erste Schritte mit der ScriptureForge API",
-          "excerpt": "Ein Schritt-für-Schritt-Tutorial zur Integration von ScriptureForge AI.",
-          "author": "Michael Park",
-          "date": "3. Jan 2026",
-          "readTime": "12 Min. Lesezeit",
-          "category": "tutorials"
         }
       ],
       "newsletter": {

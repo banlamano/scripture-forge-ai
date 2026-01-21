@@ -736,6 +736,105 @@
       "contactTitle": "¿Aún necesitas ayuda?",
       "contactDescription": "Nuestro equipo de soporte está aquí para ayudarte con cualquier pregunta.",
       "contactButton": "Contactar Soporte",
+      "articleNotFound": "Artículo no encontrado",
+      "returnToHelpCenter": "Volver al Centro de Ayuda",
+      "backToHelpCenter": "Volver al Centro de Ayuda",
+      "relatedArticles": "Artículos Relacionados",
+      "needMoreHelp": "¿Necesitas más ayuda?",
+      "needMoreHelpDescription": "Si tienes preguntas adicionales sobre este tema, no dudes en contactar a nuestro equipo de soporte o explorar los artículos relacionados a continuación.",
+      "articleContent": {
+        "creatingAccount": {
+          "howToCreate": "Cómo crear tu cuenta",
+          "steps": [
+            "Visita el sitio web de ScriptureForge AI o abre la aplicación",
+            "Haz clic en el botón \"Iniciar sesión\" en la esquina superior derecha",
+            "Elige registrarte con tu correo electrónico o usa Google Sign-In para un registro más rápido",
+            "Si usas correo electrónico, ingresa tu nombre, correo y crea una contraseña segura",
+            "Verifica tu dirección de correo electrónico haciendo clic en el enlace enviado a tu bandeja de entrada",
+            "Completa tu perfil agregando una foto de perfil y una biografía (opcional)"
+          ],
+          "benefitsTitle": "Beneficios de crear una cuenta",
+          "benefits": [
+            "Guarda tus marcadores y resaltados en todos tus dispositivos",
+            "Accede a tu historial de chat con el asistente de IA",
+            "Rastrea tu progreso de lectura y planes",
+            "Sincroniza las entradas de tu diario de oración",
+            "Personaliza tu experiencia de estudio bíblico"
+          ]
+        },
+        "navigatingInterface": {
+          "mainSections": "Secciones principales de ScriptureForge AI",
+          "sections": {
+            "bibleReader": {
+              "title": "📖 Lector de Biblia",
+              "description": "Lee las Escrituras en múltiples traducciones con herramientas para marcar, resaltar y tomar notas."
+            },
+            "aiChat": {
+              "title": "💬 Chat de IA",
+              "description": "Haz preguntas sobre la Biblia y recibe respuestas perspicaces y contextuales impulsadas por IA."
+            },
+            "prayerJournal": {
+              "title": "🙏 Diario de Oración",
+              "description": "Registra tus oraciones, rastrea las oraciones contestadas y reflexiona sobre tu viaje espiritual."
+            },
+            "readingPlans": {
+              "title": "📅 Planes de Lectura",
+              "description": "Sigue planes de lectura estructurados para guiar tu estudio bíblico diario."
+            },
+            "devotionals": {
+              "title": "✨ Devocionales",
+              "description": "Accede a contenido devocional diario para inspirar y guiar tu crecimiento espiritual."
+            },
+            "search": {
+              "title": "🔍 Búsqueda",
+              "description": "Busca en todas las traducciones de la Biblia para encontrar versículos, palabras o temas específicos."
+            }
+          },
+          "navigationTips": "Consejos de navegación",
+          "tips": [
+            "Usa la barra de navegación superior para cambiar rápidamente entre secciones principales",
+            "Accede a tu perfil y configuración desde el menú de usuario en la esquina superior derecha",
+            "Usa la función de búsqueda para encontrar versículos o navegar a libros específicos",
+            "Alterna entre modo claro/oscuro usando el selector de tema"
+          ]
+        },
+        "setupPreferences": {
+          "customizing": "Personalizando tu experiencia",
+          "preferences": {
+            "bibleTranslation": {
+              "title": "Traducción de la Biblia",
+              "description": "Elige tu traducción predeterminada de la Biblia entre opciones que incluyen:",
+              "options": [
+                "Reina-Valera 1960 (RVR1960)",
+                "Nueva Versión Internacional (NVI)",
+                "La Biblia de las Américas (LBLA)",
+                "Dios Habla Hoy (DHH)",
+                "Y muchas más traducciones"
+              ]
+            },
+            "theme": {
+              "title": "Configuración de tema",
+              "description": "Cambia entre modo claro y oscuro según tu preferencia o configúralo para seguir la configuración de tu sistema."
+            },
+            "language": {
+              "title": "Idioma",
+              "description": "ScriptureForge AI admite múltiples idiomas de interfaz, incluyendo inglés, español, francés, alemán, portugués, italiano y chino."
+            },
+            "notifications": {
+              "title": "Notificaciones",
+              "description": "Configura qué notificaciones recibes, incluyendo recordatorios de versículos diarios, actualizaciones de planes de lectura y recordatorios de oración."
+            }
+          },
+          "howToAccess": "Cómo acceder a la configuración",
+          "accessSteps": [
+            "Haz clic en tu icono de perfil en la esquina superior derecha",
+            "Selecciona \"Configuración\" o \"Perfil\" del menú desplegable",
+            "Navega por las diferentes pestañas de configuración",
+            "Realiza los cambios deseados",
+            "Los cambios se guardan automáticamente"
+          ]
+        }
+      },
       "categories": [
         {
           "id": "gettingStarted",
@@ -1120,6 +1219,7 @@
     "blog": {
       "title": "Blog",
       "subtitle": "Perspectivas sobre estudio bíblico, tecnología de IA y crecimiento espiritual",
+      "blogSubtitleDescription": "Explora artículos, guías e ideas para profundizar tu comprensión de las Escrituras y crecer en tu camino de fe.",
       "allPosts": "Todos los Artículos",
       "featured": "Destacado",
       "readMore": "Leer Más",
@@ -1149,57 +1249,83 @@
         {
           "slug": "how-ai-is-transforming-bible-study",
           "title": "Cómo la IA está Transformando el Estudio Bíblico en 2026",
-          "excerpt": "Descubre cómo la inteligencia artificial está ayudando a millones de creyentes a obtener perspectivas más profundas de las Escrituras.",
+          "excerpt": "Descubre cómo la inteligencia artificial está ayudando a millones de creyentes a obtener perspectivas más profundas de las Escrituras manteniendo la integridad teológica.",
           "author": "Dra. Sarah Mitchell",
+          "authorRole": "Profesora de Teología",
           "date": "15 Ene, 2026",
-          "readTime": "8 min lectura",
+          "readTime": "8 min",
           "category": "ai-technology",
           "featured": true
         },
         {
           "slug": "5-ways-to-study-bible-effectively",
           "title": "5 Formas de Estudiar la Biblia Más Efectivamente",
-          "excerpt": "Consejos prácticos para aprovechar mejor tu tiempo de lectura y estudio bíblico diario.",
+          "excerpt": "Consejos prácticos y técnicas probadas para aprovechar mejor tu lectura bíblica diaria y desarrollar una comprensión más profunda de las Escrituras.",
           "author": "Pastor James Wilson",
+          "authorRole": "Pastor Principal",
           "date": "12 Ene, 2026",
-          "readTime": "6 min lectura",
+          "readTime": "6 min",
           "category": "bible-study"
         },
         {
           "slug": "understanding-biblical-context",
           "title": "Entendiendo el Contexto Bíblico: Guía para Principiantes",
-          "excerpt": "Aprende por qué el contexto importa al estudiar las Escrituras y cómo interpretar pasajes correctamente.",
+          "excerpt": "Aprende por qué el contexto importa al estudiar las Escrituras y cómo interpretar correctamente los pasajes en su contexto histórico y cultural.",
           "author": "Dra. Emily Chen",
+          "authorRole": "Erudita Bíblica",
           "date": "10 Ene, 2026",
-          "readTime": "10 min lectura",
+          "readTime": "10 min",
           "category": "bible-study"
-        },
-        {
-          "slug": "new-features-january-2026",
-          "title": "Nuevas Funciones: Actualización de Enero 2026",
-          "excerpt": "Explora las últimas funciones que hemos añadido a ScriptureForge AI.",
-          "author": "Equipo ScriptureForge",
-          "date": "8 Ene, 2026",
-          "readTime": "4 min lectura",
-          "category": "news"
         },
         {
           "slug": "daily-devotional-habit",
           "title": "Construyendo un Hábito Devocional Diario que Perdure",
-          "excerpt": "Estrategias prácticas para establecer y mantener una práctica devocional diaria consistente.",
+          "excerpt": "Estrategias prácticas y disciplinas espirituales para establecer y mantener una práctica devocional diaria consistente.",
           "author": "Rachel Thompson",
-          "date": "5 Ene, 2026",
-          "readTime": "7 min lectura",
+          "authorRole": "Directora Espiritual",
+          "date": "8 Ene, 2026",
+          "readTime": "7 min",
           "category": "spiritual-growth"
         },
         {
-          "slug": "getting-started-with-api",
-          "title": "Comenzando con la API de ScriptureForge",
-          "excerpt": "Un tutorial paso a paso para integrar ScriptureForge AI en tus propias aplicaciones.",
-          "author": "Michael Park",
+          "slug": "power-of-prayer",
+          "title": "El Poder de la Oración: Conectando con Dios Diariamente",
+          "excerpt": "Explora el poder transformador de la oración y aprende formas prácticas de profundizar tu vida de oración.",
+          "author": "Pastor Michael Roberts",
+          "authorRole": "Líder de Ministerio de Oración",
+          "date": "5 Ene, 2026",
+          "readTime": "9 min",
+          "category": "spiritual-growth"
+        },
+        {
+          "slug": "community-bible-study",
+          "title": "Los Beneficios del Estudio Bíblico en Comunidad",
+          "excerpt": "Descubre por qué estudiar las Escrituras en comunidad enriquece tu comprensión y fortalece tu fe.",
+          "author": "Jennifer Adams",
+          "authorRole": "Directora de Grupos Pequeños",
           "date": "3 Ene, 2026",
-          "readTime": "12 min lectura",
-          "category": "tutorials"
+          "readTime": "6 min",
+          "category": "bible-study"
+        },
+        {
+          "slug": "finding-hope-in-difficult-times",
+          "title": "Encontrando Esperanza en Tiempos Difíciles a Través de las Escrituras",
+          "excerpt": "Cómo encontrar consuelo, fortaleza y esperanza en la Palabra de Dios durante las temporadas más desafiantes de la vida.",
+          "author": "Rev. David Park",
+          "authorRole": "Consejero Pastoral",
+          "date": "1 Ene, 2026",
+          "readTime": "8 min",
+          "category": "spiritual-growth"
+        },
+        {
+          "slug": "new-features-january-2026",
+          "title": "Nuevas Funciones: Actualización de Enero 2026",
+          "excerpt": "Explora las últimas funciones que hemos añadido a ScriptureForge AI, incluyendo búsqueda mejorada y nuevas traducciones.",
+          "author": "Equipo ScriptureForge",
+          "authorRole": "Equipo de Producto",
+          "date": "28 Dic, 2025",
+          "readTime": "4 min",
+          "category": "news"
         }
       ],
       "newsletter": {

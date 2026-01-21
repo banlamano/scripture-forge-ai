@@ -736,6 +736,105 @@
       "contactTitle": "Still need help?",
       "contactDescription": "Our support team is here to help you with any questions.",
       "contactButton": "Contact Support",
+      "articleNotFound": "Article not found",
+      "returnToHelpCenter": "Return to Help Center",
+      "backToHelpCenter": "Back to Help Center",
+      "relatedArticles": "Related Articles",
+      "needMoreHelp": "Need More Help?",
+      "needMoreHelpDescription": "If you have additional questions about this topic, feel free to reach out to our support team or explore related articles below.",
+      "articleContent": {
+        "creatingAccount": {
+          "howToCreate": "How to Create Your Account",
+          "steps": [
+            "Visit the ScriptureForge AI website or open the app",
+            "Click the \"Sign In\" button in the top right corner",
+            "Choose to sign up with your email address or use Google Sign-In for faster registration",
+            "If using email, enter your name, email, and create a secure password",
+            "Verify your email address by clicking the link sent to your inbox",
+            "Complete your profile by adding a profile picture and bio (optional)"
+          ],
+          "benefitsTitle": "Benefits of Creating an Account",
+          "benefits": [
+            "Save your bookmarks and highlights across devices",
+            "Access your chat history with the AI assistant",
+            "Track your reading progress and plans",
+            "Sync your prayer journal entries",
+            "Personalize your Bible study experience"
+          ]
+        },
+        "navigatingInterface": {
+          "mainSections": "Main Sections of ScriptureForge AI",
+          "sections": {
+            "bibleReader": {
+              "title": "📖 Bible Reader",
+              "description": "Read Scripture in multiple translations with tools for bookmarking, highlighting, and taking notes."
+            },
+            "aiChat": {
+              "title": "💬 AI Chat",
+              "description": "Ask questions about the Bible and receive insightful, contextual answers powered by AI."
+            },
+            "prayerJournal": {
+              "title": "🙏 Prayer Journal",
+              "description": "Record your prayers, track answered prayers, and reflect on your spiritual journey."
+            },
+            "readingPlans": {
+              "title": "📅 Reading Plans",
+              "description": "Follow structured reading plans to guide your daily Bible study."
+            },
+            "devotionals": {
+              "title": "✨ Devotionals",
+              "description": "Access daily devotional content to inspire and guide your spiritual growth."
+            },
+            "search": {
+              "title": "🔍 Search",
+              "description": "Search across all Bible translations to find specific verses, words, or topics."
+            }
+          },
+          "navigationTips": "Navigation Tips",
+          "tips": [
+            "Use the top navigation bar to quickly switch between main sections",
+            "Access your profile and settings from the user menu in the top right",
+            "Use the search function to find verses or navigate to specific books",
+            "Toggle dark/light mode using the theme switcher"
+          ]
+        },
+        "setupPreferences": {
+          "customizing": "Customizing Your Experience",
+          "preferences": {
+            "bibleTranslation": {
+              "title": "Bible Translation",
+              "description": "Choose your preferred default Bible translation from options including:",
+              "options": [
+                "King James Version (KJV)",
+                "New International Version (NIV)",
+                "English Standard Version (ESV)",
+                "New American Standard Bible (NASB)",
+                "And many more translations"
+              ]
+            },
+            "theme": {
+              "title": "Theme Settings",
+              "description": "Switch between light and dark mode based on your preference or set it to follow your system settings."
+            },
+            "language": {
+              "title": "Language",
+              "description": "ScriptureForge AI supports multiple interface languages including English, Spanish, French, German, Portuguese, Italian, and Chinese."
+            },
+            "notifications": {
+              "title": "Notifications",
+              "description": "Configure which notifications you receive, including daily verse reminders, reading plan updates, and prayer reminders."
+            }
+          },
+          "howToAccess": "How to Access Settings",
+          "accessSteps": [
+            "Click on your profile icon in the top right corner",
+            "Select \"Settings\" or \"Profile\" from the dropdown menu",
+            "Navigate through the different settings tabs",
+            "Make your desired changes",
+            "Changes are saved automatically"
+          ]
+        }
+      },
       "categories": [
         {
           "id": "gettingStarted",
@@ -743,17 +842,17 @@
           "description": "Learn the basics of using ScriptureForge AI",
           "articles": [
             {
-              "title": "Creating your account",
+              "title": "Create your account",
               "slug": "creating-account",
               "content": "Learn how to create your ScriptureForge AI account using email or Google Sign-In. The process takes less than a minute and gives you access to all features."
             },
             {
-              "title": "Navigating the interface",
+              "title": "Navigate the interface",
               "slug": "navigating-interface",
               "content": "Discover the main sections of ScriptureForge AI including the Bible reader, AI chat, devotionals, prayer journal, and reading plans."
             },
             {
-              "title": "Setting up your preferences",
+              "title": "Set up your preferences",
               "slug": "setup-preferences",
               "content": "Customize your experience by setting your preferred Bible translation, theme (light/dark mode), language, and notification settings."
             },
@@ -1120,6 +1219,7 @@
     "blog": {
       "title": "Blog",
       "subtitle": "Insights on Bible study, AI technology, and spiritual growth",
+      "blogSubtitleDescription": "Explore articles, guides, and insights to deepen your understanding of Scripture and grow in your faith journey.",
       "allPosts": "All Posts",
       "featured": "Featured",
       "readMore": "Read More",
@@ -1149,8 +1249,9 @@
         {
           "slug": "how-ai-is-transforming-bible-study",
           "title": "How AI is Transforming Bible Study in 2026",
-          "excerpt": "Discover how artificial intelligence is helping millions of believers gain deeper insights into Scripture while maintaining theological integrity.",
+          "excerpt": "Discover how artificial intelligence is helping millions of believers gain deeper insights into Scripture while maintaining theological integrity and reverence for God's Word.",
           "author": "Dr. Sarah Mitchell",
+          "authorRole": "Theology Professor",
           "date": "Jan 15, 2026",
           "readTime": "8 min read",
           "category": "ai-technology",
@@ -1159,47 +1260,72 @@
         {
           "slug": "5-ways-to-study-bible-effectively",
           "title": "5 Ways to Study the Bible More Effectively",
-          "excerpt": "Practical tips and techniques to help you get more out of your daily Bible reading and study time.",
+          "excerpt": "Practical tips and proven techniques to help you get more out of your daily Bible reading and develop a deeper understanding of Scripture.",
           "author": "Pastor James Wilson",
+          "authorRole": "Senior Pastor",
           "date": "Jan 12, 2026",
           "readTime": "6 min read",
           "category": "bible-study"
         },
         {
           "slug": "understanding-biblical-context",
-          "title": "Understanding Biblical Context: A Beginners Guide",
-          "excerpt": "Learn why context matters when studying Scripture and how to properly interpret passages in their historical setting.",
+          "title": "Understanding Biblical Context: A Beginner's Guide",
+          "excerpt": "Learn why context matters when studying Scripture and how to properly interpret passages in their historical, cultural, and literary setting.",
           "author": "Dr. Emily Chen",
+          "authorRole": "Biblical Scholar",
           "date": "Jan 10, 2026",
           "readTime": "10 min read",
           "category": "bible-study"
         },
         {
-          "slug": "new-features-january-2026",
-          "title": "New Features: January 2026 Update",
-          "excerpt": "Explore the latest features we have added to ScriptureForge AI, including enhanced search, new translations, and more.",
-          "author": "ScriptureForge Team",
-          "date": "Jan 8, 2026",
-          "readTime": "4 min read",
-          "category": "news"
-        },
-        {
           "slug": "daily-devotional-habit",
-          "title": "Building a Daily Devotional Habit That Sticks",
-          "excerpt": "Practical strategies for establishing and maintaining a consistent daily devotional practice.",
+          "title": "Building a Daily Devotional Habit That Lasts",
+          "excerpt": "Practical strategies and spiritual disciplines for establishing and maintaining a consistent daily devotional practice that transforms your walk with God.",
           "author": "Rachel Thompson",
-          "date": "Jan 5, 2026",
+          "authorRole": "Spiritual Director",
+          "date": "Jan 8, 2026",
           "readTime": "7 min read",
           "category": "spiritual-growth"
         },
         {
-          "slug": "getting-started-with-api",
-          "title": "Getting Started with the ScriptureForge API",
-          "excerpt": "A step-by-step tutorial on integrating ScriptureForge AI into your own applications.",
-          "author": "Michael Park",
+          "slug": "power-of-prayer",
+          "title": "The Power of Prayer: Connecting with God Daily",
+          "excerpt": "Explore the transformative power of prayer and learn practical ways to deepen your prayer life and experience God's presence more fully.",
+          "author": "Pastor Michael Roberts",
+          "authorRole": "Prayer Ministry Leader",
+          "date": "Jan 5, 2026",
+          "readTime": "9 min read",
+          "category": "spiritual-growth"
+        },
+        {
+          "slug": "community-bible-study",
+          "title": "The Benefits of Community Bible Study",
+          "excerpt": "Discover why studying Scripture in community enriches your understanding and strengthens your faith through shared insights and accountability.",
+          "author": "Jennifer Adams",
+          "authorRole": "Small Groups Director",
           "date": "Jan 3, 2026",
-          "readTime": "12 min read",
-          "category": "tutorials"
+          "readTime": "6 min read",
+          "category": "bible-study"
+        },
+        {
+          "slug": "finding-hope-in-difficult-times",
+          "title": "Finding Hope in Difficult Times Through Scripture",
+          "excerpt": "How to find comfort, strength, and hope in God's Word during life's most challenging seasons and trials.",
+          "author": "Rev. David Park",
+          "authorRole": "Pastoral Counselor",
+          "date": "Jan 1, 2026",
+          "readTime": "8 min read",
+          "category": "spiritual-growth"
+        },
+        {
+          "slug": "new-features-january-2026",
+          "title": "New Features: January 2026 Update",
+          "excerpt": "Explore the latest features we've added to ScriptureForge AI, including enhanced search, new translations, improved AI responses, and more.",
+          "author": "ScriptureForge Team",
+          "authorRole": "Product Team",
+          "date": "Dec 28, 2025",
+          "readTime": "4 min read",
+          "category": "news"
         }
       ],
       "newsletter": {

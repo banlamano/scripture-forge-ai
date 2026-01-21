@@ -1,8 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import { ArrowLeft, BookOpen, MessageCircle, Settings, Shield, HelpCircle } from "lucide-react";
 import Link from "next/link";
+import { useRawTranslations } from "@/components/providers/language-provider";
 
 const categoryIcons: Record<string, React.ReactNode> = {
   gettingStarted: <BookOpen className="w-6 h-6" />,
@@ -17,25 +17,72 @@ interface HelpArticleContentProps {
   slug: string;
 }
 
-export function HelpArticleContent({ category, slug }: HelpArticleContentProps) {
-  const t = useTranslations("resources.helpCenter");
-  
-  const categories = t.raw("categories") as Array<{
+interface ArticleContentSection {
+  creatingAccount: {
+    howToCreate: string;
+    steps: string[];
+    benefitsTitle: string;
+    benefits: string[];
+  };
+  navigatingInterface: {
+    mainSections: string;
+    sections: {
+      bibleReader: { title: string; description: string };
+      aiChat: { title: string; description: string };
+      prayerJournal: { title: string; description: string };
+      readingPlans: { title: string; description: string };
+      devotionals: { title: string; description: string };
+      search: { title: string; description: string };
+    };
+    navigationTips: string;
+    tips: string[];
+  };
+  setupPreferences: {
+    customizing: string;
+    preferences: {
+      bibleTranslation: { title: string; description: string; options: string[] };
+      theme: { title: string; description: string };
+      language: { title: string; description: string };
+      notifications: { title: string; description: string };
+    };
+    howToAccess: string;
+    accessSteps: string[];
+  };
+}
+
+interface HelpCenterTranslations {
+  title: string;
+  articleNotFound: string;
+  returnToHelpCenter: string;
+  backToHelpCenter: string;
+  relatedArticles: string;
+  needMoreHelp: string;
+  needMoreHelpDescription: string;
+  contactTitle: string;
+  contactDescription: string;
+  contactButton: string;
+  articleContent: ArticleContentSection;
+  categories: Array<{
     id: string;
     title: string;
     description: string;
     articles: Array<{ title: string; slug: string; content: string }>;
   }>;
+}
 
+export function HelpArticleContent({ category, slug }: HelpArticleContentProps) {
+  const t = useRawTranslations<HelpCenterTranslations>("resources.helpCenter");
+  
+  const categories = t?.categories || [];
   const currentCategory = categories.find(c => c.id === category);
   const article = currentCategory?.articles.find(a => a.slug === slug);
 
   if (!currentCategory || !article) {
     return (
       <div className="container px-4 md:px-6 py-12 max-w-4xl mx-auto text-center">
-        <h1 className="text-2xl font-bold mb-4">Article not found</h1>
+        <h1 className="text-2xl font-bold mb-4">{t?.articleNotFound}</h1>
         <Link href="/help" className="text-primary hover:underline">
-          Return to Help Center
+          {t?.returnToHelpCenter}
         </Link>
       </div>
     );
@@ -49,7 +96,7 @@ export function HelpArticleContent({ category, slug }: HelpArticleContentProps) 
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
         <Link href="/help" className="hover:text-foreground transition-colors">
-          Help Center
+          {t?.title}
         </Link>
         <span>/</span>
         <Link href={`/help#${category}`} className="hover:text-foreground transition-colors">
@@ -65,7 +112,7 @@ export function HelpArticleContent({ category, slug }: HelpArticleContentProps) 
         className="inline-flex items-center gap-2 text-primary hover:underline mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
-        Back to Help Center
+        {t?.backToHelpCenter}
       </Link>
 
       {/* Article header */}
@@ -86,102 +133,92 @@ export function HelpArticleContent({ category, slug }: HelpArticleContentProps) 
         </p>
         
         {/* Extended content based on article type */}
-        {slug === 'creating-account' && (
+        {slug === 'creating-account' && t?.articleContent?.creatingAccount && (
           <>
-            <h2 className="text-xl font-semibold mt-8 mb-4">How to Create Your Account</h2>
+            <h2 className="text-xl font-semibold mt-8 mb-4">{t.articleContent.creatingAccount.howToCreate}</h2>
             <ol className="list-decimal list-inside space-y-3 text-muted-foreground">
-              <li>Visit the ScriptureForge AI website or open the app</li>
-              <li>Click the "Sign In" button in the top right corner</li>
-              <li>Choose to sign up with your email address or use Google Sign-In for faster registration</li>
-              <li>If using email, enter your name, email, and create a secure password</li>
-              <li>Verify your email address by clicking the link sent to your inbox</li>
-              <li>Complete your profile by adding a profile picture and bio (optional)</li>
+              {t.articleContent.creatingAccount.steps.map((step, index) => (
+                <li key={index}>{step}</li>
+              ))}
             </ol>
-            <h2 className="text-xl font-semibold mt-8 mb-4">Benefits of Creating an Account</h2>
+            <h2 className="text-xl font-semibold mt-8 mb-4">{t.articleContent.creatingAccount.benefitsTitle}</h2>
             <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-              <li>Save your bookmarks and highlights across devices</li>
-              <li>Access your chat history with the AI assistant</li>
-              <li>Track your reading progress and plans</li>
-              <li>Sync your prayer journal entries</li>
-              <li>Personalize your Bible study experience</li>
+              {t.articleContent.creatingAccount.benefits.map((benefit, index) => (
+                <li key={index}>{benefit}</li>
+              ))}
             </ul>
           </>
         )}
 
-        {slug === 'navigating-interface' && (
+        {slug === 'navigating-interface' && t?.articleContent?.navigatingInterface && (
           <>
-            <h2 className="text-xl font-semibold mt-8 mb-4">Main Sections of ScriptureForge AI</h2>
+            <h2 className="text-xl font-semibold mt-8 mb-4">{t.articleContent.navigatingInterface.mainSections}</h2>
             <div className="space-y-4 text-muted-foreground">
               <div className="p-4 border rounded-lg">
-                <h3 className="font-medium text-foreground mb-2">📖 Bible Reader</h3>
-                <p>Read Scripture in multiple translations with tools for bookmarking, highlighting, and taking notes.</p>
+                <h3 className="font-medium text-foreground mb-2">{t.articleContent.navigatingInterface.sections.bibleReader.title}</h3>
+                <p>{t.articleContent.navigatingInterface.sections.bibleReader.description}</p>
               </div>
               <div className="p-4 border rounded-lg">
-                <h3 className="font-medium text-foreground mb-2">💬 AI Chat</h3>
-                <p>Ask questions about the Bible and receive insightful, contextual answers powered by AI.</p>
+                <h3 className="font-medium text-foreground mb-2">{t.articleContent.navigatingInterface.sections.aiChat.title}</h3>
+                <p>{t.articleContent.navigatingInterface.sections.aiChat.description}</p>
               </div>
               <div className="p-4 border rounded-lg">
-                <h3 className="font-medium text-foreground mb-2">🙏 Prayer Journal</h3>
-                <p>Record your prayers, track answered prayers, and reflect on your spiritual journey.</p>
+                <h3 className="font-medium text-foreground mb-2">{t.articleContent.navigatingInterface.sections.prayerJournal.title}</h3>
+                <p>{t.articleContent.navigatingInterface.sections.prayerJournal.description}</p>
               </div>
               <div className="p-4 border rounded-lg">
-                <h3 className="font-medium text-foreground mb-2">📅 Reading Plans</h3>
-                <p>Follow structured reading plans to guide your daily Bible study.</p>
+                <h3 className="font-medium text-foreground mb-2">{t.articleContent.navigatingInterface.sections.readingPlans.title}</h3>
+                <p>{t.articleContent.navigatingInterface.sections.readingPlans.description}</p>
               </div>
               <div className="p-4 border rounded-lg">
-                <h3 className="font-medium text-foreground mb-2">✨ Devotionals</h3>
-                <p>Access daily devotional content to inspire and guide your spiritual growth.</p>
+                <h3 className="font-medium text-foreground mb-2">{t.articleContent.navigatingInterface.sections.devotionals.title}</h3>
+                <p>{t.articleContent.navigatingInterface.sections.devotionals.description}</p>
               </div>
               <div className="p-4 border rounded-lg">
-                <h3 className="font-medium text-foreground mb-2">🔍 Search</h3>
-                <p>Search across all Bible translations to find specific verses, words, or topics.</p>
+                <h3 className="font-medium text-foreground mb-2">{t.articleContent.navigatingInterface.sections.search.title}</h3>
+                <p>{t.articleContent.navigatingInterface.sections.search.description}</p>
               </div>
             </div>
-            <h2 className="text-xl font-semibold mt-8 mb-4">Navigation Tips</h2>
+            <h2 className="text-xl font-semibold mt-8 mb-4">{t.articleContent.navigatingInterface.navigationTips}</h2>
             <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-              <li>Use the top navigation bar to quickly switch between main sections</li>
-              <li>Access your profile and settings from the user menu in the top right</li>
-              <li>Use the search function to find verses or navigate to specific books</li>
-              <li>Toggle dark/light mode using the theme switcher</li>
+              {t.articleContent.navigatingInterface.tips.map((tip, index) => (
+                <li key={index}>{tip}</li>
+              ))}
             </ul>
           </>
         )}
 
-        {slug === 'setup-preferences' && (
+        {slug === 'setup-preferences' && t?.articleContent?.setupPreferences && (
           <>
-            <h2 className="text-xl font-semibold mt-8 mb-4">Customizing Your Experience</h2>
+            <h2 className="text-xl font-semibold mt-8 mb-4">{t.articleContent.setupPreferences.customizing}</h2>
             <div className="space-y-6 text-muted-foreground">
               <div>
-                <h3 className="font-medium text-foreground mb-2">Bible Translation</h3>
-                <p className="mb-2">Choose your preferred default Bible translation from options including:</p>
+                <h3 className="font-medium text-foreground mb-2">{t.articleContent.setupPreferences.preferences.bibleTranslation.title}</h3>
+                <p className="mb-2">{t.articleContent.setupPreferences.preferences.bibleTranslation.description}</p>
                 <ul className="list-disc list-inside ml-4 space-y-1">
-                  <li>King James Version (KJV)</li>
-                  <li>New International Version (NIV)</li>
-                  <li>English Standard Version (ESV)</li>
-                  <li>New American Standard Bible (NASB)</li>
-                  <li>And many more translations</li>
+                  {t.articleContent.setupPreferences.preferences.bibleTranslation.options.map((option, index) => (
+                    <li key={index}>{option}</li>
+                  ))}
                 </ul>
               </div>
               <div>
-                <h3 className="font-medium text-foreground mb-2">Theme Settings</h3>
-                <p>Switch between light and dark mode based on your preference or set it to follow your system settings.</p>
+                <h3 className="font-medium text-foreground mb-2">{t.articleContent.setupPreferences.preferences.theme.title}</h3>
+                <p>{t.articleContent.setupPreferences.preferences.theme.description}</p>
               </div>
               <div>
-                <h3 className="font-medium text-foreground mb-2">Language</h3>
-                <p>ScriptureForge AI supports multiple interface languages including English, Spanish, French, German, Portuguese, Italian, and Chinese.</p>
+                <h3 className="font-medium text-foreground mb-2">{t.articleContent.setupPreferences.preferences.language.title}</h3>
+                <p>{t.articleContent.setupPreferences.preferences.language.description}</p>
               </div>
               <div>
-                <h3 className="font-medium text-foreground mb-2">Notifications</h3>
-                <p>Configure which notifications you receive, including daily verse reminders, reading plan updates, and prayer reminders.</p>
+                <h3 className="font-medium text-foreground mb-2">{t.articleContent.setupPreferences.preferences.notifications.title}</h3>
+                <p>{t.articleContent.setupPreferences.preferences.notifications.description}</p>
               </div>
             </div>
-            <h2 className="text-xl font-semibold mt-8 mb-4">How to Access Settings</h2>
+            <h2 className="text-xl font-semibold mt-8 mb-4">{t.articleContent.setupPreferences.howToAccess}</h2>
             <ol className="list-decimal list-inside space-y-2 text-muted-foreground">
-              <li>Click on your profile icon in the top right corner</li>
-              <li>Select "Settings" or "Profile" from the dropdown menu</li>
-              <li>Navigate through the different settings tabs</li>
-              <li>Make your desired changes</li>
-              <li>Changes are saved automatically</li>
+              {t.articleContent.setupPreferences.accessSteps.map((step, index) => (
+                <li key={index}>{step}</li>
+              ))}
             </ol>
           </>
         )}
@@ -189,10 +226,9 @@ export function HelpArticleContent({ category, slug }: HelpArticleContentProps) 
         {/* Default extended content for other articles */}
         {!['creating-account', 'navigating-interface', 'setup-preferences'].includes(slug) && (
           <>
-            <h2 className="text-xl font-semibold mt-8 mb-4">Need More Help?</h2>
+            <h2 className="text-xl font-semibold mt-8 mb-4">{t?.needMoreHelp}</h2>
             <p className="text-muted-foreground">
-              If you have additional questions about this topic, feel free to reach out to our support team 
-              or explore related articles below.
+              {t?.needMoreHelpDescription}
             </p>
           </>
         )}
@@ -201,7 +237,7 @@ export function HelpArticleContent({ category, slug }: HelpArticleContentProps) 
       {/* Related articles */}
       {relatedArticles.length > 0 && (
         <div className="border-t pt-8">
-          <h2 className="text-xl font-semibold mb-6">Related Articles</h2>
+          <h2 className="text-xl font-semibold mb-6">{t?.relatedArticles}</h2>
           <div className="grid md:grid-cols-3 gap-4">
             {relatedArticles.map((related) => (
               <Link
@@ -219,13 +255,13 @@ export function HelpArticleContent({ category, slug }: HelpArticleContentProps) 
 
       {/* Contact support */}
       <div className="mt-12 p-6 bg-muted/50 rounded-lg text-center">
-        <h2 className="text-lg font-semibold mb-2">{t("contactTitle")}</h2>
-        <p className="text-muted-foreground mb-4">{t("contactDescription")}</p>
+        <h2 className="text-lg font-semibold mb-2">{t?.contactTitle}</h2>
+        <p className="text-muted-foreground mb-4">{t?.contactDescription}</p>
         <Link
           href="/contact"
           className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors"
         >
-          {t("contactButton")}
+          {t?.contactButton}
         </Link>
       </div>
     </div>

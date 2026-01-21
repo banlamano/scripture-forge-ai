@@ -1,9 +1,9 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import { Search, BookOpen, MessageCircle, Settings, CreditCard, Shield, HelpCircle, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { useRawTranslations } from "@/components/providers/language-provider";
 
 const categoryIcons: Record<string, React.ReactNode> = {
   gettingStarted: <BookOpen className="w-6 h-6" />,
@@ -14,18 +14,35 @@ const categoryIcons: Record<string, React.ReactNode> = {
   privacy: <Shield className="w-6 h-6" />,
 };
 
-export function HelpCenterContent() {
-  const t = useTranslations("resources.helpCenter");
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const categories = t.raw("categories") as Array<{
+interface HelpCenterTranslations {
+  title: string;
+  subtitle: string;
+  searchPlaceholder: string;
+  faqTitle: string;
+  contactTitle: string;
+  contactDescription: string;
+  contactButton: string;
+  articleNotFound: string;
+  returnToHelpCenter: string;
+  backToHelpCenter: string;
+  relatedArticles: string;
+  needMoreHelp: string;
+  needMoreHelpDescription: string;
+  categories: Array<{
     id: string;
     title: string;
     description: string;
     articles: Array<{ title: string; slug: string }>;
   }>;
+  faqs: Array<{ question: string; answer: string }>;
+}
 
-  const faqs = t.raw("faqs") as Array<{ question: string; answer: string }>;
+export function HelpCenterContent() {
+  const t = useRawTranslations<HelpCenterTranslations>("resources.helpCenter");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const categories = t?.categories || [];
+  const faqs = t?.faqs || [];
 
   const filteredCategories = searchQuery
     ? categories.map(cat => ({
@@ -40,15 +57,15 @@ export function HelpCenterContent() {
     <div className="container px-4 md:px-6 py-12 max-w-6xl mx-auto">
       {/* Header */}
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4">{t("title")}</h1>
-        <p className="text-xl text-muted-foreground mb-8">{t("subtitle")}</p>
+        <h1 className="text-4xl font-bold mb-4">{t?.title}</h1>
+        <p className="text-xl text-muted-foreground mb-8">{t?.subtitle}</p>
         
         {/* Search */}
         <div className="max-w-xl mx-auto relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <input
             type="text"
-            placeholder={t("searchPlaceholder")}
+            placeholder={t?.searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-12 pr-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary"
@@ -89,7 +106,7 @@ export function HelpCenterContent() {
 
       {/* FAQs */}
       <div className="mb-16">
-        <h2 className="text-2xl font-bold mb-8 text-center">{t("faqTitle")}</h2>
+        <h2 className="text-2xl font-bold mb-8 text-center">{t?.faqTitle}</h2>
         <div className="max-w-3xl mx-auto space-y-4">
           {faqs.map((faq, index) => (
             <details
@@ -108,14 +125,14 @@ export function HelpCenterContent() {
 
       {/* Contact Support */}
       <div className="text-center bg-muted/50 rounded-lg p-8">
-        <h2 className="text-2xl font-bold mb-4">{t("contactTitle")}</h2>
-        <p className="text-muted-foreground mb-6">{t("contactDescription")}</p>
+        <h2 className="text-2xl font-bold mb-4">{t?.contactTitle}</h2>
+        <p className="text-muted-foreground mb-6">{t?.contactDescription}</p>
         <Link
           href="/contact"
           className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
         >
           <MessageCircle className="w-5 h-5" />
-          {t("contactButton")}
+          {t?.contactButton}
         </Link>
       </div>
     </div>
