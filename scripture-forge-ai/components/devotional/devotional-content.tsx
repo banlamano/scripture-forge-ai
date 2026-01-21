@@ -33,8 +33,8 @@ export function DevotionalContent() {
     day: "numeric" 
   });
 
-  // Get the daily devotional based on current date
-  const dailyDevotional = useMemo(() => getDailyDevotional(new Date()), []);
+  // Get the daily devotional based on current date and locale
+  const dailyDevotional = useMemo(() => getDailyDevotional(new Date(), locale), [locale]);
 
   return (
     <div className="container max-w-3xl mx-auto">

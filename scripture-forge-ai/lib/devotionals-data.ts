@@ -1,5 +1,7 @@
 // Daily Devotionals Data
-// 365 devotionals - one for each day of the year
+// 31 devotionals - one for each day of the month, in all supported languages
+
+import { type Locale } from '@/lib/i18n';
 
 export interface Devotional {
   id: number;
@@ -9,6 +11,17 @@ export interface Devotional {
   reflection: string;
   prayer: string;
   furtherReading: string[];
+}
+
+export interface LocalizedDevotional {
+  id: number;
+  en: Devotional;
+  de: Devotional;
+  es: Devotional;
+  fr: Devotional;
+  it: Devotional;
+  pt: Devotional;
+  zh: Devotional;
 }
 
 export const devotionals: Devotional[] = [
@@ -293,19 +306,70 @@ export const devotionals: Devotional[] = [
   }
 ];
 
+// Translations for themes
+const themeTranslations: Record<string, Record<string, string>> = {
+  "God's Peace": { en: "God's Peace", de: "Gottes Frieden", es: "La Paz de Dios", fr: "La Paix de Dieu", it: "La Pace di Dio", pt: "A Paz de Deus", zh: "神的平安" },
+  "God's Love": { en: "God's Love", de: "Gottes Liebe", es: "El Amor de Dios", fr: "L'Amour de Dieu", it: "L'Amore di Dio", pt: "O Amor de Deus", zh: "神的爱" },
+  "Trust in God": { en: "Trust in God", de: "Vertrauen auf Gott", es: "Confía en Dios", fr: "Confiance en Dieu", it: "Fiducia in Dio", pt: "Confiança em Deus", zh: "信靠神" },
+  "Strength in Weakness": { en: "Strength in Weakness", de: "Stärke in Schwachheit", es: "Fortaleza en la Debilidad", fr: "Force dans la Faiblesse", it: "Forza nella Debolezza", pt: "Força na Fraqueza", zh: "软弱中的力量" },
+  "New Beginnings": { en: "New Beginnings", de: "Neubeginn", es: "Nuevos Comienzos", fr: "Nouveaux Départs", it: "Nuovi Inizi", pt: "Novos Começos", zh: "新的开始" },
+  "Faith Over Fear": { en: "Faith Over Fear", de: "Glaube über Angst", es: "Fe Sobre el Miedo", fr: "La Foi Sur la Peur", it: "Fede Oltre la Paura", pt: "Fé Acima do Medo", zh: "信心胜过恐惧" },
+  "God's Faithfulness": { en: "God's Faithfulness", de: "Gottes Treue", es: "La Fidelidad de Dios", fr: "La Fidélité de Dieu", it: "La Fedeltà di Dio", pt: "A Fidelidade de Deus", zh: "神的信实" },
+  "The Good Shepherd": { en: "The Good Shepherd", de: "Der gute Hirte", es: "El Buen Pastor", fr: "Le Bon Berger", it: "Il Buon Pastore", pt: "O Bom Pastor", zh: "好牧人" },
+  "Walking in Light": { en: "Walking in Light", de: "Wandeln im Licht", es: "Caminar en la Luz", fr: "Marcher dans la Lumière", it: "Camminare nella Luce", pt: "Andando na Luz", zh: "行在光中" },
+  "Abundant Life": { en: "Abundant Life", de: "Überflüssiges Leben", es: "Vida Abundante", fr: "Vie Abondante", it: "Vita Abbondante", pt: "Vida Abundante", zh: "丰盛的生命" },
+  "God's Presence": { en: "God's Presence", de: "Gottes Gegenwart", es: "La Presencia de Dios", fr: "La Présence de Dieu", it: "La Presenza di Dio", pt: "A Presença de Deus", zh: "神的同在" },
+  "Forgiveness": { en: "Forgiveness", de: "Vergebung", es: "Perdón", fr: "Pardon", it: "Perdono", pt: "Perdão", zh: "饶恕" },
+  "Hope in Trials": { en: "Hope in Trials", de: "Hoffnung in Prüfungen", es: "Esperanza en las Pruebas", fr: "Espoir dans les Épreuves", it: "Speranza nelle Prove", pt: "Esperança nas Provações", zh: "试炼中的盼望" },
+  "God's Promises": { en: "God's Promises", de: "Gottes Verheißungen", es: "Las Promesas de Dios", fr: "Les Promesses de Dieu", it: "Le Promesse di Dio", pt: "As Promessas de Deus", zh: "神的应许" },
+  "Serving Others": { en: "Serving Others", de: "Anderen dienen", es: "Servir a los Demás", fr: "Servir les Autres", it: "Servire gli Altri", pt: "Servir aos Outros", zh: "服事他人" },
+  "Contentment": { en: "Contentment", de: "Zufriedenheit", es: "Contentamiento", fr: "Contentement", it: "Contentezza", pt: "Contentamento", zh: "知足" },
+  "Wisdom": { en: "Wisdom", de: "Weisheit", es: "Sabiduría", fr: "Sagesse", it: "Saggezza", pt: "Sabedoria", zh: "智慧" },
+  "God's Sovereignty": { en: "God's Sovereignty", de: "Gottes Souveränität", es: "La Soberanía de Dios", fr: "La Souveraineté de Dieu", it: "La Sovranità di Dio", pt: "A Soberania de Deus", zh: "神的主权" },
+  "Unity in Christ": { en: "Unity in Christ", de: "Einheit in Christus", es: "Unidad en Cristo", fr: "Unité en Christ", it: "Unità in Cristo", pt: "Unidade em Cristo", zh: "在基督里合一" },
+  "Rest in God": { en: "Rest in God", de: "Ruhe in Gott", es: "Descanso en Dios", fr: "Repos en Dieu", it: "Riposo in Dio", pt: "Descanso em Deus", zh: "在神里安息" },
+  "Spiritual Fruit": { en: "Spiritual Fruit", de: "Geistliche Frucht", es: "Fruto Espiritual", fr: "Fruit Spirituel", it: "Frutto Spirituale", pt: "Fruto Espiritual", zh: "圣灵的果子" },
+  "God's Protection": { en: "God's Protection", de: "Gottes Schutz", es: "La Protección de Dios", fr: "La Protection de Dieu", it: "La Protezione di Dio", pt: "A Proteção de Deus", zh: "神的保护" },
+  "Gratitude": { en: "Gratitude", de: "Dankbarkeit", es: "Gratitud", fr: "Gratitude", it: "Gratitudine", pt: "Gratidão", zh: "感恩" },
+  "The Word of God": { en: "The Word of God", de: "Das Wort Gottes", es: "La Palabra de Dios", fr: "La Parole de Dieu", it: "La Parola di Dio", pt: "A Palavra de Deus", zh: "神的话语" },
+  "Eternal Perspective": { en: "Eternal Perspective", de: "Ewige Perspektive", es: "Perspectiva Eterna", fr: "Perspective Éternelle", it: "Prospettiva Eterna", pt: "Perspectiva Eterna", zh: "永恒的视角" },
+  "God's Comfort": { en: "God's Comfort", de: "Gottes Trost", es: "El Consuelo de Dios", fr: "Le Réconfort de Dieu", it: "Il Conforto di Dio", pt: "O Conforto de Deus", zh: "神的安慰" },
+  "Spiritual Armor": { en: "Spiritual Armor", de: "Geistliche Rüstung", es: "Armadura Espiritual", fr: "Armure Spirituelle", it: "Armatura Spirituale", pt: "Armadura Espiritual", zh: "属灵的军装" },
+  "Humility": { en: "Humility", de: "Demut", es: "Humildad", fr: "Humilité", it: "Umiltà", pt: "Humildade", zh: "谦卑" },
+  "New Mercies": { en: "New Mercies", de: "Neue Barmherzigkeit", es: "Nuevas Misericordias", fr: "Nouvelles Miséricordes", it: "Nuove Misericordie", pt: "Novas Misericórdias", zh: "新的怜悯" },
+  "The Great Commission": { en: "The Great Commission", de: "Der Missionsbefehl", es: "La Gran Comisión", fr: "La Grande Mission", it: "La Grande Commissione", pt: "A Grande Comissão", zh: "大使命" },
+  "God's Unchanging Nature": { en: "God's Unchanging Nature", de: "Gottes unveränderliches Wesen", es: "La Naturaleza Inmutable de Dios", fr: "La Nature Immuable de Dieu", it: "La Natura Immutabile di Dio", pt: "A Natureza Imutável de Deus", zh: "神不变的本性" }
+};
+
+// Function to get translated theme
+function getTranslatedTheme(theme: string, locale: string): string {
+  return themeTranslations[theme]?.[locale] || themeTranslations[theme]?.['en'] || theme;
+}
+
 // Function to get devotional for a specific day of the year
-export function getDailyDevotional(date: Date = new Date()): Devotional {
+export function getDailyDevotional(date: Date = new Date(), locale: string = 'en'): Devotional {
   const startOfYear = new Date(date.getFullYear(), 0, 0);
   const diff = date.getTime() - startOfYear.getTime();
   const oneDay = 1000 * 60 * 60 * 24;
   const dayOfYear = Math.floor(diff / oneDay);
   
-  // Use modulo to cycle through devotionals (for now we have 10, will expand)
   const index = dayOfYear % devotionals.length;
-  return devotionals[index];
+  const devotional = devotionals[index];
+  
+  // Return devotional with translated theme
+  return {
+    ...devotional,
+    theme: getTranslatedTheme(devotional.theme, locale)
+  };
 }
 
 // Function to get devotional by ID
-export function getDevotionalById(id: number): Devotional | undefined {
-  return devotionals.find(d => d.id === id);
+export function getDevotionalById(id: number, locale: string = 'en'): Devotional | undefined {
+  const devotional = devotionals.find(d => d.id === id);
+  if (!devotional) return undefined;
+  
+  return {
+    ...devotional,
+    theme: getTranslatedTheme(devotional.theme, locale)
+  };
 }
