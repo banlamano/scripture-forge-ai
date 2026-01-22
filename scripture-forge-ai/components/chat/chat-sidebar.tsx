@@ -2,17 +2,16 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
-import { Plus, History, Trash2, X, MessageCircle, LogIn } from "lucide-react";
+import { Plus, History, Trash2, X, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 
 interface ChatConversation {
   id: string;
   title: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | string;
+  updatedAt: Date | string;
   preview?: string;
 }
 
@@ -24,7 +23,6 @@ interface ChatSidebarProps {
   selectedId: string | null;
   onSelectConversation: (id: string) => void;
   onDeleteConversation: (id: string) => void;
-  isAuthenticated: boolean;
 }
 
 export function ChatSidebar({ 
@@ -35,7 +33,6 @@ export function ChatSidebar({
   selectedId,
   onSelectConversation,
   onDeleteConversation,
-  isAuthenticated,
 }: ChatSidebarProps) {
   const t = useTranslations("chat");
 
@@ -103,19 +100,7 @@ export function ChatSidebar({
         {/* Chat list */}
         <ScrollArea className="flex-1">
           <div className="p-2 space-y-1">
-            {!isAuthenticated ? (
-              <div className="text-center py-8 px-4">
-                <LogIn className="w-8 h-8 mx-auto mb-3 text-muted-foreground" />
-                <p className="text-sm text-muted-foreground mb-3">
-                  {t("signInToSave") || "Sign in to save your chat history"}
-                </p>
-                <Link href="/auth/signin">
-                  <Button variant="outline" size="sm">
-                    {t("signIn") || "Sign In"}
-                  </Button>
-                </Link>
-              </div>
-            ) : conversations.length === 0 ? (
+            {conversations.length === 0 ? (
               <div className="text-center text-muted-foreground text-sm py-8 px-4">
                 <MessageCircle className="w-8 h-8 mx-auto mb-3 opacity-50" />
                 <p>{t("noHistory") || "No chat history yet"}</p>

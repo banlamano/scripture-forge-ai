@@ -122,8 +122,8 @@ export function ChatInterface() {
       lang: locale, // Pass the user's language to the API
     },
     onFinish: async (message) => {
-      // Save assistant message to database
-      if (activeConversationId && isAuthenticated) {
+      // Save assistant message to localStorage
+      if (activeConversationId) {
         await addMessage(activeConversationId, "assistant", message.content);
       }
     },
@@ -163,8 +163,8 @@ export function ChatInterface() {
 
     let convId = activeConversationId;
 
-    // If authenticated and no active conversation, create one
-    if (isAuthenticated && !convId) {
+    // If no active conversation, create one (works for all users with localStorage)
+    if (!convId) {
       const newConv = await createConversation();
       if (newConv) {
         convId = newConv.id;
@@ -174,8 +174,8 @@ export function ChatInterface() {
       }
     }
 
-    // Save user message to database
-    if (convId && isAuthenticated) {
+    // Save user message to localStorage
+    if (convId) {
       await addMessage(convId, "user", input);
     }
 
@@ -370,7 +370,6 @@ export function ChatInterface() {
         selectedId={activeConversationId}
         onSelectConversation={handleSelectConversation}
         onDeleteConversation={handleDeleteConversation}
-        isAuthenticated={isAuthenticated}
       />
 
       {/* Main chat area */}
