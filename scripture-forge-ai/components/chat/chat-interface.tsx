@@ -375,6 +375,33 @@ export function ChatInterface() {
 
       {/* Main chat area */}
       <div className="flex-1 flex flex-col">
+        {/* Header with sidebar toggle */}
+        <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 py-2 flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowSidebar(!showSidebar)}
+            className="rounded-lg"
+            title={t("history")}
+          >
+            <History className="w-5 h-5" />
+          </Button>
+          <div className="flex-1">
+            <h1 className="font-semibold text-sm">
+              {currentConversation?.title || t("newChat")}
+            </h1>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleNewChat}
+            className="rounded-lg"
+            title={t("newChat")}
+          >
+            <Plus className="w-5 h-5" />
+          </Button>
+        </div>
+
         {/* Messages area */}
         <ScrollArea className="flex-1" ref={scrollRef}>
           <div className="max-w-3xl mx-auto px-4 py-6">
