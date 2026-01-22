@@ -15,13 +15,13 @@ export interface Devotional {
 
 export interface LocalizedDevotional {
   id: number;
-  en: Devotional;
-  de: Devotional;
-  es: Devotional;
-  fr: Devotional;
-  it: Devotional;
-  pt: Devotional;
-  zh: Devotional;
+  en: Omit<Devotional, 'id'>;
+  de: Omit<Devotional, 'id'>;
+  es: Omit<Devotional, 'id'>;
+  fr: Omit<Devotional, 'id'>;
+  it: Omit<Devotional, 'id'>;
+  pt: Omit<Devotional, 'id'>;
+  zh: Omit<Devotional, 'id'>;
 }
 
 export const devotionals: Devotional[] = [
@@ -346,6 +346,9 @@ function getTranslatedTheme(theme: string, locale: string): string {
   return themeTranslations[theme]?.[locale] || themeTranslations[theme]?.['en'] || theme;
 }
 
+// Import localized content
+import { getLocalizedDevotional } from './devotionals-localized';
+
 // Function to get devotional for a specific day of the year
 export function getDailyDevotional(date: Date = new Date(), locale: string = 'en'): Devotional {
   const startOfYear = new Date(date.getFullYear(), 0, 0);
@@ -356,7 +359,16 @@ export function getDailyDevotional(date: Date = new Date(), locale: string = 'en
   const index = dayOfYear % devotionals.length;
   const devotional = devotionals[index];
   
-  // Return devotional with translated theme
+  // Try to get fully localized content
+  const localizedContent = getLocalizedDevotional(devotional.id, locale);
+  if (localizedContent) {
+    return {
+      id: devotional.id,
+      ...localizedContent
+    };
+  }
+  
+  // Fallback to English content with translated theme only
   return {
     ...devotional,
     theme: getTranslatedTheme(devotional.theme, locale)
@@ -368,6 +380,16 @@ export function getDevotionalById(id: number, locale: string = 'en'): Devotional
   const devotional = devotionals.find(d => d.id === id);
   if (!devotional) return undefined;
   
+  // Try to get fully localized content
+  const localizedContent = getLocalizedDevotional(id, locale);
+  if (localizedContent) {
+    return {
+      id: devotional.id,
+      ...localizedContent
+    };
+  }
+  
+  // Fallback to English content with translated theme only
   return {
     ...devotional,
     theme: getTranslatedTheme(devotional.theme, locale)
