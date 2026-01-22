@@ -153,7 +153,16 @@
       "q6": "Quem foi o Rei Davi?",
       "q7": "O que é salvação?",
       "q8": "Explique a parábola do semeador"
-    }
+    },
+    "signInToSave": "Faça login para salvar seu histórico de chat",
+    "signIn": "Entrar",
+    "noHistory": "Sem histórico de chat",
+    "startConversation": "Inicie uma conversa para vê-la aqui",
+    "conversationDeleted": "Conversa excluída",
+    "justNow": "Agora mesmo",
+    "ago": "atrás",
+    "yesterday": "Ontem",
+    "daysAgo": "dias atrás"
   },
   "bible": {
     "title": "Leitor de Bíblia",

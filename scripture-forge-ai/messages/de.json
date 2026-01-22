@@ -153,7 +153,16 @@
       "q6": "Wer war König David?",
       "q7": "Was ist Erlösung?",
       "q8": "Erkläre das Gleichnis vom Sämann"
-    }
+    },
+    "signInToSave": "Melden Sie sich an, um Ihren Chatverlauf zu speichern",
+    "signIn": "Anmelden",
+    "noHistory": "Noch kein Chatverlauf",
+    "startConversation": "Starten Sie eine Unterhaltung, um sie hier zu sehen",
+    "conversationDeleted": "Unterhaltung gelöscht",
+    "justNow": "Gerade eben",
+    "ago": "vor",
+    "yesterday": "Gestern",
+    "daysAgo": "Tage her"
   },
   "bible": {
     "title": "Bibel-Leser",

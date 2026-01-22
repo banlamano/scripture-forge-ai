@@ -153,7 +153,16 @@
       "q6": "Chi era il Re Davide?",
       "q7": "Cos'è la salvezza?",
       "q8": "Spiega la parabola del seminatore"
-    }
+    },
+    "signInToSave": "Accedi per salvare la cronologia chat",
+    "signIn": "Accedi",
+    "noHistory": "Nessuna cronologia chat",
+    "startConversation": "Inizia una conversazione per vederla qui",
+    "conversationDeleted": "Conversazione eliminata",
+    "justNow": "Proprio ora",
+    "ago": "fa",
+    "yesterday": "Ieri",
+    "daysAgo": "giorni fa"
   },
   "bible": {
     "title": "Lettore Biblico",

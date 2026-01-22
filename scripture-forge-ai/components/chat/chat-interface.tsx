@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useChat } from "ai/react";
 import {
@@ -37,15 +37,34 @@ import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { useLanguage } from "@/components/providers/language-provider";
 import { ShareModal } from "@/components/ui/share-modal";
+import { useChatHistory } from "@/lib/hooks/use-chat-history";
 
 export function ChatInterface() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const word = searchParams.get("word");
   const verse = searchParams.get("verse");
   const query = searchParams.get("q");
+  const conversationIdParam = searchParams.get("c");
   const t = useTranslations("chat");
   const tCommon = useTranslations("common");
   const { locale } = useLanguage();
+  
+  // Chat history management
+  const {
+    conversations,
+    currentConversation,
+    isAuthenticated,
+    createConversation,
+    loadConversation,
+    addMessage,
+    deleteConversation,
+    clearCurrentConversation,
+    fetchConversations,
+  } = useChatHistory();
+
+  const [activeConversationId, setActiveConversationId] = useState<string | null>(conversationIdParam);
+  const [isInitialized, setIsInitialized] = useState(false);
   
   // Build the initial query based on parameters - using translated templates
   let initialQuery = "";
@@ -77,20 +96,36 @@ export function ChatInterface() {
     }
   }, []);
 
+  // Load conversation from URL param
+  useEffect(() => {
+    if (conversationIdParam && isAuthenticated && !isInitialized) {
+      loadConversation(conversationIdParam);
+      setActiveConversationId(conversationIdParam);
+      setIsInitialized(true);
+    }
+  }, [conversationIdParam, isAuthenticated, loadConversation, isInitialized]);
+
   const {
     messages,
     input,
     setInput,
-    handleSubmit,
+    handleSubmit: originalHandleSubmit,
     isLoading,
     reload,
     stop,
     error,
+    setMessages,
   } = useChat({
     api: "/api/chat",
     initialInput: initialQuery,
     body: {
       lang: locale, // Pass the user's language to the API
+    },
+    onFinish: async (message) => {
+      // Save assistant message to database
+      if (activeConversationId && isAuthenticated) {
+        await addMessage(activeConversationId, "assistant", message.content);
+      }
     },
     onError: (err) => {
       // Show user-friendly error message
@@ -107,6 +142,46 @@ export function ChatInterface() {
       });
     },
   });
+
+  // Load messages when conversation changes
+  useEffect(() => {
+    if (currentConversation?.messages && currentConversation.messages.length > 0) {
+      const formattedMessages = currentConversation.messages.map((msg) => ({
+        id: msg.id,
+        role: msg.role as "user" | "assistant",
+        content: msg.content,
+      }));
+      setMessages(formattedMessages);
+    }
+  }, [currentConversation, setMessages]);
+
+  // Custom submit handler that saves to history
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if (!input.trim()) return;
+
+    let convId = activeConversationId;
+
+    // If authenticated and no active conversation, create one
+    if (isAuthenticated && !convId) {
+      const newConv = await createConversation();
+      if (newConv) {
+        convId = newConv.id;
+        setActiveConversationId(convId);
+        // Update URL with conversation ID
+        router.push(`/chat?c=${convId}`, { scroll: false });
+      }
+    }
+
+    // Save user message to database
+    if (convId && isAuthenticated) {
+      await addMessage(convId, "user", input);
+    }
+
+    // Call the original submit handler
+    originalHandleSubmit(e);
+  };
 
   // Auto-scroll to bottom - using scrollIntoView for reliability
   const scrollToBottom = useCallback(() => {
@@ -174,7 +249,36 @@ export function ChatInterface() {
   };
 
   const handleNewChat = () => {
-    window.location.href = "/chat";
+    // Clear current conversation state
+    clearCurrentConversation();
+    setActiveConversationId(null);
+    setMessages([]);
+    setInput("");
+    // Navigate to clean chat URL
+    router.push("/chat");
+  };
+
+  // Handle selecting a conversation from sidebar
+  const handleSelectConversation = async (conversationId: string) => {
+    if (conversationId === activeConversationId) return;
+    
+    setActiveConversationId(conversationId);
+    await loadConversation(conversationId);
+    router.push(`/chat?c=${conversationId}`, { scroll: false });
+    setShowSidebar(false);
+  };
+
+  // Handle deleting a conversation
+  const handleDeleteConversation = async (conversationId: string) => {
+    const success = await deleteConversation(conversationId);
+    if (success) {
+      toast.success(t("conversationDeleted") || "Conversation deleted");
+      if (conversationId === activeConversationId) {
+        handleNewChat();
+      }
+    } else {
+      toast.error(t("errorOccurred") || "Failed to delete conversation");
+    }
   };
 
   // Voice input (speech-to-text)
@@ -262,6 +366,11 @@ export function ChatInterface() {
         isOpen={showSidebar}
         onClose={() => setShowSidebar(false)}
         onNewChat={handleNewChat}
+        conversations={conversations}
+        selectedId={activeConversationId}
+        onSelectConversation={handleSelectConversation}
+        onDeleteConversation={handleDeleteConversation}
+        isAuthenticated={isAuthenticated}
       />
 
       {/* Main chat area */}

@@ -153,7 +153,16 @@
       "q6": "Who was King David?",
       "q7": "What is salvation?",
       "q8": "Explain the parable of the sower"
-    }
+    },
+    "signInToSave": "Sign in to save your chat history",
+    "signIn": "Sign In",
+    "noHistory": "No chat history yet",
+    "startConversation": "Start a conversation to see it here",
+    "conversationDeleted": "Conversation deleted",
+    "justNow": "Just now",
+    "ago": "ago",
+    "yesterday": "Yesterday",
+    "daysAgo": "days ago"
   },
   "bible": {
     "title": "Bible Reader",

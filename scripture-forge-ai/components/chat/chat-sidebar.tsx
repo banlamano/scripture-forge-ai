@@ -1,67 +1,55 @@
 "use client";
 
-import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
-import { Plus, History, Trash2, X, MessageCircle } from "lucide-react";
+import { Plus, History, Trash2, X, MessageCircle, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
-interface ChatHistory {
+interface ChatConversation {
   id: string;
-  title: string;
-  timestamp: Date;
-  preview: string;
+  title: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  preview?: string;
 }
-
-// Mock data - in production, this would come from the database
-const mockHistory: ChatHistory[] = [
-  {
-    id: "1",
-    title: "Understanding John 3:16",
-    timestamp: new Date(Date.now() - 1000 * 60 * 30),
-    preview: "Explain the meaning of John 3:16...",
-  },
-  {
-    id: "2",
-    title: "Daily devotional on hope",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2),
-    preview: "Give me a devotional about hope...",
-  },
-  {
-    id: "3",
-    title: "Dealing with anxiety",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24),
-    preview: "What does the Bible say about anxiety...",
-  },
-];
 
 interface ChatSidebarProps {
   isOpen: boolean;
   onClose: () => void;
   onNewChat: () => void;
+  conversations: ChatConversation[];
+  selectedId: string | null;
+  onSelectConversation: (id: string) => void;
+  onDeleteConversation: (id: string) => void;
+  isAuthenticated: boolean;
 }
 
-export function ChatSidebar({ isOpen, onClose, onNewChat }: ChatSidebarProps) {
+export function ChatSidebar({ 
+  isOpen, 
+  onClose, 
+  onNewChat,
+  conversations,
+  selectedId,
+  onSelectConversation,
+  onDeleteConversation,
+  isAuthenticated,
+}: ChatSidebarProps) {
   const t = useTranslations("chat");
-  const [history, setHistory] = useState(mockHistory);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const deleteChat = (id: string) => {
-    setHistory((prev) => prev.filter((chat) => chat.id !== id));
-  };
-
-  const formatTime = (date: Date) => {
+  const formatTime = (date: Date | string) => {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
     const now = new Date();
-    const diff = now.getTime() - date.getTime();
+    const diff = now.getTime() - dateObj.getTime();
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const days = Math.floor(hours / 24);
 
-    if (hours < 1) return "Just now";
-    if (hours < 24) return `${hours}h ago`;
-    if (days === 1) return "Yesterday";
-    return `${days} days ago`;
+    if (hours < 1) return t("justNow") || "Just now";
+    if (hours < 24) return `${hours}h ${t("ago") || "ago"}`;
+    if (days === 1) return t("yesterday") || "Yesterday";
+    return `${days} ${t("daysAgo") || "days ago"}`;
   };
 
   return (
@@ -115,12 +103,26 @@ export function ChatSidebar({ isOpen, onClose, onNewChat }: ChatSidebarProps) {
         {/* Chat list */}
         <ScrollArea className="flex-1">
           <div className="p-2 space-y-1">
-            {history.length === 0 ? (
-              <div className="text-center text-muted-foreground text-sm py-8">
-                {t("history")}
+            {!isAuthenticated ? (
+              <div className="text-center py-8 px-4">
+                <LogIn className="w-8 h-8 mx-auto mb-3 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground mb-3">
+                  {t("signInToSave") || "Sign in to save your chat history"}
+                </p>
+                <Link href="/auth/signin">
+                  <Button variant="outline" size="sm">
+                    {t("signIn") || "Sign In"}
+                  </Button>
+                </Link>
+              </div>
+            ) : conversations.length === 0 ? (
+              <div className="text-center text-muted-foreground text-sm py-8 px-4">
+                <MessageCircle className="w-8 h-8 mx-auto mb-3 opacity-50" />
+                <p>{t("noHistory") || "No chat history yet"}</p>
+                <p className="text-xs mt-1">{t("startConversation") || "Start a conversation to see it here"}</p>
               </div>
             ) : (
-              history.map((chat) => (
+              conversations.map((chat) => (
                 <div
                   key={chat.id}
                   className={cn(
@@ -129,21 +131,23 @@ export function ChatSidebar({ isOpen, onClose, onNewChat }: ChatSidebarProps) {
                       ? "bg-primary/10"
                       : "hover:bg-muted"
                   )}
-                  onClick={() => setSelectedId(chat.id)}
+                  onClick={() => onSelectConversation(chat.id)}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <MessageCircle className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
                         <h3 className="font-medium text-sm truncate">
-                          {chat.title}
+                          {chat.title || t("newChat") || "New Chat"}
                         </h3>
                       </div>
-                      <p className="text-xs text-muted-foreground mt-1 truncate">
-                        {chat.preview}
-                      </p>
+                      {chat.preview && (
+                        <p className="text-xs text-muted-foreground mt-1 truncate">
+                          {chat.preview}
+                        </p>
+                      )}
                       <p className="text-xs text-muted-foreground/70 mt-1">
-                        {formatTime(chat.timestamp)}
+                        {formatTime(chat.updatedAt)}
                       </p>
                     </div>
                     <Button
@@ -152,7 +156,7 @@ export function ChatSidebar({ isOpen, onClose, onNewChat }: ChatSidebarProps) {
                       className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                       onClick={(e) => {
                         e.stopPropagation();
-                        deleteChat(chat.id);
+                        onDeleteConversation(chat.id);
                       }}
                     >
                       <Trash2 className="w-3.5 h-3.5 text-muted-foreground hover:text-destructive" />

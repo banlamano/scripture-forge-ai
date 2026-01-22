@@ -153,7 +153,16 @@
       "q6": "大卫王是谁？",
       "q7": "什么是救恩？",
       "q8": "解释撒种的比喻"
-    }
+    },
+    "signInToSave": "登录以保存聊天记录",
+    "signIn": "登录",
+    "noHistory": "暂无聊天记录",
+    "startConversation": "开始对话后将显示在此处",
+    "conversationDeleted": "对话已删除",
+    "justNow": "刚刚",
+    "ago": "前",
+    "yesterday": "昨天",
+    "daysAgo": "天前"
   },
   "bible": {
     "title": "圣经阅读器",

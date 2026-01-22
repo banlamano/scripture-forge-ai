@@ -153,7 +153,16 @@
       "q6": "¿Quién fue el Rey David?",
       "q7": "¿Qué es la salvación?",
       "q8": "Explica la parábola del sembrador"
-    }
+    },
+    "signInToSave": "Inicia sesión para guardar tu historial de chat",
+    "signIn": "Iniciar sesión",
+    "noHistory": "Sin historial de chat",
+    "startConversation": "Inicia una conversación para verla aquí",
+    "conversationDeleted": "Conversación eliminada",
+    "justNow": "Ahora mismo",
+    "ago": "hace",
+    "yesterday": "Ayer",
+    "daysAgo": "días"
   },
   "bible": {
     "title": "Lector de Biblia",

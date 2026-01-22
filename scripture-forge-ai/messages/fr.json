@@ -153,7 +153,16 @@
       "q6": "Qui était le roi David?",
       "q7": "Qu'est-ce que le salut?",
       "q8": "Explique la parabole du semeur"
-    }
+    },
+    "signInToSave": "Connectez-vous pour sauvegarder votre historique de chat",
+    "signIn": "Se connecter",
+    "noHistory": "Pas encore d'historique de chat",
+    "startConversation": "Commencez une conversation pour la voir ici",
+    "conversationDeleted": "Conversation supprimée",
+    "justNow": "À l'instant",
+    "ago": "il y a",
+    "yesterday": "Hier",
+    "daysAgo": "jours"
   },
   "bible": {
     "title": "Lecteur de Bible",
