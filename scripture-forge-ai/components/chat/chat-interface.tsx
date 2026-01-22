@@ -96,15 +96,6 @@ export function ChatInterface() {
     }
   }, []);
 
-  // Load conversation from URL param
-  useEffect(() => {
-    if (conversationIdParam && isAuthenticated && !isInitialized) {
-      loadConversation(conversationIdParam);
-      setActiveConversationId(conversationIdParam);
-      setIsInitialized(true);
-    }
-  }, [conversationIdParam, isAuthenticated, loadConversation, isInitialized]);
-
   const {
     messages,
     input,
@@ -143,17 +134,27 @@ export function ChatInterface() {
     },
   });
 
-  // Load messages when conversation changes
+  // Load conversation from URL param on initial load
   useEffect(() => {
-    if (currentConversation?.messages && currentConversation.messages.length > 0) {
-      const formattedMessages = currentConversation.messages.map((msg) => ({
-        id: msg.id,
-        role: msg.role as "user" | "assistant",
-        content: msg.content,
-      }));
-      setMessages(formattedMessages);
-    }
-  }, [currentConversation, setMessages]);
+    const loadFromUrl = async () => {
+      if (conversationIdParam && !isInitialized) {
+        setActiveConversationId(conversationIdParam);
+        const conversation = await loadConversation(conversationIdParam);
+        
+        // Set messages from loaded conversation
+        if (conversation?.messages && conversation.messages.length > 0) {
+          const formattedMessages = conversation.messages.map((msg) => ({
+            id: msg.id,
+            role: msg.role as "user" | "assistant",
+            content: msg.content,
+          }));
+          setMessages(formattedMessages);
+        }
+        setIsInitialized(true);
+      }
+    };
+    loadFromUrl();
+  }, [conversationIdParam, loadConversation, isInitialized, setMessages]);
 
   // Custom submit handler that saves to history
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -263,7 +264,20 @@ export function ChatInterface() {
     if (conversationId === activeConversationId) return;
     
     setActiveConversationId(conversationId);
-    await loadConversation(conversationId);
+    const conversation = await loadConversation(conversationId);
+    
+    // Directly set messages from the loaded conversation
+    if (conversation?.messages && conversation.messages.length > 0) {
+      const formattedMessages = conversation.messages.map((msg) => ({
+        id: msg.id,
+        role: msg.role as "user" | "assistant",
+        content: msg.content,
+      }));
+      setMessages(formattedMessages);
+    } else {
+      setMessages([]);
+    }
+    
     router.push(`/chat?c=${conversationId}`, { scroll: false });
     setShowSidebar(false);
   };
