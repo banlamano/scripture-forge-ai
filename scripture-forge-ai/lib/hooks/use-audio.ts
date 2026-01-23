@@ -6,6 +6,7 @@ interface UseAudioOptions {
   rate?: number;
   pitch?: number;
   volume?: number;
+  onBoundary?: (event: { charIndex: number; charLength: number; name: string }) => void;
 }
 
 // Language locale preferences for voice selection
@@ -32,14 +33,17 @@ const LANGUAGE_LOCALES: Record<string, string[]> = {
 };
 
 export function useAudio(options: UseAudioOptions = {}) {
-  const { rate = 0.9, pitch = 1, volume = 1 } = options;
+  const { rate = 0.9, pitch = 1, volume = 1, onBoundary } = options;
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [currentCharIndex, setCurrentCharIndex] = useState<number>(0);
+  const [currentWord, setCurrentWord] = useState<string>("");
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const checkIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const textRef = useRef<string>("");
 
   // Load available voices
   useEffect(() => {
@@ -153,17 +157,22 @@ export function useAudio(options: UseAudioOptions = {}) {
         }
 
         try {
+          // Store text for boundary tracking
+          textRef.current = text;
+          setCurrentCharIndex(0);
+          setCurrentWord("");
+
           const utterance = new SpeechSynthesisUtterance(text);
           utterance.rate = rate;
           utterance.pitch = pitch;
-          utterance.volume = volume;
+          utterance.volume = Math.max(0.1, Math.min(1, volume)); // Ensure volume is between 0.1 and 1
 
           // Find and set the best voice for the language
           const bestVoice = findBestVoice(language, availableVoices);
           if (bestVoice) {
             utterance.voice = bestVoice;
             utterance.lang = bestVoice.lang;
-            console.log(`Using voice: ${bestVoice.name} (${bestVoice.lang})`);
+            console.log(`Using voice: ${bestVoice.name} (${bestVoice.lang}), volume: ${utterance.volume}`);
           } else {
             // Set language code if no specific voice found
             const locales = LANGUAGE_LOCALES[language];
@@ -171,8 +180,34 @@ export function useAudio(options: UseAudioOptions = {}) {
             console.log(`No voice found for ${language}, using lang: ${utterance.lang}`);
           }
 
+          // Track word boundaries for highlighting
+          utterance.onboundary = (event) => {
+            if (event.name === 'word') {
+              const charIndex = event.charIndex;
+              const charLength = event.charLength || 0;
+              setCurrentCharIndex(charIndex);
+              
+              // Extract the current word
+              if (charLength > 0) {
+                const word = text.substring(charIndex, charIndex + charLength);
+                setCurrentWord(word);
+              } else {
+                // Try to find word boundary manually
+                const wordMatch = text.substring(charIndex).match(/^[\w\u00C0-\u024F\u1E00-\u1EFF]+/);
+                if (wordMatch) {
+                  setCurrentWord(wordMatch[0]);
+                }
+              }
+              
+              // Call the callback if provided
+              if (onBoundary) {
+                onBoundary({ charIndex, charLength, name: event.name });
+              }
+            }
+          };
+
           utterance.onstart = () => {
-            console.log("Speech started");
+            console.log("Speech started, volume:", utterance.volume);
             setIsPlaying(true);
             setIsPaused(false);
             setIsLoading(false);
@@ -183,6 +218,8 @@ export function useAudio(options: UseAudioOptions = {}) {
             setIsPlaying(false);
             setIsPaused(false);
             setIsLoading(false);
+            setCurrentCharIndex(0);
+            setCurrentWord("");
             if (checkIntervalRef.current) {
               clearInterval(checkIntervalRef.current);
               checkIntervalRef.current = null;
@@ -198,6 +235,8 @@ export function useAudio(options: UseAudioOptions = {}) {
             setIsPlaying(false);
             setIsPaused(false);
             setIsLoading(false);
+            setCurrentCharIndex(0);
+            setCurrentWord("");
             if (checkIntervalRef.current) {
               clearInterval(checkIntervalRef.current);
               checkIntervalRef.current = null;
@@ -213,7 +252,7 @@ export function useAudio(options: UseAudioOptions = {}) {
           // This workaround keeps the speech synthesis active
           checkIntervalRef.current = setInterval(() => {
             if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
-              // Keep it active
+              // Keep it active by pausing and resuming
               window.speechSynthesis.pause();
               window.speechSynthesis.resume();
             }
@@ -271,9 +310,12 @@ export function useAudio(options: UseAudioOptions = {}) {
       window.speechSynthesis.cancel();
     }
     utteranceRef.current = null;
+    textRef.current = "";
     setIsPlaying(false);
     setIsPaused(false);
     setIsLoading(false);
+    setCurrentCharIndex(0);
+    setCurrentWord("");
   }, []);
 
   const toggle = useCallback(() => {
@@ -294,6 +336,8 @@ export function useAudio(options: UseAudioOptions = {}) {
     isPaused,
     isLoading,
     error,
+    currentCharIndex,
+    currentWord,
     isSupported: typeof window !== "undefined" && "speechSynthesis" in window,
     voices,
   };

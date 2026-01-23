@@ -157,8 +157,32 @@ export function BibleReader() {
   const MIN_FONT_SIZE = 12;
   const MAX_FONT_SIZE = 32;
 
-  // Audio playback
+  // Audio playback with verse tracking
   const audio = useAudio({ rate: 0.9 });
+  
+  // Track which verse is currently being read
+  const [currentReadingVerse, setCurrentReadingVerse] = useState<number | null>(null);
+  
+  // Calculate current verse based on character index
+  useEffect(() => {
+    if (!audio.isPlaying || !chapterData || audio.currentCharIndex === 0) {
+      if (!audio.isPlaying) {
+        setCurrentReadingVerse(null);
+      }
+      return;
+    }
+    
+    // Build a mapping of character positions to verse numbers
+    let charCount = 0;
+    for (const verse of chapterData.verses) {
+      const verseLength = verse.text.length + 1; // +1 for space between verses
+      if (audio.currentCharIndex >= charCount && audio.currentCharIndex < charCount + verseLength) {
+        setCurrentReadingVerse(verse.number);
+        break;
+      }
+      charCount += verseLength;
+    }
+  }, [audio.currentCharIndex, audio.isPlaying, chapterData]);
   
   // Theme
   const { theme, setTheme } = useTheme();
@@ -1190,6 +1214,9 @@ export function BibleReader() {
                       });
                     };
 
+                    // Check if this verse is currently being read
+                    const isCurrentlyReading = currentReadingVerse === verse.number && audio.isPlaying;
+                    
                     // For single-chapter books, display each verse as a paragraph
                     if (isSingleChapter) {
                       return (
@@ -1199,14 +1226,21 @@ export function BibleReader() {
                           animate={{ opacity: 1 }}
                           transition={{ delay: verse.number * 0.02 }}
                           onClick={() => toggleVerseSelection(verse.number)}
-                          className={`cursor-pointer transition-colors rounded p-2 sm:p-3 touch-manipulation ${
-                            isSelected
+                          className={`cursor-pointer transition-all duration-300 rounded p-2 sm:p-3 touch-manipulation ${
+                            isCurrentlyReading
+                              ? "bg-blue-100 dark:bg-blue-900/40 border-l-4 border-blue-500 pl-3"
+                              : isSelected
                               ? "bg-primary/20 text-primary"
                               : "hover:bg-muted active:bg-muted/80"
                           }`}
                         >
-                          <sup className="verse-number font-bold text-primary mr-2">{verse.number}</sup>
+                          <sup className={`verse-number font-bold mr-2 ${isCurrentlyReading ? "text-blue-600 dark:text-blue-400" : "text-primary"}`}>{verse.number}</sup>
                           {renderWordsWithClick(verse.text, verse.number)}
+                          {isCurrentlyReading && (
+                            <span className="ml-2 inline-flex items-center">
+                              <Volume2 className="w-4 h-4 text-blue-500 animate-pulse" />
+                            </span>
+                          )}
                         </motion.p>
                       );
                     }
@@ -1219,13 +1253,15 @@ export function BibleReader() {
                         animate={{ opacity: 1 }}
                         transition={{ delay: verse.number * 0.02 }}
                         onClick={() => toggleVerseSelection(verse.number)}
-                        className={`inline cursor-pointer transition-colors rounded px-0.5 py-1 touch-manipulation ${
-                          isSelected
+                        className={`inline cursor-pointer transition-all duration-300 rounded px-0.5 py-1 touch-manipulation ${
+                          isCurrentlyReading
+                            ? "bg-blue-100 dark:bg-blue-900/40 text-blue-900 dark:text-blue-100 ring-2 ring-blue-400"
+                            : isSelected
                             ? "bg-primary/20 text-primary"
                             : "hover:bg-muted active:bg-muted/80"
                         }`}
                       >
-                        <sup className="verse-number">{verse.number}</sup>
+                        <sup className={`verse-number ${isCurrentlyReading ? "text-blue-600 dark:text-blue-400 font-bold" : ""}`}>{verse.number}</sup>
                         {renderWordsWithClick(verse.text, verse.number)}{" "}
                       </motion.span>
                     );
