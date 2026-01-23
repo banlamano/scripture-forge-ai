@@ -183,6 +183,11 @@
     "aiTranslated": "AI翻译",
     "aiTranslationDisclaimer": "本文由AI翻译，仅供阅读理解。如需进行神学研究，请参阅您语言的官方译本。",
     "nativeTranslation": "官方译本",
+    "searchPlaceholder": "搜索圣经...",
+    "searching": "搜索中...",
+    "resultsFound": "条结果",
+    "noResults": "未找到结果",
+    "tryDifferentSearch": "尝试其他搜索词",
     "books": {
       "Genesis": "创世记",
       "Exodus": "出埃及记",

@@ -183,6 +183,11 @@
     "aiTranslated": "Traduit par IA",
     "aiTranslationDisclaimer": "Ce texte a été traduit par IA pour faciliter la compréhension. Pour une étude théologique, veuillez consulter les traductions officielles dans votre langue.",
     "nativeTranslation": "Traduction Officielle",
+    "searchPlaceholder": "Rechercher dans la Bible...",
+    "searching": "Recherche en cours...",
+    "resultsFound": "résultats trouvés",
+    "noResults": "Aucun résultat trouvé",
+    "tryDifferentSearch": "Essayez un autre terme de recherche",
     "books": {
       "Genesis": "Genèse",
       "Exodus": "Exode",

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useCallback, useEffect, useMemo } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   BookOpen,
   ChevronLeft,
@@ -101,6 +101,16 @@ export function BibleReader() {
   const [selectedWord, setSelectedWord] = useState<{ word: string; verseNumber: number } | null>(null);
   const [showSidebar, setShowSidebar] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<Array<{
+    book: string;
+    chapter: number;
+    verse: number;
+    text: string;
+  }>>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchResultsRef = useRef<HTMLDivElement>(null);
   const [fontSize, setFontSize] = useState(18);
   const [chapterData, setChapterData] = useState<ChapterData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -221,6 +231,72 @@ export function BibleReader() {
     setSelectedVerses([]);
   };
 
+  // Smart Search functionality
+  const handleSearch = useCallback(async () => {
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+      setShowSearchResults(false);
+      return;
+    }
+
+    setIsSearching(true);
+    setShowSearchResults(true);
+
+    try {
+      const response = await fetch(
+        `/api/bible/search?q=${encodeURIComponent(searchQuery)}&limit=20&bibleId=${selectedBibleId}`
+      );
+      
+      if (!response.ok) {
+        throw new Error("Search failed");
+      }
+
+      const data = await response.json();
+      setSearchResults(data.results || []);
+    } catch (err) {
+      console.error("Search error:", err);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  }, [searchQuery, selectedBibleId]);
+
+  // Handle search input key press
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    } else if (e.key === "Escape") {
+      setShowSearchResults(false);
+      setSearchQuery("");
+    }
+  };
+
+  // Navigate to search result
+  const goToSearchResult = (book: string, chapter: number, verse: number) => {
+    setSelectedBook(book);
+    setSelectedChapter(chapter);
+    setSelectedVerses([verse]);
+    setShowSearchResults(false);
+    setSearchQuery("");
+  };
+
+  // Close search results when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchResultsRef.current &&
+        !searchResultsRef.current.contains(event.target as Node) &&
+        searchInputRef.current &&
+        !searchInputRef.current.contains(event.target as Node)
+      ) {
+        setShowSearchResults(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <div className="flex h-[calc(100vh-4rem)]">
       {/* Sidebar */}
@@ -302,15 +378,80 @@ export function BibleReader() {
             </Select>
 
             {/* Search */}
-            <div className="flex-1 max-w-xs hidden lg:block">
+            <div className="flex-1 max-w-sm hidden lg:block">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
-                  placeholder={tCommon("search")}
+                  ref={searchInputRef}
+                  placeholder={t("searchPlaceholder") || "Search the Bible..."}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9"
+                  onKeyDown={handleSearchKeyDown}
+                  onFocus={() => searchResults.length > 0 && setShowSearchResults(true)}
+                  className="pl-9 pr-10"
                 />
+                {isSearching && (
+                  <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-muted-foreground" />
+                )}
+                {!isSearching && searchQuery && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                    onClick={handleSearch}
+                  >
+                    <Sparkles className="w-4 h-4 text-primary" />
+                  </Button>
+                )}
+
+                {/* Search Results Dropdown */}
+                <AnimatePresence>
+                  {showSearchResults && (
+                    <motion.div
+                      ref={searchResultsRef}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="absolute top-full left-0 right-0 mt-2 bg-background border rounded-lg shadow-lg z-50 max-h-[400px] overflow-auto"
+                    >
+                      {isSearching ? (
+                        <div className="p-4 text-center">
+                          <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-primary" />
+                          <p className="text-sm text-muted-foreground">{t("searching") || "Searching..."}</p>
+                        </div>
+                      ) : searchResults.length > 0 ? (
+                        <div className="py-2">
+                          <div className="px-3 py-2 text-xs font-medium text-muted-foreground border-b">
+                            {searchResults.length} {t("resultsFound") || "results found"}
+                          </div>
+                          {searchResults.map((result, index) => (
+                            <button
+                              key={`${result.book}-${result.chapter}-${result.verse}-${index}`}
+                              onClick={() => goToSearchResult(result.book, result.chapter, result.verse)}
+                              className="w-full px-3 py-2 text-left hover:bg-muted transition-colors border-b last:border-b-0"
+                            >
+                              <div className="flex items-start gap-2">
+                                <span className="text-xs font-semibold text-primary whitespace-nowrap">
+                                  {t(`books.${result.book}`) || result.book} {result.chapter}:{result.verse}
+                                </span>
+                              </div>
+                              <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+                                {result.text}
+                              </p>
+                            </button>
+                          ))}
+                        </div>
+                      ) : searchQuery.trim() ? (
+                        <div className="p-4 text-center">
+                          <p className="text-sm text-muted-foreground">{t("noResults") || "No results found"}</p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {t("tryDifferentSearch") || "Try a different search term"}
+                          </p>
+                        </div>
+                      ) : null}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
 

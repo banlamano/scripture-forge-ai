@@ -183,6 +183,11 @@
     "aiTranslated": "KI-Übersetzung",
     "aiTranslationDisclaimer": "Dieser Text wurde von KI übersetzt, um das Leseverständnis zu erleichtern. Für theologische Studien verwenden Sie bitte offizielle Übersetzungen in Ihrer Sprache.",
     "nativeTranslation": "Offizielle Übersetzung",
+    "searchPlaceholder": "Die Bibel durchsuchen...",
+    "searching": "Suche läuft...",
+    "resultsFound": "Ergebnisse gefunden",
+    "noResults": "Keine Ergebnisse gefunden",
+    "tryDifferentSearch": "Versuchen Sie einen anderen Suchbegriff",
     "books": {
       "Genesis": "1. Mose",
       "Exodus": "2. Mose",
