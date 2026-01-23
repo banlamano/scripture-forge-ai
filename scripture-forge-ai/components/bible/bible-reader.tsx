@@ -106,10 +106,18 @@ export function BibleReader() {
     chapter: number;
     verse: number;
     text: string;
+    testament?: 'OT' | 'NT';
   }>>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [searchMode, setSearchMode] = useState(false); // When true, show search results in main content
+  const [searchFilter, setSearchFilter] = useState<'all' | 'ot' | 'nt' | string>('all');
+  const [searchCounts, setSearchCounts] = useState<{
+    total: number;
+    ot: number;
+    nt: number;
+    books: Record<string, number>;
+  }>({ total: 0, ot: 0, nt: 0, books: {} });
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [fontSize, setFontSize] = useState(18);
   const [chapterData, setChapterData] = useState<ChapterData | null>(null);
@@ -232,7 +240,7 @@ export function BibleReader() {
   };
 
   // Smart Search functionality
-  const handleSearch = useCallback(async () => {
+  const handleSearch = useCallback(async (filter: string = 'all') => {
     if (!searchQuery.trim()) {
       setSearchResults([]);
       setSearchMode(false);
@@ -241,10 +249,11 @@ export function BibleReader() {
 
     setIsSearching(true);
     setSearchMode(true);
+    setSearchFilter(filter);
 
     try {
       const response = await fetch(
-        `/api/bible/search?q=${encodeURIComponent(searchQuery)}&limit=30&bibleId=${selectedBibleId}`
+        `/api/bible/search?q=${encodeURIComponent(searchQuery)}&filter=${filter}&translation=KJV`
       );
       
       if (!response.ok) {
@@ -253,18 +262,25 @@ export function BibleReader() {
 
       const data = await response.json();
       setSearchResults(data.results || []);
+      setSearchCounts({
+        total: data.totalCount || 0,
+        ot: data.otCount || 0,
+        nt: data.ntCount || 0,
+        books: data.bookCounts || {},
+      });
     } catch (err) {
       console.error("Search error:", err);
       setSearchResults([]);
+      setSearchCounts({ total: 0, ot: 0, nt: 0, books: {} });
     } finally {
       setIsSearching(false);
     }
-  }, [searchQuery, selectedBibleId]);
+  }, [searchQuery]);
 
   // Handle search input key press
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      handleSearch();
+      handleSearch('all');
     } else if (e.key === "Escape") {
       clearSearch();
     }
@@ -275,6 +291,13 @@ export function BibleReader() {
     setSearchMode(false);
     setSearchResults([]);
     setSearchQuery("");
+    setSearchFilter('all');
+    setSearchCounts({ total: 0, ot: 0, nt: 0, books: {} });
+  };
+
+  // Change search filter
+  const changeSearchFilter = (filter: 'all' | 'ot' | 'nt' | string) => {
+    handleSearch(filter);
   };
 
   // Navigate to search result
@@ -400,7 +423,7 @@ export function BibleReader() {
                       variant="ghost"
                       size="icon"
                       className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
-                      onClick={handleSearch}
+                      onClick={() => handleSearch('all')}
                     >
                       <Sparkles className="w-4 h-4 text-primary" />
                     </Button>
@@ -455,9 +478,66 @@ export function BibleReader() {
                     </Button>
                   </div>
                   {!isSearching && (
-                    <p className="text-sm text-muted-foreground">
-                      {searchResults.length} {t("resultsFound") || "results found"} for &quot;{searchQuery}&quot;
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {searchCounts.total} {t("resultsFound") || "results found"} for &quot;{searchQuery}&quot;
                     </p>
+                  )}
+                  
+                  {/* Filter Tabs */}
+                  {!isSearching && searchCounts.total > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {/* All */}
+                      <Button
+                        variant={searchFilter === 'all' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => changeSearchFilter('all')}
+                        className="rounded-full"
+                      >
+                        {t("filterAll") || "All"} ({searchCounts.total})
+                      </Button>
+                      {/* Old Testament */}
+                      {searchCounts.ot > 0 && (
+                        <Button
+                          variant={searchFilter === 'ot' ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => changeSearchFilter('ot')}
+                          className="rounded-full"
+                        >
+                          {t("oldTestament") || "Old Testament"} ({searchCounts.ot})
+                        </Button>
+                      )}
+                      {/* New Testament */}
+                      {searchCounts.nt > 0 && (
+                        <Button
+                          variant={searchFilter === 'nt' ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => changeSearchFilter('nt')}
+                          className="rounded-full"
+                        >
+                          {t("newTestament") || "New Testament"} ({searchCounts.nt})
+                        </Button>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Book Filter Dropdown */}
+                  {!isSearching && Object.keys(searchCounts.books).length > 0 && (
+                    <div className="mb-4">
+                      <select
+                        value={searchFilter !== 'all' && searchFilter !== 'ot' && searchFilter !== 'nt' ? searchFilter : ''}
+                        onChange={(e) => e.target.value && changeSearchFilter(e.target.value)}
+                        className="w-full max-w-xs px-3 py-2 border rounded-lg bg-background text-sm"
+                      >
+                        <option value="">{t("filterByBook") || "Filter by Book..."}</option>
+                        {Object.entries(searchCounts.books)
+                          .sort(([a], [b]) => a.localeCompare(b))
+                          .map(([book, count]) => (
+                            <option key={book} value={book}>
+                              {t(`books.${book}`) || book} ({count})
+                            </option>
+                          ))}
+                      </select>
+                    </div>
                   )}
                 </div>
 

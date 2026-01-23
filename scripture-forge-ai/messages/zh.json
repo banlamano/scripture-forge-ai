@@ -191,6 +191,8 @@
     "clearSearch": "清除",
     "searchResults": "搜索结果",
     "backToReading": "返回阅读",
+    "filterAll": "全部",
+    "filterByBook": "按书卷筛选...",
     "books": {
       "Genesis": "创世记",
       "Exodus": "出埃及记",

@@ -297,3 +297,96 @@ export async function fetchBollsBooks(
     return null;
   }
 }
+
+// Old Testament book IDs (1-39)
+const OT_BOOK_IDS = Array.from({ length: 39 }, (_, i) => i + 1);
+// New Testament book IDs (40-66)
+const NT_BOOK_IDS = Array.from({ length: 27 }, (_, i) => i + 40);
+
+export interface BollsSearchResult {
+  book: string;
+  bookId: number;
+  chapter: number;
+  verse: number;
+  text: string;
+  testament: 'OT' | 'NT';
+}
+
+export interface BollsSearchResponse {
+  results: BollsSearchResult[];
+  totalCount: number;
+  otCount: number;
+  ntCount: number;
+  bookCounts: Record<string, number>;
+}
+
+/**
+ * Search the Bible using Bolls.life API
+ * Returns all results with filtering options for OT/NT/Book
+ */
+export async function searchBollsBible(
+  query: string,
+  translationId: string = "KJV"
+): Promise<BollsSearchResponse> {
+  try {
+    const url = `${BOLLS_API_BASE}/search/${translationId}/${encodeURIComponent(query)}/`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      console.error(`Bolls.life search error: ${response.status}`);
+      return { results: [], totalCount: 0, otCount: 0, ntCount: 0, bookCounts: {} };
+    }
+
+    const data = await response.json();
+    
+    // Clean HTML tags from text
+    const cleanText = (text: string) => {
+      return text
+        .replace(/<br\s*\/?>/gi, " ")
+        .replace(/<[^>]+>/g, "")
+        .replace(/&nbsp;/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    };
+
+    const results: BollsSearchResult[] = data.map((item: {
+      bookid: number;
+      chapter: number;
+      verse: number;
+      text: string;
+    }) => {
+      const bookName = getBookName(item.bookid) || `Book ${item.bookid}`;
+      const testament = item.bookid <= 39 ? 'OT' : 'NT';
+      
+      return {
+        book: bookName,
+        bookId: item.bookid,
+        chapter: item.chapter,
+        verse: item.verse,
+        text: cleanText(item.text),
+        testament,
+      };
+    });
+
+    // Calculate counts
+    const otCount = results.filter(r => r.testament === 'OT').length;
+    const ntCount = results.filter(r => r.testament === 'NT').length;
+    
+    // Count by book
+    const bookCounts: Record<string, number> = {};
+    results.forEach(r => {
+      bookCounts[r.book] = (bookCounts[r.book] || 0) + 1;
+    });
+
+    return {
+      results,
+      totalCount: results.length,
+      otCount,
+      ntCount,
+      bookCounts,
+    };
+  } catch (error) {
+    console.error("Bolls.life search error:", error);
+    return { results: [], totalCount: 0, otCount: 0, ntCount: 0, bookCounts: {} };
+  }
+}

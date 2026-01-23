@@ -7,6 +7,7 @@ import {
   BIBLE_TRANSLATIONS,
   isBollsTranslation
 } from "@/lib/api-bible";
+import { searchBollsBible } from "@/lib/bolls-bible";
 
 export async function GET(
   request: NextRequest,
@@ -115,7 +116,8 @@ export async function GET(
 
       case "search": {
         const query = searchParams.get("q");
-        const limit = parseInt(searchParams.get("limit") || "20");
+        const filter = searchParams.get("filter") || "all"; // all, ot, nt, or book name
+        const translationForSearch = searchParams.get("translation") || "KJV";
         
         if (!query) {
           return NextResponse.json(
@@ -124,8 +126,30 @@ export async function GET(
           );
         }
 
-        const results = await searchVerses(query, translation, limit);
-        return NextResponse.json({ results });
+        // Use Bolls.life API for comprehensive search
+        const searchResponse = await searchBollsBible(query, translationForSearch);
+        
+        // Apply filter
+        let filteredResults = searchResponse.results;
+        if (filter === "ot") {
+          filteredResults = searchResponse.results.filter(r => r.testament === "OT");
+        } else if (filter === "nt") {
+          filteredResults = searchResponse.results.filter(r => r.testament === "NT");
+        } else if (filter !== "all") {
+          // Filter by specific book
+          filteredResults = searchResponse.results.filter(
+            r => r.book.toLowerCase() === filter.toLowerCase()
+          );
+        }
+
+        return NextResponse.json({
+          results: filteredResults,
+          totalCount: searchResponse.totalCount,
+          otCount: searchResponse.otCount,
+          ntCount: searchResponse.ntCount,
+          bookCounts: searchResponse.bookCounts,
+          filter,
+        });
       }
 
       default:

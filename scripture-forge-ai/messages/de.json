@@ -191,6 +191,8 @@
     "clearSearch": "Löschen",
     "searchResults": "Suchergebnisse",
     "backToReading": "Zurück zum Lesen",
+    "filterAll": "Alle",
+    "filterByBook": "Nach Buch filtern...",
     "books": {
       "Genesis": "1. Mose",
       "Exodus": "2. Mose",

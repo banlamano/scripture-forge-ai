@@ -191,6 +191,8 @@
     "clearSearch": "Effacer",
     "searchResults": "Résultats de Recherche",
     "backToReading": "Retour à la Lecture",
+    "filterAll": "Tous",
+    "filterByBook": "Filtrer par Livre...",
     "books": {
       "Genesis": "Genèse",
       "Exodus": "Exode",
