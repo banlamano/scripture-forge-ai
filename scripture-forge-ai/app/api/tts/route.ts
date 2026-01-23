@@ -1,42 +1,62 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Language to voice mapping for natural TTS
-// Using ResponsiveVoice compatible voices (works via API)
-const LANGUAGE_VOICES: Record<string, string> = {
-  en: "Brian", // English - natural male voice
-  es: "Enrique", // Spanish
-  fr: "Mathieu", // French
-  de: "Hans", // German
-  it: "Giorgio", // Italian
-  pt: "Ricardo", // Portuguese
-  zh: "Zhiyu", // Chinese
-  ja: "Takumi", // Japanese
-  ko: "Seoyeon", // Korean
-  nl: "Ruben", // Dutch
-  pl: "Jacek", // Polish
-  ru: "Maxim", // Russian
-  ar: "Zeina", // Arabic
-  hi: "Aditi", // Hindi
-  tr: "Filiz", // Turkish
+// Language code mapping for Google Translate TTS
+const LANGUAGE_CODES: Record<string, string> = {
+  en: "en",
+  es: "es",
+  fr: "fr",
+  de: "de",
+  it: "it",
+  pt: "pt",
+  zh: "zh-CN",
+  ja: "ja",
+  ko: "ko",
+  nl: "nl",
+  pl: "pl",
+  ru: "ru",
+  ar: "ar",
+  hi: "hi",
+  tr: "tr",
+  vi: "vi",
+  th: "th",
+  id: "id",
+  sw: "sw",
 };
 
-// Split text into chunks (API has character limits)
-function splitTextIntoChunks(text: string, maxLength: number = 500): string[] {
+// Split text into chunks (Google TTS has ~200 char limit per request)
+function splitTextIntoChunks(text: string, maxLength: number = 180): string[] {
+  // Split by sentences first
   const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
   const chunks: string[] = [];
   let currentChunk = "";
 
   for (const sentence of sentences) {
-    if ((currentChunk + sentence).length <= maxLength) {
-      currentChunk += sentence;
+    const trimmedSentence = sentence.trim();
+    if ((currentChunk + " " + trimmedSentence).length <= maxLength) {
+      currentChunk = currentChunk ? currentChunk + " " + trimmedSentence : trimmedSentence;
     } else {
       if (currentChunk) chunks.push(currentChunk.trim());
-      currentChunk = sentence;
+      // If single sentence is too long, split by words
+      if (trimmedSentence.length > maxLength) {
+        const words = trimmedSentence.split(/\s+/);
+        let wordChunk = "";
+        for (const word of words) {
+          if ((wordChunk + " " + word).length <= maxLength) {
+            wordChunk = wordChunk ? wordChunk + " " + word : word;
+          } else {
+            if (wordChunk) chunks.push(wordChunk.trim());
+            wordChunk = word;
+          }
+        }
+        if (wordChunk) currentChunk = wordChunk;
+      } else {
+        currentChunk = trimmedSentence;
+      }
     }
   }
   if (currentChunk) chunks.push(currentChunk.trim());
 
-  return chunks;
+  return chunks.filter(c => c.length > 0);
 }
 
 export async function POST(request: NextRequest) {
@@ -47,45 +67,48 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Text is required" }, { status: 400 });
     }
 
-    // Use StreamElements TTS API (free, no key required)
-    const voice = LANGUAGE_VOICES[language] || LANGUAGE_VOICES["en"];
+    const langCode = LANGUAGE_CODES[language] || "en";
     
-    // Split text into manageable chunks
-    const chunks = splitTextIntoChunks(text, 500);
+    // Split text into chunks
+    const chunks = splitTextIntoChunks(text, 180);
     const audioBuffers: Buffer[] = [];
 
-    for (const chunk of chunks) {
+    console.log(`TTS: Processing ${chunks.length} chunks for language: ${langCode}`);
+
+    for (let i = 0; i < chunks.length; i++) {
+      const chunk = chunks[i];
       const encodedText = encodeURIComponent(chunk);
-      const ttsUrl = `https://api.streamelements.com/kappa/v2/speech?voice=${voice}&text=${encodedText}`;
+      
+      // Use Google Translate TTS (free, no API key)
+      const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${langCode}&client=tw-ob&q=${encodedText}`;
 
-      const response = await fetch(ttsUrl, {
-        headers: {
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-        },
-      });
+      try {
+        const response = await fetch(ttsUrl, {
+          headers: {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Referer": "https://translate.google.com/",
+          },
+        });
 
-      if (!response.ok) {
-        console.error("StreamElements TTS error:", response.status);
-        // Try fallback with English voice
-        if (voice !== "Brian") {
-          const fallbackUrl = `https://api.streamelements.com/kappa/v2/speech?voice=Brian&text=${encodedText}`;
-          const fallbackResponse = await fetch(fallbackUrl);
-          if (fallbackResponse.ok) {
-            const buffer = await fallbackResponse.arrayBuffer();
-            audioBuffers.push(Buffer.from(buffer));
-            continue;
-          }
+        if (response.ok) {
+          const buffer = await response.arrayBuffer();
+          audioBuffers.push(Buffer.from(buffer));
+        } else {
+          console.error(`TTS chunk ${i} failed:`, response.status);
         }
-        continue; // Skip this chunk if both fail
+      } catch (chunkError) {
+        console.error(`TTS chunk ${i} error:`, chunkError);
       }
-
-      const buffer = await response.arrayBuffer();
-      audioBuffers.push(Buffer.from(buffer));
+      
+      // Small delay between requests to avoid rate limiting
+      if (i < chunks.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
     }
 
     if (audioBuffers.length === 0) {
       return NextResponse.json(
-        { error: "Failed to generate audio" },
+        { error: "Failed to generate audio. Please try again." },
         { status: 500 }
       );
     }
@@ -94,6 +117,8 @@ export async function POST(request: NextRequest) {
     const combinedBuffer = Buffer.concat(audioBuffers);
     const base64Audio = combinedBuffer.toString("base64");
 
+    console.log(`TTS: Generated ${audioBuffers.length}/${chunks.length} chunks, total size: ${combinedBuffer.length} bytes`);
+
     return NextResponse.json({
       audioContent: base64Audio,
       contentType: "audio/mpeg",
@@ -101,7 +126,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("TTS error:", error);
     return NextResponse.json(
-      { error: "TTS service error" },
+      { error: "TTS service error. Please try again." },
       { status: 500 }
     );
   }
@@ -113,8 +138,8 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json({
     language,
-    voice: LANGUAGE_VOICES[language] || LANGUAGE_VOICES["en"],
-    supported: !!LANGUAGE_VOICES[language],
-    provider: "StreamElements TTS (Free)",
+    langCode: LANGUAGE_CODES[language] || "en",
+    supported: !!LANGUAGE_CODES[language],
+    provider: "Google Translate TTS (Free)",
   });
 }
