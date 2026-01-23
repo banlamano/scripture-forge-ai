@@ -350,17 +350,18 @@ export async function searchBollsBible(
     };
 
     const results: BollsSearchResult[] = data.map((item: {
-      bookid: number;
+      book: number;
       chapter: number;
       verse: number;
       text: string;
     }) => {
-      const bookName = getBookName(item.bookid) || `Book ${item.bookid}`;
-      const testament = item.bookid <= 39 ? 'OT' : 'NT';
+      const bookId = item.book;
+      const bookName = getBookName(bookId) || `Book ${bookId}`;
+      const testament = bookId <= 39 ? 'OT' : 'NT';
       
       return {
         book: bookName,
-        bookId: item.bookid,
+        bookId: bookId,
         chapter: item.chapter,
         verse: item.verse,
         text: cleanText(item.text),
