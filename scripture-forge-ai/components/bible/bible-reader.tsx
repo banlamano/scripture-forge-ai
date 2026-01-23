@@ -332,8 +332,23 @@ export function BibleReader() {
   const handlePlayAudio = useCallback(() => {
     if (chapterData && !audio.isPlaying && !audio.isLoading) {
       const text = chapterData.verses.map((v) => `${v.text}`).join(" ");
+      
+      // Show loading toast
+      toast.loading(t("audioLoading") || "Preparing audio...", { id: "audio-loading" });
+      
+      // Speak the text
       audio.speak(text, locale);
-      toast.success(t("audioStarted") || "Playing audio...");
+      
+      // Check if speech started after a short delay
+      setTimeout(() => {
+        toast.dismiss("audio-loading");
+        if (audio.isPlaying || window.speechSynthesis?.speaking) {
+          toast.success(t("audioStarted") || "Playing audio...");
+        } else if (!audio.error) {
+          // Give a hint for mobile users
+          toast.info(t("audioTip") || "Tap the play button again if audio doesn't start");
+        }
+      }, 500);
     }
   }, [chapterData, audio, locale, t]);
 

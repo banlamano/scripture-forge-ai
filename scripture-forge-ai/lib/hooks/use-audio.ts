@@ -45,7 +45,7 @@ export function useAudio(options: UseAudioOptions = {}) {
   const checkIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const textRef = useRef<string>("");
 
-  // Load available voices
+  // Load available voices and warm up speech synthesis for mobile
   useEffect(() => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
 
@@ -53,6 +53,7 @@ export function useAudio(options: UseAudioOptions = {}) {
       const availableVoices = window.speechSynthesis.getVoices();
       if (availableVoices.length > 0) {
         setVoices(availableVoices);
+        console.log(`Loaded ${availableVoices.length} voices`);
       }
     };
 
@@ -64,10 +65,14 @@ export function useAudio(options: UseAudioOptions = {}) {
 
     // Fallback: try loading voices after a short delay
     const timeout = setTimeout(loadVoices, 100);
+    
+    // Try loading again after longer delay for slow mobile browsers
+    const timeout2 = setTimeout(loadVoices, 500);
 
     return () => {
       window.speechSynthesis.onvoiceschanged = null;
       clearTimeout(timeout);
+      clearTimeout(timeout2);
     };
   }, []);
 
@@ -134,7 +139,7 @@ export function useAudio(options: UseAudioOptions = {}) {
         checkIntervalRef.current = null;
       }
 
-      // Cancel any ongoing speech
+      // Cancel any ongoing speech first
       window.speechSynthesis.cancel();
       
       // Reset states
@@ -143,8 +148,11 @@ export function useAudio(options: UseAudioOptions = {}) {
       setIsPlaying(false);
       setIsPaused(false);
 
-      // Get voices - try multiple times if needed
-      let availableVoices = window.speechSynthesis.getVoices();
+      // Mobile browsers require speech synthesis to be triggered directly from user interaction
+      // Also, some mobile browsers need a small delay after cancel()
+      const initSpeech = () => {
+        // Get voices - try multiple times if needed
+        let availableVoices = window.speechSynthesis.getVoices();
       
       const startSpeech = () => {
         // Get fresh list of voices
@@ -274,15 +282,20 @@ export function useAudio(options: UseAudioOptions = {}) {
         }
       };
 
-      // Start speech after a small delay to ensure voices are loaded
-      if (availableVoices.length > 0) {
-        startSpeech();
-      } else {
-        // Wait for voices to load
-        setTimeout(startSpeech, 100);
-      }
+        // Start speech after a small delay to ensure voices are loaded
+        if (availableVoices.length > 0) {
+          startSpeech();
+        } else {
+          // Wait for voices to load
+          setTimeout(startSpeech, 100);
+        }
+      };
+
+      // On mobile, we need a small delay after cancel() before speaking again
+      // This also helps with iOS Safari which can be finicky
+      setTimeout(initSpeech, 50);
     },
-    [rate, pitch, volume, findBestVoice]
+    [rate, pitch, volume, findBestVoice, onBoundary]
   );
 
   const pause = useCallback(() => {
