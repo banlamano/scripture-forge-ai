@@ -125,6 +125,12 @@ export function BibleReader() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
+  // Swipe gesture state for mobile chapter navigation
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
+  
   // Update selected translation when locale changes
   useEffect(() => {
     const translations = BIBLE_TRANSLATIONS[locale] || BIBLE_TRANSLATIONS["en"];
@@ -238,7 +244,67 @@ export function BibleReader() {
       direction === "next" ? prev + 1 : Math.max(1, prev - 1)
     );
     setSelectedVerses([]);
+    setSelectedWord(null);
   };
+
+  // Swipe gesture handlers for mobile chapter navigation
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    touchEndX.current = null;
+    setSwipeDirection(null);
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    const diffX = touchStartX.current - currentX;
+    const diffY = Math.abs(touchStartY.current - currentY);
+    
+    // Only track horizontal swipes (ignore vertical scrolling)
+    if (diffY > 50) {
+      touchStartX.current = null;
+      setSwipeDirection(null);
+      return;
+    }
+    
+    touchEndX.current = currentX;
+    
+    // Show visual feedback for swipe direction
+    if (Math.abs(diffX) > 30) {
+      setSwipeDirection(diffX > 0 ? 'left' : 'right');
+    } else {
+      setSwipeDirection(null);
+    }
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    if (touchStartX.current === null || touchEndX.current === null) {
+      setSwipeDirection(null);
+      return;
+    }
+    
+    const diffX = touchStartX.current - touchEndX.current;
+    const minSwipeDistance = 80; // Minimum distance for a valid swipe
+    
+    if (Math.abs(diffX) >= minSwipeDistance) {
+      if (diffX > 0) {
+        // Swiped left -> next chapter
+        navigateChapter("next");
+      } else {
+        // Swiped right -> previous chapter
+        navigateChapter("prev");
+      }
+    }
+    
+    // Reset touch state
+    touchStartX.current = null;
+    touchStartY.current = null;
+    touchEndX.current = null;
+    setSwipeDirection(null);
+  }, []);
 
   // Smart Search functionality
   const handleSearch = useCallback(async (filter: string = 'all') => {
@@ -512,8 +578,41 @@ export function BibleReader() {
         </div>
 
         {/* Scripture content */}
-        <ScrollArea className="flex-1">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
+        <ScrollArea className="flex-1 relative">
+          {/* Swipe indicators for mobile */}
+          <AnimatePresence>
+            {swipeDirection === 'left' && (
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0 }}
+                className="fixed right-4 top-1/2 -translate-y-1/2 z-40 md:hidden pointer-events-none"
+              >
+                <div className="bg-primary/90 text-primary-foreground rounded-full p-3 shadow-lg">
+                  <ChevronRight className="w-6 h-6" />
+                </div>
+              </motion.div>
+            )}
+            {swipeDirection === 'right' && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0 }}
+                className="fixed left-4 top-1/2 -translate-y-1/2 z-40 md:hidden pointer-events-none"
+              >
+                <div className="bg-primary/90 text-primary-foreground rounded-full p-3 shadow-lg">
+                  <ChevronLeft className="w-6 h-6" />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          
+          <div 
+            className="max-w-3xl mx-auto px-4 sm:px-6 py-4 sm:py-8"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
             {/* Search Results Mode */}
             {searchMode && (
               <>
