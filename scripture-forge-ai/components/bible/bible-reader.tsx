@@ -131,6 +131,16 @@ export function BibleReader() {
   const touchEndX = useRef<number | null>(null);
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
   
+  // Pinch-to-zoom state for font size adjustment
+  const initialPinchDistance = useRef<number | null>(null);
+  const initialFontSize = useRef<number>(18);
+  const [isPinching, setIsPinching] = useState(false);
+  const [fontSizeIndicator, setFontSizeIndicator] = useState<number | null>(null);
+  
+  // Font size constraints
+  const MIN_FONT_SIZE = 12;
+  const MAX_FONT_SIZE = 32;
+  
   // Update selected translation when locale changes
   useEffect(() => {
     const translations = BIBLE_TRANSLATIONS[locale] || BIBLE_TRANSLATIONS["en"];
@@ -281,6 +291,15 @@ export function BibleReader() {
   }, []);
 
   const handleTouchEnd = useCallback(() => {
+    // Handle pinch end
+    if (isPinching) {
+      setIsPinching(false);
+      initialPinchDistance.current = null;
+      // Hide font size indicator after a short delay
+      setTimeout(() => setFontSizeIndicator(null), 800);
+      return;
+    }
+    
     if (touchStartX.current === null || touchEndX.current === null) {
       setSwipeDirection(null);
       return;
@@ -304,7 +323,42 @@ export function BibleReader() {
     touchStartY.current = null;
     touchEndX.current = null;
     setSwipeDirection(null);
+  }, [isPinching]);
+
+  // Calculate distance between two touch points
+  const getTouchDistance = useCallback((touches: React.TouchList) => {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
   }, []);
+
+  // Pinch gesture handlers for font size adjustment
+  const handlePinchStart = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      initialPinchDistance.current = getTouchDistance(e.touches);
+      initialFontSize.current = fontSize;
+      setIsPinching(true);
+      // Cancel any swipe gesture
+      touchStartX.current = null;
+      setSwipeDirection(null);
+    }
+  }, [fontSize, getTouchDistance]);
+
+  const handlePinchMove = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 2 && initialPinchDistance.current !== null) {
+      const currentDistance = getTouchDistance(e.touches);
+      const scale = currentDistance / initialPinchDistance.current;
+      
+      // Calculate new font size based on pinch scale
+      let newFontSize = Math.round(initialFontSize.current * scale);
+      
+      // Clamp font size to min/max bounds
+      newFontSize = Math.max(MIN_FONT_SIZE, Math.min(MAX_FONT_SIZE, newFontSize));
+      
+      setFontSize(newFontSize);
+      setFontSizeIndicator(newFontSize);
+    }
+  }, [getTouchDistance]);
 
   // Smart Search functionality
   const handleSearch = useCallback(async (filter: string = 'all') => {
@@ -605,12 +659,45 @@ export function BibleReader() {
                 </div>
               </motion.div>
             )}
+            
+            {/* Font size indicator for pinch-to-zoom */}
+            {fontSizeIndicator !== null && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none"
+              >
+                <div className="bg-black/80 text-white rounded-2xl px-6 py-4 shadow-2xl flex flex-col items-center gap-2">
+                  <span className="text-3xl font-bold">{fontSizeIndicator}px</span>
+                  <span className="text-xs text-white/70 uppercase tracking-wide">Font Size</span>
+                  {/* Visual size preview bar */}
+                  <div className="w-24 h-2 bg-white/20 rounded-full overflow-hidden mt-1">
+                    <div 
+                      className="h-full bg-primary rounded-full transition-all"
+                      style={{ 
+                        width: `${((fontSizeIndicator - MIN_FONT_SIZE) / (MAX_FONT_SIZE - MIN_FONT_SIZE)) * 100}%` 
+                      }}
+                    />
+                  </div>
+                </div>
+              </motion.div>
+            )}
           </AnimatePresence>
           
           <div 
             className="max-w-3xl mx-auto px-4 sm:px-6 py-4 sm:py-8"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
+            onTouchStart={(e) => {
+              handleTouchStart(e);
+              handlePinchStart(e);
+            }}
+            onTouchMove={(e) => {
+              if (e.touches.length === 2) {
+                handlePinchMove(e);
+              } else if (!isPinching) {
+                handleTouchMove(e);
+              }
+            }}
             onTouchEnd={handleTouchEnd}
           >
             {/* Search Results Mode */}
