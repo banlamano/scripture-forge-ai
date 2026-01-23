@@ -253,7 +253,7 @@ export function BibleReader() {
 
     try {
       const response = await fetch(
-        `/api/bible/search?q=${encodeURIComponent(searchQuery)}&filter=${filter}&translation=KJV`
+        `/api/bible/search?q=${encodeURIComponent(searchQuery)}&filter=${filter}&lang=${locale}`
       );
       
       if (!response.ok) {

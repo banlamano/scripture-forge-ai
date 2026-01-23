@@ -321,6 +321,22 @@ export interface BollsSearchResponse {
 }
 
 /**
+ * Get the appropriate translation ID for search based on locale
+ */
+export function getSearchTranslationId(locale: string): string {
+  const translationMap: Record<string, string> = {
+    en: "KJV",
+    de: "LUT",      // Luther 1912
+    fr: "FRLSG",    // Louis Segond 1910
+    es: "RV1960",   // Reina Valera 1960
+    pt: "ARA",      // Almeida Revista e Atualizada
+    it: "NR06",     // Nuova Riveduta 2006
+    zh: "CUVS",     // Chinese Union Version Simplified
+  };
+  return translationMap[locale] || "KJV";
+}
+
+/**
  * Search the Bible using Bolls.life API
  * Returns all results with filtering options for OT/NT/Book
  */
@@ -339,35 +355,53 @@ export async function searchBollsBible(
 
     const data = await response.json();
     
-    // Clean HTML tags from text
+    // Clean HTML tags and Strong's numbers from text
     const cleanText = (text: string) => {
       return text
+        // Remove Strong's Concordance numbers like <S>559</S>
+        .replace(/<S>\d+<\/S>/gi, "")
+        // Remove other Strong's formats like <s>H1234</s> or <s>G5678</s>
+        .replace(/<s>[HG]?\d+<\/s>/gi, "")
+        // Remove <mark> tags (used for highlighting in API response)
+        .replace(/<\/?mark>/gi, "")
+        // Remove <sup> tags (footnotes/references)
+        .replace(/<sup>.*?<\/sup>/gi, "")
+        // Remove any remaining HTML tags
         .replace(/<br\s*\/?>/gi, " ")
         .replace(/<[^>]+>/g, "")
+        // Clean up HTML entities
         .replace(/&nbsp;/g, " ")
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        // Clean up extra whitespace
         .replace(/\s+/g, " ")
         .trim();
     };
 
-    const results: BollsSearchResult[] = data.map((item: {
-      book: number;
-      chapter: number;
-      verse: number;
-      text: string;
-    }) => {
-      const bookId = item.book;
-      const bookName = getBookName(bookId) || `Book ${bookId}`;
-      const testament = bookId <= 39 ? 'OT' : 'NT';
-      
-      return {
-        book: bookName,
-        bookId: bookId,
-        chapter: item.chapter,
-        verse: item.verse,
-        text: cleanText(item.text),
-        testament,
-      };
-    });
+    // Filter and map results - only include canonical 66 books (exclude Apocrypha)
+    const results: BollsSearchResult[] = data
+      .filter((item: { book: number }) => item.book >= 1 && item.book <= 66)
+      .map((item: {
+        book: number;
+        chapter: number;
+        verse: number;
+        text: string;
+      }) => {
+        const bookId = item.book;
+        const bookName = getBookName(bookId) || `Book ${bookId}`;
+        const testament = bookId <= 39 ? 'OT' : 'NT';
+        
+        return {
+          book: bookName,
+          bookId: bookId,
+          chapter: item.chapter,
+          verse: item.verse,
+          text: cleanText(item.text),
+          testament,
+        };
+      });
 
     // Calculate counts
     const otCount = results.filter(r => r.testament === 'OT').length;

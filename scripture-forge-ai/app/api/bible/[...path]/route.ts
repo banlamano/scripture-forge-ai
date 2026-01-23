@@ -7,7 +7,7 @@ import {
   BIBLE_TRANSLATIONS,
   isBollsTranslation
 } from "@/lib/api-bible";
-import { searchBollsBible } from "@/lib/bolls-bible";
+import { searchBollsBible, getSearchTranslationId } from "@/lib/bolls-bible";
 
 export async function GET(
   request: NextRequest,
@@ -117,7 +117,11 @@ export async function GET(
       case "search": {
         const query = searchParams.get("q");
         const filter = searchParams.get("filter") || "all"; // all, ot, nt, or book name
-        const translationForSearch = searchParams.get("translation") || "KJV";
+        const lang = searchParams.get("lang") || "en"; // User's language
+        const translationOverride = searchParams.get("translation"); // Optional override
+        
+        // Get the appropriate translation for the user's language
+        const translationForSearch = translationOverride || getSearchTranslationId(lang);
         
         if (!query) {
           return NextResponse.json(
