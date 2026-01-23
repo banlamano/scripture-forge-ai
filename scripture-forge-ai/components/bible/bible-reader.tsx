@@ -99,7 +99,8 @@ export function BibleReader() {
   });
   const [selectedVerses, setSelectedVerses] = useState<number[]>([]);
   const [selectedWord, setSelectedWord] = useState<{ word: string; verseNumber: number } | null>(null);
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false); // Default closed on mobile
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Array<{
     book: string;
@@ -338,24 +339,63 @@ export function BibleReader() {
       {/* Main content */}
       <div className="flex-1 flex flex-col">
         {/* Toolbar */}
-        <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 py-3">
-          <div className="flex flex-wrap items-center gap-3">
+        <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-3 sm:px-4 py-2 sm:py-3">
+          {/* Mobile Search Bar - shown when search is active */}
+          {showMobileSearch && (
+            <div className="flex items-center gap-2 mb-3 lg:hidden">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  autoFocus
+                  placeholder={t("searchPlaceholder") || "Search the Bible..."}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleSearchKeyDown}
+                  className="pl-9 pr-10 h-10"
+                />
+                {isSearching && (
+                  <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-muted-foreground" />
+                )}
+              </div>
+              {searchQuery ? (
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={() => handleSearch('all')}
+                  className="shrink-0 h-10"
+                >
+                  <Search className="w-4 h-4" />
+                </Button>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowMobileSearch(false)}
+                  className="shrink-0 h-10"
+                >
+                  {t("cancel") || "Cancel"}
+                </Button>
+              )}
+            </div>
+          )}
+
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             {/* Toggle sidebar */}
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setShowSidebar(!showSidebar)}
-              className="md:hidden"
+              className="h-9 w-9 shrink-0"
             >
               <BookOpen className="w-5 h-5" />
             </Button>
 
-            {/* Book/Chapter selector */}
-            <div className="flex items-center gap-2">
+            {/* Book/Chapter selector - responsive */}
+            <div className="flex items-center gap-1 sm:gap-2 flex-1 min-w-0">
               <Select value={selectedBook} onValueChange={setSelectedBook}>
-                <SelectTrigger className="w-[160px]">
+                <SelectTrigger className="w-[100px] sm:w-[140px] md:w-[160px] h-9">
                   <SelectValue placeholder={t("selectBook")}>
-                    {t(`books.${selectedBook}`)}
+                    <span className="truncate">{t(`books.${selectedBook}`)}</span>
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -372,37 +412,39 @@ export function BibleReader() {
                   variant="ghost"
                   size="icon"
                   onClick={() => navigateChapter("prev")}
+                  className="h-9 w-9 hidden sm:flex"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </Button>
-                <span className="px-3 font-medium min-w-[60px] text-center">
-                  {t("chapter")} {selectedChapter}
+                <span className="px-2 sm:px-3 font-medium min-w-[50px] sm:min-w-[60px] text-center text-sm sm:text-base">
+                  {selectedChapter}
                 </span>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => navigateChapter("next")}
+                  className="h-9 w-9 hidden sm:flex"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </Button>
               </div>
+
+              {/* Translation selector - responsive */}
+              <Select value={selectedBibleId} onValueChange={setSelectedBibleId}>
+                <SelectTrigger className="w-[70px] sm:w-[100px] md:w-[120px] h-9">
+                  <SelectValue placeholder={t("selectTranslation")} />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableTranslations.map((trans) => (
+                    <SelectItem key={trans.id} value={trans.id}>
+                      {trans.abbreviation}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
-            {/* Translation selector - shows translations for current language */}
-            <Select value={selectedBibleId} onValueChange={setSelectedBibleId}>
-              <SelectTrigger className="w-[120px]">
-                <SelectValue placeholder={t("selectTranslation")} />
-              </SelectTrigger>
-              <SelectContent>
-                {availableTranslations.map((trans) => (
-                  <SelectItem key={trans.id} value={trans.id}>
-                    {trans.abbreviation}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {/* Search */}
+            {/* Desktop Search */}
             <div className="flex-1 max-w-sm hidden lg:block">
               <div className="relative flex items-center gap-2">
                 <div className="relative flex-1">
@@ -443,17 +485,26 @@ export function BibleReader() {
             </div>
 
             {/* Action buttons */}
-            <div className="flex items-center gap-1 ml-auto">
-              <Button variant="ghost" size="icon" onClick={speakChapter}>
+            <div className="flex items-center gap-0.5 sm:gap-1 ml-auto shrink-0">
+              {/* Mobile search button */}
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setShowMobileSearch(!showMobileSearch)}
+                className="h-9 w-9 lg:hidden"
+              >
+                <Search className="w-4 h-4" />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={speakChapter} className="h-9 w-9 hidden sm:flex">
                 <Volume2 className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="h-9 w-9 hidden sm:flex">
                 <Bookmark className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="h-9 w-9 hidden md:flex">
                 <Share2 className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="h-9 w-9 hidden md:flex">
                 <Settings className="w-4 h-4" />
               </Button>
             </div>
@@ -462,7 +513,7 @@ export function BibleReader() {
 
         {/* Scripture content */}
         <ScrollArea className="flex-1">
-          <div className="max-w-3xl mx-auto px-6 py-8">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
             {/* Search Results Mode */}
             {searchMode && (
               <>
@@ -648,7 +699,7 @@ export function BibleReader() {
                     const isSelected = selectedVerses.includes(verse.number);
                     const isSingleChapter = isSingleChapterBook(selectedBook);
                     
-                    // Helper to render words as clickable spans
+                    // Helper to render words as clickable/tappable spans
                     const renderWordsWithClick = (text: string, verseNum: number) => {
                       const words = text.split(/(\s+)/); // Split but keep spaces
                       return words.map((word, idx) => {
@@ -659,7 +710,12 @@ export function BibleReader() {
                           <span
                             key={idx}
                             onClick={(e) => handleWordClick(word, verseNum, e)}
-                            className={`cursor-pointer hover:bg-primary/30 rounded transition-colors ${
+                            onTouchEnd={(e) => {
+                              // Prevent ghost click on mobile
+                              e.preventDefault();
+                              handleWordClick(word, verseNum, e as unknown as React.MouseEvent);
+                            }}
+                            className={`cursor-pointer hover:bg-primary/30 active:bg-primary/40 rounded transition-colors select-none touch-manipulation ${
                               isWordSelected ? 'bg-yellow-300 dark:bg-yellow-600 text-black dark:text-white font-semibold' : ''
                             }`}
                           >
@@ -678,10 +734,10 @@ export function BibleReader() {
                           animate={{ opacity: 1 }}
                           transition={{ delay: verse.number * 0.02 }}
                           onClick={() => toggleVerseSelection(verse.number)}
-                          className={`cursor-pointer transition-colors rounded p-2 ${
+                          className={`cursor-pointer transition-colors rounded p-2 sm:p-3 touch-manipulation ${
                             isSelected
                               ? "bg-primary/20 text-primary"
-                              : "hover:bg-muted"
+                              : "hover:bg-muted active:bg-muted/80"
                           }`}
                         >
                           <sup className="verse-number font-bold text-primary mr-2">{verse.number}</sup>
@@ -698,10 +754,10 @@ export function BibleReader() {
                         animate={{ opacity: 1 }}
                         transition={{ delay: verse.number * 0.02 }}
                         onClick={() => toggleVerseSelection(verse.number)}
-                        className={`inline cursor-pointer transition-colors rounded px-0.5 ${
+                        className={`inline cursor-pointer transition-colors rounded px-0.5 py-1 touch-manipulation ${
                           isSelected
                             ? "bg-primary/20 text-primary"
-                            : "hover:bg-muted"
+                            : "hover:bg-muted active:bg-muted/80"
                         }`}
                       >
                         <sup className="verse-number">{verse.number}</sup>

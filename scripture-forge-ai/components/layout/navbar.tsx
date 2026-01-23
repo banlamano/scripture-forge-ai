@@ -142,41 +142,48 @@ export const Navbar = memo(function Navbar() {
 
       {/* Mobile Navigation - simplified animation */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t bg-background animate-in slide-in-from-top-2 duration-200">
-          <div className="container px-4 py-4 space-y-1">
-            {navigationItems.map((item) => {
-              const isActive = pathname === item.href;
-              return (
+        <>
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/20 z-40 md:hidden animate-in fade-in duration-200"
+            onClick={closeMobileMenu}
+          />
+          <div className="md:hidden border-t bg-background animate-in slide-in-from-top-2 duration-200 relative z-50 shadow-lg">
+            <div className="container px-4 py-3 space-y-1">
+              {navigationItems.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.key}
+                    href={item.href}
+                    onClick={closeMobileMenu}
+                    prefetch={true}
+                    className={cn(
+                      "flex items-center gap-3 px-4 py-3.5 rounded-lg transition-colors touch-manipulation active:scale-[0.98]",
+                      isActive
+                        ? "bg-primary/10 text-primary font-medium"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground active:bg-muted"
+                    )}
+                  >
+                    <item.icon className="w-5 h-5" />
+                    {t(item.key)}
+                  </Link>
+                );
+              })}
+              {!session && (
                 <Link
-                  key={item.key}
-                  href={item.href}
+                  href="/auth/signin"
                   onClick={closeMobileMenu}
                   prefetch={true}
-                  className={cn(
-                    "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
-                    isActive
-                      ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                  )}
+                  className="flex items-center gap-3 px-4 py-3.5 rounded-lg text-primary hover:bg-primary/10 active:bg-primary/20 touch-manipulation active:scale-[0.98]"
                 >
-                  <item.icon className="w-5 h-5" />
-                  {t(item.key)}
+                  <LogIn className="w-5 h-5" />
+                  {t("signIn")}
                 </Link>
-              );
-            })}
-            {!session && (
-              <Link
-                href="/auth/signin"
-                onClick={closeMobileMenu}
-                prefetch={true}
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-primary hover:bg-primary/10"
-              >
-                <LogIn className="w-5 h-5" />
-                {t("signIn")}
-              </Link>
-            )}
+              )}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </header>
   );

@@ -6,6 +6,7 @@ import { AuthProvider } from "@/components/providers/auth-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { LanguageProvider } from "@/components/providers/language-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { MobileNav } from "@/components/layout/mobile-nav";
 import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({
@@ -116,7 +117,10 @@ export default function RootLayout({
           <LanguageProvider>
             <AuthProvider>
               <QueryProvider>
-                {children}
+                <div className="pb-16 md:pb-0">
+                  {children}
+                </div>
+                <MobileNav />
                 <Toaster richColors position="top-center" />
               </QueryProvider>
             </AuthProvider>

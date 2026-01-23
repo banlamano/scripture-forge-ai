@@ -470,7 +470,7 @@ export function ChatInterface() {
         </ScrollArea>
 
         {/* Input area */}
-        <div className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-4">
+        <div className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-3 sm:p-4 safe-bottom">
           <div className="max-w-3xl mx-auto">
             <form onSubmit={handleSubmit} className="relative">
               <Textarea

@@ -37,44 +37,44 @@ export function DevotionalContent() {
   const dailyDevotional = useMemo(() => getDailyDevotional(new Date(), locale), [locale]);
 
   return (
-    <div className="container max-w-3xl mx-auto">
+    <div className="container max-w-3xl mx-auto px-4 sm:px-6">
       {/* Header */}
-      <div className="text-center mb-8">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-scripture-gold/10 text-scripture-gold text-sm font-medium mb-4">
-          <Calendar className="w-4 h-4" />
+      <div className="text-center mb-6 sm:mb-8">
+        <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-scripture-gold/10 text-scripture-gold text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+          <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           {todayDate}
         </div>
-        <h1 className="text-3xl md:text-4xl font-bold mb-2">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
           {t("title")}
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground text-sm sm:text-base">
           {dailyDevotional.theme}
         </p>
       </div>
 
       {/* Scripture Card */}
-      <Card className="mb-8 bg-gradient-to-br from-primary/5 to-transparent">
-        <CardContent className="pt-6">
-          <blockquote className="scripture-text text-xl md:text-2xl text-center italic mb-4">
+      <Card className="mb-6 sm:mb-8 bg-gradient-to-br from-primary/5 to-transparent">
+        <CardContent className="pt-4 sm:pt-6 pb-4 sm:pb-6">
+          <blockquote className="scripture-text text-lg sm:text-xl md:text-2xl text-center italic mb-3 sm:mb-4 leading-relaxed">
             &ldquo;{dailyDevotional.verseText}&rdquo;
           </blockquote>
-          <p className="text-center text-primary font-medium">
+          <p className="text-center text-primary font-medium text-sm sm:text-base">
             — {dailyDevotional.verseReference} (NIV)
           </p>
         </CardContent>
       </Card>
 
       {/* Reflection */}
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-scripture-gold" />
+      <Card className="mb-6 sm:mb-8">
+        <CardHeader className="pb-2 sm:pb-4">
+          <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-scripture-gold" />
             {t("reflection")}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="prose-scripture">
-            <p className="mb-4 leading-relaxed">
+            <p className="mb-4 leading-relaxed text-sm sm:text-base">
               {dailyDevotional.reflection}
             </p>
           </div>
@@ -82,23 +82,23 @@ export function DevotionalContent() {
       </Card>
 
       {/* Prayer Focus */}
-      <Card className="mb-8 bg-muted/50">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Heart className="w-5 h-5 text-red-500" />
+      <Card className="mb-6 sm:mb-8 bg-muted/50">
+        <CardHeader className="pb-2 sm:pb-4">
+          <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+            <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
             {t("prayerFocus")}
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="italic leading-relaxed">{dailyDevotional.prayer}</p>
+          <p className="italic leading-relaxed text-sm sm:text-base">{dailyDevotional.prayer}</p>
         </CardContent>
       </Card>
 
       {/* Further Reading */}
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-scripture-olive" />
+      <Card className="mb-6 sm:mb-8">
+        <CardHeader className="pb-2 sm:pb-4">
+          <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+            <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-scripture-olive" />
             {t("readMore")}
           </CardTitle>
         </CardHeader>
@@ -108,7 +108,7 @@ export function DevotionalContent() {
               <Link
                 key={reference}
                 href={`/bible?ref=${encodeURIComponent(reference)}`}
-                className="px-3 py-1.5 rounded-full bg-muted hover:bg-muted/80 text-sm font-medium transition-colors"
+                className="px-3 py-2 sm:py-1.5 rounded-full bg-muted hover:bg-muted/80 active:bg-muted/60 text-sm font-medium transition-colors touch-manipulation"
               >
                 {reference}
               </Link>

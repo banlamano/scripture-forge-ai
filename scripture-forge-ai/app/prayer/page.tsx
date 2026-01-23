@@ -158,40 +158,40 @@ export default function PrayerJournalPage() {
       <main className="flex-1 bg-gradient-to-b from-background to-muted/30">
         <div className="container max-w-4xl mx-auto px-4 py-8">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
             <div>
-              <h1 className="text-3xl font-bold flex items-center gap-3">
-                <BookHeart className="w-8 h-8 text-primary" />
+              <h1 className="text-2xl sm:text-3xl font-bold flex items-center gap-2 sm:gap-3">
+                <BookHeart className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
                 {t("title")}
               </h1>
-              <p className="text-muted-foreground mt-1">
+              <p className="text-muted-foreground mt-1 text-sm sm:text-base">
                 {t("description")}
               </p>
             </div>
-            <Button onClick={() => setShowNewPrayer(true)} className="gap-2">
+            <Button onClick={() => setShowNewPrayer(true)} className="gap-2 w-full sm:w-auto">
               <Plus className="w-4 h-4" />
               {t("newPrayer")}
             </Button>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6 sm:mb-8">
             <Card className="text-center">
-              <CardContent className="pt-6">
-                <div className="text-3xl font-bold text-primary">{stats.total}</div>
-                <div className="text-sm text-muted-foreground">{t("totalPrayers")}</div>
+              <CardContent className="pt-4 sm:pt-6 pb-4">
+                <div className="text-2xl sm:text-3xl font-bold text-primary">{stats.total}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">{t("totalPrayers")}</div>
               </CardContent>
             </Card>
             <Card className="text-center">
-              <CardContent className="pt-6">
-                <div className="text-3xl font-bold text-blue-500">{stats.active}</div>
-                <div className="text-sm text-muted-foreground">{t("active")}</div>
+              <CardContent className="pt-4 sm:pt-6 pb-4">
+                <div className="text-2xl sm:text-3xl font-bold text-blue-500">{stats.active}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">{t("active")}</div>
               </CardContent>
             </Card>
             <Card className="text-center">
-              <CardContent className="pt-6">
-                <div className="text-3xl font-bold text-green-500">{stats.answered}</div>
-                <div className="text-sm text-muted-foreground">{t("answered")}</div>
+              <CardContent className="pt-4 sm:pt-6 pb-4">
+                <div className="text-2xl sm:text-3xl font-bold text-green-500">{stats.answered}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">{t("answered")}</div>
               </CardContent>
             </Card>
           </div>
@@ -214,14 +214,14 @@ export default function PrayerJournalPage() {
                   onChange={(e) => setNewPrayer({ ...newPrayer, content: e.target.value })}
                   rows={4}
                 />
-                <div className="flex flex-wrap gap-2">
+                <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap scrollbar-hide">
                   {categoryIds.map((catId) => (
                     <Button
                       key={catId}
                       variant={newPrayer.category === catId ? "default" : "outline"}
                       size="sm"
                       onClick={() => setNewPrayer({ ...newPrayer, category: catId })}
-                      className="rounded-full"
+                      className="rounded-full whitespace-nowrap shrink-0"
                     >
                       <span className={`w-2 h-2 rounded-full ${categoryColors[catId]} mr-2`} />
                       {t(`categories.${catId}`)}
@@ -241,21 +241,22 @@ export default function PrayerJournalPage() {
           )}
 
           {/* Filters and Search */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <div className="relative flex-1">
+          <div className="flex flex-col gap-3 sm:gap-4 mb-6">
+            <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 placeholder={tCommon("search")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 h-10"
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
               <Button
                 variant={filter === "all" ? "default" : "outline"}
                 size="sm"
                 onClick={() => setFilter("all")}
+                className="shrink-0 h-9"
               >
                 {t("all")}
               </Button>
@@ -263,6 +264,7 @@ export default function PrayerJournalPage() {
                 variant={filter === "active" ? "default" : "outline"}
                 size="sm"
                 onClick={() => setFilter("active")}
+                className="shrink-0 h-9"
               >
                 <Clock className="w-4 h-4 mr-1" />
                 {t("active")}
@@ -271,6 +273,7 @@ export default function PrayerJournalPage() {
                 variant={filter === "answered" ? "default" : "outline"}
                 size="sm"
                 onClick={() => setFilter("answered")}
+                className="shrink-0 h-9"
               >
                 <Check className="w-4 h-4 mr-1" />
                 {t("answered")}

@@ -404,9 +404,9 @@ export default function ReadingPlansPage() {
       <main className="flex-1 bg-gradient-to-b from-background to-muted/30">
         <div className="container max-w-6xl mx-auto px-4 py-8">
           {/* Header */}
-          <div className="text-center mb-10">
-            <h1 className="text-4xl font-bold mb-3">{t("title")}</h1>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <div className="text-center mb-6 sm:mb-10">
+            <h1 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-3">{t("title")}</h1>
+            <p className="text-muted-foreground text-sm sm:text-lg max-w-2xl mx-auto">
               {t("description")}
             </p>
           </div>
@@ -570,14 +570,14 @@ export default function ReadingPlansPage() {
           </div>
 
           {/* Category Filter */}
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex gap-2 mb-6 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap scrollbar-hide">
             {categoryKeys.map((categoryKey) => (
               <Button
                 key={categoryKey}
                 variant={selectedCategory === categoryKey ? "default" : "outline"}
                 size="sm"
                 onClick={() => setSelectedCategory(categoryKey)}
-                className="rounded-full"
+                className="rounded-full whitespace-nowrap shrink-0"
               >
                 {categoryKey === "all" ? t("categories.all") : t(categoryKey)}
               </Button>
@@ -585,7 +585,7 @@ export default function ReadingPlansPage() {
           </div>
 
           {/* Plans Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {filteredPlans.map((plan) => {
               const planProgress = activePlans[plan.id];
               const isActive = !!planProgress;

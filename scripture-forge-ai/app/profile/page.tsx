@@ -191,9 +191,9 @@ export default function ProfilePage() {
       <main className="flex-1 bg-gradient-to-b from-background to-muted/30">
         <div className="container max-w-4xl mx-auto px-4 py-8">
         {/* Header Section */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">{t("title")}</h1>
-          <p className="text-muted-foreground">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">{t("title")}</h1>
+          <p className="text-muted-foreground text-sm sm:text-base">
             {t("description")}
           </p>
         </div>
@@ -326,18 +326,18 @@ export default function ProfilePage() {
           </CardHeader>
           <CardContent>
             {/* Theme Selector */}
-            <div className="flex items-center justify-between py-4 border-b">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-4 border-b gap-3">
               <div>
                 <h3 className="font-medium">{t("theme")}</h3>
                 <p className="text-sm text-muted-foreground">
                   {t("themeDescription")}
                 </p>
               </div>
-              <div className="flex items-center gap-1 p-1 bg-muted rounded-lg">
+              <div className="flex items-center gap-1 p-1 bg-muted rounded-lg w-full sm:w-auto">
                 <Button
                   variant={theme === "light" ? "default" : "ghost"}
                   size="sm"
-                  className="h-8 px-3"
+                  className="h-10 sm:h-8 px-3 flex-1 sm:flex-initial"
                   onClick={() => setTheme("light")}
                 >
                   <Sun className="w-4 h-4 mr-1" />
@@ -346,7 +346,7 @@ export default function ProfilePage() {
                 <Button
                   variant={theme === "dark" ? "default" : "ghost"}
                   size="sm"
-                  className="h-8 px-3"
+                  className="h-10 sm:h-8 px-3 flex-1 sm:flex-initial"
                   onClick={() => setTheme("dark")}
                 >
                   <Moon className="w-4 h-4 mr-1" />
@@ -355,7 +355,7 @@ export default function ProfilePage() {
                 <Button
                   variant={theme === "system" ? "default" : "ghost"}
                   size="sm"
-                  className="h-8 px-3"
+                  className="h-10 sm:h-8 px-3 flex-1 sm:flex-initial"
                   onClick={() => setTheme("system")}
                 >
                   <Monitor className="w-4 h-4 mr-1" />
@@ -365,7 +365,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Default Translation */}
-            <div className="flex items-center justify-between py-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-4 gap-3">
               <div>
                 <h3 className="font-medium">{t("defaultTranslation")}</h3>
                 <p className="text-sm text-muted-foreground">
@@ -376,7 +376,7 @@ export default function ProfilePage() {
                 value={defaultTranslation} 
                 onValueChange={handleTranslationChange}
               >
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-full sm:w-[180px] h-10 sm:h-9">
                   <SelectValue placeholder={t("selectTranslation")}>
                     {availableTranslations.find(t => t.id === defaultTranslation)?.abbreviation || t("selectTranslation")}
                   </SelectValue>

@@ -66,14 +66,23 @@ export function BibleSidebar({
   };
 
   return (
-    <div className="w-72 border-r bg-muted/30 flex flex-col h-full">
-      {/* Header */}
-      <div className="p-4 border-b flex items-center justify-between">
-        <h2 className="font-semibold">{t("selectBook")}</h2>
-        <Button variant="ghost" size="icon" onClick={onClose} className="md:hidden">
-          <X className="w-4 h-4" />
-        </Button>
-      </div>
+    <>
+      {/* Mobile overlay backdrop */}
+      <div 
+        className="fixed inset-0 bg-black/50 z-40 md:hidden" 
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      
+      {/* Sidebar */}
+      <div className="fixed inset-y-0 left-0 w-[85vw] max-w-[320px] md:w-72 md:relative md:inset-auto border-r bg-background md:bg-muted/30 flex flex-col h-full z-50 md:z-auto animate-in slide-in-from-left md:animate-none">
+        {/* Header */}
+        <div className="p-4 border-b flex items-center justify-between">
+          <h2 className="font-semibold">{t("selectBook")}</h2>
+          <Button variant="ghost" size="icon" onClick={onClose} className="md:hidden">
+            <X className="w-4 h-4" />
+          </Button>
+        </div>
 
       {/* Search */}
       <div className="p-3 border-b">
@@ -142,7 +151,8 @@ export function BibleSidebar({
           )}
         </div>
       </ScrollArea>
-    </div>
+      </div>
+    </>
   );
 }
 
