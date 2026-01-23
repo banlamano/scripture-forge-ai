@@ -1,43 +1,84 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Language to Google Cloud TTS voice mapping
-// Using Neural2 voices - Google's most natural and latest AI voices
-const LANGUAGE_VOICE_MAP: Record<string, { languageCode: string; name: string; ssmlGender: string }> = {
-  en: { languageCode: "en-US", name: "en-US-Neural2-D", ssmlGender: "MALE" },
-  es: { languageCode: "es-ES", name: "es-ES-Neural2-B", ssmlGender: "MALE" },
-  fr: { languageCode: "fr-FR", name: "fr-FR-Neural2-B", ssmlGender: "MALE" },
-  de: { languageCode: "de-DE", name: "de-DE-Neural2-B", ssmlGender: "MALE" },
-  it: { languageCode: "it-IT", name: "it-IT-Neural2-C", ssmlGender: "MALE" },
-  pt: { languageCode: "pt-BR", name: "pt-BR-Neural2-B", ssmlGender: "MALE" },
-  zh: { languageCode: "cmn-CN", name: "cmn-CN-Wavenet-B", ssmlGender: "MALE" }, // Neural2 not available for Chinese, using Wavenet
-  // Additional languages with Neural2 support
-  ja: { languageCode: "ja-JP", name: "ja-JP-Neural2-B", ssmlGender: "MALE" },
-  ko: { languageCode: "ko-KR", name: "ko-KR-Neural2-B", ssmlGender: "MALE" },
-  nl: { languageCode: "nl-NL", name: "nl-NL-Neural2-B", ssmlGender: "MALE" },
-  pl: { languageCode: "pl-PL", name: "pl-PL-Neural2-B", ssmlGender: "MALE" },
-  ru: { languageCode: "ru-RU", name: "ru-RU-Neural2-B", ssmlGender: "MALE" },
-  ar: { languageCode: "ar-XA", name: "ar-XA-Wavenet-B", ssmlGender: "MALE" }, // Neural2 not available, using Wavenet
-  hi: { languageCode: "hi-IN", name: "hi-IN-Neural2-B", ssmlGender: "MALE" },
-  // Add more languages as needed
+// Microsoft Edge TTS Voice mapping
+// Using Neural voices - completely FREE, high quality
+// Voice list: https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support
+const EDGE_VOICES: Record<string, { voice: string; lang: string }> = {
+  // Male voices (default)
+  en: { voice: "en-US-GuyNeural", lang: "en-US" },
+  es: { voice: "es-ES-AlvaroNeural", lang: "es-ES" },
+  fr: { voice: "fr-FR-HenriNeural", lang: "fr-FR" },
+  de: { voice: "de-DE-ConradNeural", lang: "de-DE" },
+  it: { voice: "it-IT-DiegoNeural", lang: "it-IT" },
+  pt: { voice: "pt-BR-AntonioNeural", lang: "pt-BR" },
+  zh: { voice: "zh-CN-YunxiNeural", lang: "zh-CN" },
+  ja: { voice: "ja-JP-KeitaNeural", lang: "ja-JP" },
+  ko: { voice: "ko-KR-InJoonNeural", lang: "ko-KR" },
+  nl: { voice: "nl-NL-MaartenNeural", lang: "nl-NL" },
+  pl: { voice: "pl-PL-MarekNeural", lang: "pl-PL" },
+  ru: { voice: "ru-RU-DmitryNeural", lang: "ru-RU" },
+  ar: { voice: "ar-SA-HamedNeural", lang: "ar-SA" },
+  hi: { voice: "hi-IN-MadhurNeural", lang: "hi-IN" },
+  tr: { voice: "tr-TR-AhmetNeural", lang: "tr-TR" },
+  vi: { voice: "vi-VN-NamMinhNeural", lang: "vi-VN" },
+  th: { voice: "th-TH-NiwatNeural", lang: "th-TH" },
+  id: { voice: "id-ID-ArdiNeural", lang: "id-ID" },
+  sw: { voice: "sw-KE-RafikiNeural", lang: "sw-KE" },
 };
 
-// Female voice alternatives - Neural2 where available
-const FEMALE_VOICES: Record<string, { languageCode: string; name: string; ssmlGender: string }> = {
-  en: { languageCode: "en-US", name: "en-US-Neural2-F", ssmlGender: "FEMALE" },
-  es: { languageCode: "es-ES", name: "es-ES-Neural2-A", ssmlGender: "FEMALE" },
-  fr: { languageCode: "fr-FR", name: "fr-FR-Neural2-A", ssmlGender: "FEMALE" },
-  de: { languageCode: "de-DE", name: "de-DE-Neural2-A", ssmlGender: "FEMALE" },
-  it: { languageCode: "it-IT", name: "it-IT-Neural2-A", ssmlGender: "FEMALE" },
-  pt: { languageCode: "pt-BR", name: "pt-BR-Neural2-A", ssmlGender: "FEMALE" },
-  zh: { languageCode: "cmn-CN", name: "cmn-CN-Wavenet-A", ssmlGender: "FEMALE" },
-  ja: { languageCode: "ja-JP", name: "ja-JP-Neural2-B", ssmlGender: "FEMALE" },
-  ko: { languageCode: "ko-KR", name: "ko-KR-Neural2-A", ssmlGender: "FEMALE" },
-  nl: { languageCode: "nl-NL", name: "nl-NL-Neural2-A", ssmlGender: "FEMALE" },
-  pl: { languageCode: "pl-PL", name: "pl-PL-Neural2-A", ssmlGender: "FEMALE" },
-  ru: { languageCode: "ru-RU", name: "ru-RU-Neural2-A", ssmlGender: "FEMALE" },
-  ar: { languageCode: "ar-XA", name: "ar-XA-Wavenet-A", ssmlGender: "FEMALE" },
-  hi: { languageCode: "hi-IN", name: "hi-IN-Neural2-A", ssmlGender: "FEMALE" },
+// Female voice alternatives
+const EDGE_VOICES_FEMALE: Record<string, { voice: string; lang: string }> = {
+  en: { voice: "en-US-JennyNeural", lang: "en-US" },
+  es: { voice: "es-ES-ElviraNeural", lang: "es-ES" },
+  fr: { voice: "fr-FR-DeniseNeural", lang: "fr-FR" },
+  de: { voice: "de-DE-KatjaNeural", lang: "de-DE" },
+  it: { voice: "it-IT-ElsaNeural", lang: "it-IT" },
+  pt: { voice: "pt-BR-FranciscaNeural", lang: "pt-BR" },
+  zh: { voice: "zh-CN-XiaoxiaoNeural", lang: "zh-CN" },
+  ja: { voice: "ja-JP-NanamiNeural", lang: "ja-JP" },
+  ko: { voice: "ko-KR-SunHiNeural", lang: "ko-KR" },
+  nl: { voice: "nl-NL-ColetteNeural", lang: "nl-NL" },
+  pl: { voice: "pl-PL-ZofiaNeural", lang: "pl-PL" },
+  ru: { voice: "ru-RU-SvetlanaNeural", lang: "ru-RU" },
+  ar: { voice: "ar-SA-ZariyahNeural", lang: "ar-SA" },
+  hi: { voice: "hi-IN-SwaraNeural", lang: "hi-IN" },
+  tr: { voice: "tr-TR-EmelNeural", lang: "tr-TR" },
+  vi: { voice: "vi-VN-HoaiMyNeural", lang: "vi-VN" },
+  th: { voice: "th-TH-PremwadeeNeural", lang: "th-TH" },
+  id: { voice: "id-ID-GadisNeural", lang: "id-ID" },
+  sw: { voice: "sw-KE-ZuriNeural", lang: "sw-KE" },
 };
+
+// Edge TTS WebSocket endpoint
+const EDGE_TTS_ENDPOINT = "wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1";
+
+// Generate unique request ID
+function generateRequestId(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+// Create SSML for Edge TTS
+function createSSML(text: string, voice: string, rate: string = "-5%", pitch: string = "+0Hz"): string {
+  // Escape XML special characters
+  const escapedText = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+
+  return `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
+    <voice name="${voice}">
+      <prosody rate="${rate}" pitch="${pitch}">
+        ${escapedText}
+      </prosody>
+    </voice>
+  </speak>`;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -50,69 +91,52 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check for API key
-    const apiKey = process.env.GOOGLE_CLOUD_TTS_API_KEY;
-    if (!apiKey) {
-      console.error("GOOGLE_CLOUD_TTS_API_KEY not configured");
-      return NextResponse.json(
-        { error: "TTS service not configured" },
-        { status: 500 }
-      );
-    }
-
     // Get voice configuration for the language
-    const voiceMap = voiceGender === "female" ? FEMALE_VOICES : LANGUAGE_VOICE_MAP;
+    const voiceMap = voiceGender === "female" ? EDGE_VOICES_FEMALE : EDGE_VOICES;
     const voiceConfig = voiceMap[language] || voiceMap["en"];
 
-    // Prepare the request to Google Cloud TTS API
-    const ttsRequest = {
-      input: { text },
-      voice: {
-        languageCode: voiceConfig.languageCode,
-        name: voiceConfig.name,
-        ssmlGender: voiceConfig.ssmlGender,
-      },
-      audioConfig: {
-        audioEncoding: "MP3",
-        speakingRate: 0.95, // Slightly slower for scripture reading
-        pitch: 0,
-        volumeGainDb: 0,
-        effectsProfileId: ["large-home-entertainment-class-device"], // Optimized for speakers
-      },
-    };
+    // Use edge-tts npm package approach via HTTP
+    // We'll use a simpler REST-like approach with the Edge TTS service
+    const requestId = generateRequestId();
+    const ssml = createSSML(text, voiceConfig.voice, "-5%", "+0Hz");
 
-    // Call Google Cloud TTS API
-    const response = await fetch(
-      `https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(ttsRequest),
-      }
-    );
+    // Edge TTS synthesis via HTTP endpoint
+    const synthesizeUrl = `https://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4&ConnectionId=${requestId}`;
+
+    const response = await fetch(synthesizeUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/ssml+xml",
+        "X-Microsoft-OutputFormat": "audio-24khz-48kbitrate-mono-mp3",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0",
+      },
+      body: ssml,
+    });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Google TTS API error:", errorData);
+      console.error("Edge TTS error:", response.status, response.statusText);
+      
+      // If Edge TTS fails, return error (frontend will use browser fallback)
       return NextResponse.json(
-        { error: "Failed to generate audio" },
-        { status: response.status }
+        { error: "TTS service temporarily unavailable", fallback: true },
+        { status: 503 }
       );
     }
 
-    const data = await response.json();
+    // Get audio as ArrayBuffer
+    const audioBuffer = await response.arrayBuffer();
     
-    // Return the base64-encoded audio content
+    // Convert to base64
+    const base64Audio = Buffer.from(audioBuffer).toString('base64');
+
     return NextResponse.json({
-      audioContent: data.audioContent,
+      audioContent: base64Audio,
       contentType: "audio/mpeg",
     });
   } catch (error) {
     console.error("TTS error:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Internal server error", fallback: true },
       { status: 500 }
     );
   }
@@ -123,8 +147,8 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const language = searchParams.get("language") || "en";
 
-  const maleVoice = LANGUAGE_VOICE_MAP[language] || LANGUAGE_VOICE_MAP["en"];
-  const femaleVoice = FEMALE_VOICES[language] || FEMALE_VOICES["en"];
+  const maleVoice = EDGE_VOICES[language] || EDGE_VOICES["en"];
+  const femaleVoice = EDGE_VOICES_FEMALE[language] || EDGE_VOICES_FEMALE["en"];
 
   return NextResponse.json({
     language,
@@ -132,6 +156,7 @@ export async function GET(request: NextRequest) {
       male: maleVoice,
       female: femaleVoice,
     },
-    supported: !!LANGUAGE_VOICE_MAP[language],
+    supported: !!EDGE_VOICES[language],
+    provider: "Microsoft Edge TTS (Free)",
   });
 }
