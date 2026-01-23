@@ -240,6 +240,12 @@ export function BibleReader() {
     setSelectedWord(null);
   }, []);
 
+  // Clear all selections when tapping on empty area
+  const clearAllSelections = useCallback(() => {
+    setSelectedWord(null);
+    setSelectedVerses([]);
+  }, []);
+
   const speakChapter = () => {
     if ("speechSynthesis" in window && chapterData) {
       const text = chapterData.verses.map((v) => v.text).join(" ");
@@ -858,7 +864,29 @@ export function BibleReader() {
 
                 {/* Chapter content */}
                 {!isLoading && !error && chapterData && (
-              <>
+              <div 
+                className="min-h-full"
+                onClick={(e) => {
+                  // Clear selections when tapping on background area
+                  const target = e.target as HTMLElement;
+                  // Don't clear if clicking on interactive elements
+                  if (
+                    target.closest('.verse-number') ||
+                    target.closest('button') ||
+                    target.closest('a') ||
+                    target.closest('[role="button"]')
+                  ) {
+                    return;
+                  }
+                  // Check if click is on empty space (not on text content)
+                  const isEmptySpace = 
+                    target.tagName === 'DIV' && 
+                    !target.classList.contains('scripture-text');
+                  if (isEmptySpace && (selectedWord || selectedVerses.length > 0)) {
+                    clearAllSelections();
+                  }
+                }}
+              >
                 {/* Chapter header */}
                 <div className="text-center mb-8">
                   <h1 className="text-3xl font-serif font-bold mb-2">
@@ -880,6 +908,12 @@ export function BibleReader() {
                 <div 
                   className={`scripture-text ${isSingleChapterBook(selectedBook) ? 'space-y-4' : 'space-y-1'}`} 
                   style={{ fontSize: `${fontSize}px` }}
+                  onClick={(e) => {
+                    // Clear selections when clicking on empty area (not on a word or verse)
+                    if (e.target === e.currentTarget) {
+                      clearAllSelections();
+                    }
+                  }}
                 >
                   {chapterData.verses.map((verse) => {
                     const isSelected = selectedVerses.includes(verse.number);
@@ -973,7 +1007,7 @@ export function BibleReader() {
                     selectedWord={selectedWord.word}
                   />
                 )}
-              </>
+              </div>
             )}
               </>
             )}
