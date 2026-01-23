@@ -153,8 +153,12 @@ export function useAudio(options: UseAudioOptions = {}) {
       const initSpeech = () => {
         // Get voices - try multiple times if needed
         let availableVoices = window.speechSynthesis.getVoices();
+        
+        // Log for debugging
+        console.log("initSpeech called, voices available:", availableVoices.length);
       
       const startSpeech = () => {
+        console.log("startSpeech called");
         // Get fresh list of voices
         availableVoices = window.speechSynthesis.getVoices();
         
@@ -253,8 +257,12 @@ export function useAudio(options: UseAudioOptions = {}) {
 
           utteranceRef.current = utterance;
           
+          console.log("Calling speechSynthesis.speak()");
+          
           // Speak the utterance
           window.speechSynthesis.speak(utterance);
+          
+          console.log("speechSynthesis.speak() called, speaking:", window.speechSynthesis.speaking, "pending:", window.speechSynthesis.pending);
 
           // Chrome has a bug where long texts get cut off after ~15 seconds
           // This workaround keeps the speech synthesis active
@@ -268,11 +276,17 @@ export function useAudio(options: UseAudioOptions = {}) {
 
           // Set playing state immediately since onstart might not fire on some browsers
           setTimeout(() => {
-            if (window.speechSynthesis.speaking) {
+            console.log("Checking speech state - speaking:", window.speechSynthesis.speaking, "pending:", window.speechSynthesis.pending);
+            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
               setIsPlaying(true);
               setIsLoading(false);
+            } else {
+              // Speech didn't start - this might be a mobile restriction
+              console.log("Speech synthesis did not start");
+              setIsLoading(false);
+              setError("Audio playback not available. Please check your device settings.");
             }
-          }, 100);
+          }, 300);
 
         } catch (err) {
           console.error("TTS error:", err);
@@ -282,18 +296,24 @@ export function useAudio(options: UseAudioOptions = {}) {
         }
       };
 
-        // Start speech after a small delay to ensure voices are loaded
+        // Start speech - try immediately, voices should be loaded
         if (availableVoices.length > 0) {
           startSpeech();
         } else {
-          // Wait for voices to load
-          setTimeout(startSpeech, 100);
+          // If voices not loaded yet, wait briefly and try again
+          console.log("No voices yet, waiting...");
+          setTimeout(() => {
+            availableVoices = window.speechSynthesis.getVoices();
+            console.log("Retry - voices available:", availableVoices.length);
+            startSpeech();
+          }, 100);
         }
       };
 
-      // On mobile, we need a small delay after cancel() before speaking again
-      // This also helps with iOS Safari which can be finicky
-      setTimeout(initSpeech, 50);
+      // IMPORTANT: For mobile browsers, we must call speech synthesis directly 
+      // from the user gesture, not from a setTimeout. So we call initSpeech immediately.
+      // The cancel() was already called above, which should be enough.
+      initSpeech();
     },
     [rate, pitch, volume, findBestVoice, onBoundary]
   );
