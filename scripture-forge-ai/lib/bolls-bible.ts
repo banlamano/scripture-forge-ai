@@ -357,7 +357,8 @@ export async function searchBollsBible(
     
     // Clean HTML tags and Strong's numbers from text
     const cleanText = (text: string) => {
-      return text
+      // First decode any HTML entities
+      let cleaned = text
         // Remove Strong's Concordance numbers like <S>559</S>
         .replace(/<S>\d+<\/S>/gi, "")
         // Remove other Strong's formats like <s>H1234</s> or <s>G5678</s>
@@ -375,9 +376,14 @@ export async function searchBollsBible(
         .replace(/&lt;/g, "<")
         .replace(/&gt;/g, ">")
         .replace(/&quot;/g, '"')
+        .replace(/&apos;/g, "'")
+        .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code)))
+        .replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCharCode(parseInt(code, 16)))
         // Clean up extra whitespace
         .replace(/\s+/g, " ")
         .trim();
+      
+      return cleaned;
     };
 
     // Filter and map results - only include canonical 66 books (exclude Apocrypha)
