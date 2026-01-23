@@ -158,7 +158,7 @@ export function BibleReader() {
   const MAX_FONT_SIZE = 32;
 
   // Audio playback with verse tracking
-  const audio = useAudio({ rate: 0.9 });
+  const audio = useAudio({ volume: 1 });
   
   // Track which verse is currently being read
   const [currentReadingVerse, setCurrentReadingVerse] = useState<number | null>(null);
