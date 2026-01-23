@@ -9,13 +9,26 @@ import {
   ChevronRight,
   Search,
   Bookmark,
+  BookmarkCheck,
   Highlighter,
   Volume2,
+  VolumeX,
+  Pause,
+  Play,
+  Square,
   Settings,
   Share2,
   StickyNote,
   Sparkles,
   Loader2,
+  X,
+  Type,
+  Sun,
+  Moon,
+  Monitor,
+  Check,
+  Copy,
+  Link2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +47,9 @@ import { BibleSidebar } from "./bible-sidebar";
 import { VerseActions } from "./verse-actions";
 import { useTranslations } from "next-intl";
 import { useLanguage } from "@/components/providers/language-provider";
+import { useTheme } from "next-themes";
+import { useAudio } from "@/lib/hooks/use-audio";
+import { toast } from "sonner";
 
 interface ChapterData {
   book: string;
@@ -140,6 +156,48 @@ export function BibleReader() {
   // Font size constraints
   const MIN_FONT_SIZE = 12;
   const MAX_FONT_SIZE = 32;
+
+  // Audio playback
+  const audio = useAudio({ rate: 0.9 });
+  
+  // Theme
+  const { theme, setTheme } = useTheme();
+  
+  // UI state for modals/panels
+  const [showSettingsPanel, setShowSettingsPanel] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  
+  // Bookmarks state (persisted to localStorage)
+  const BOOKMARKS_KEY = "scripture-forge-bookmarks";
+  const [bookmarks, setBookmarks] = useState<Array<{ book: string; chapter: number; timestamp: number }>>([]);
+  const [showBookmarksPanel, setShowBookmarksPanel] = useState(false);
+  
+  // Check if current chapter is bookmarked
+  const isCurrentChapterBookmarked = useMemo(() => {
+    return bookmarks.some(b => b.book === selectedBook && b.chapter === selectedChapter);
+  }, [bookmarks, selectedBook, selectedChapter]);
+
+  // Load bookmarks from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem(BOOKMARKS_KEY);
+      if (saved) {
+        try {
+          setBookmarks(JSON.parse(saved));
+        } catch (e) {
+          console.error("Failed to load bookmarks:", e);
+        }
+      }
+    }
+  }, []);
+
+  // Save bookmarks to localStorage
+  const saveBookmarks = useCallback((newBookmarks: Array<{ book: string; chapter: number; timestamp: number }>) => {
+    setBookmarks(newBookmarks);
+    if (typeof window !== "undefined") {
+      localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(newBookmarks));
+    }
+  }, []);
   
   // Update selected translation when locale changes
   useEffect(() => {
@@ -246,14 +304,126 @@ export function BibleReader() {
     setSelectedVerses([]);
   }, []);
 
-  const speakChapter = () => {
-    if ("speechSynthesis" in window && chapterData) {
-      const text = chapterData.verses.map((v) => v.text).join(" ");
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.9;
-      speechSynthesis.speak(utterance);
+  // Audio control functions
+  const handlePlayAudio = useCallback(() => {
+    if (chapterData && !audio.isPlaying) {
+      const text = chapterData.verses.map((v) => `Verse ${v.number}. ${v.text}`).join(" ");
+      audio.speak(text);
+      toast.success(t("audioStarted") || "Playing audio...");
     }
-  };
+  }, [chapterData, audio, t]);
+
+  const handleStopAudio = useCallback(() => {
+    audio.stop();
+    toast.info(t("audioStopped") || "Audio stopped");
+  }, [audio, t]);
+
+  const handleToggleAudio = useCallback(() => {
+    if (audio.isPlaying) {
+      if (audio.isPaused) {
+        audio.resume();
+      } else {
+        audio.pause();
+      }
+    } else {
+      handlePlayAudio();
+    }
+  }, [audio, handlePlayAudio]);
+
+  // Bookmark functions
+  const toggleBookmark = useCallback(() => {
+    if (isCurrentChapterBookmarked) {
+      // Remove bookmark
+      const newBookmarks = bookmarks.filter(
+        b => !(b.book === selectedBook && b.chapter === selectedChapter)
+      );
+      saveBookmarks(newBookmarks);
+      toast.info(t("bookmarkRemoved") || "Bookmark removed");
+    } else {
+      // Add bookmark
+      const newBookmarks = [
+        ...bookmarks,
+        { book: selectedBook, chapter: selectedChapter, timestamp: Date.now() }
+      ];
+      saveBookmarks(newBookmarks);
+      toast.success(t("bookmarkAdded") || "Bookmark added");
+    }
+  }, [isCurrentChapterBookmarked, bookmarks, selectedBook, selectedChapter, saveBookmarks, t]);
+
+  const goToBookmark = useCallback((book: string, chapter: number) => {
+    setSelectedBook(book);
+    setSelectedChapter(chapter);
+    setShowBookmarksPanel(false);
+    setSelectedVerses([]);
+    setSelectedWord(null);
+  }, []);
+
+  const removeBookmark = useCallback((book: string, chapter: number) => {
+    const newBookmarks = bookmarks.filter(
+      b => !(b.book === book && b.chapter === chapter)
+    );
+    saveBookmarks(newBookmarks);
+    toast.info(t("bookmarkRemoved") || "Bookmark removed");
+  }, [bookmarks, saveBookmarks, t]);
+
+  // Share functions
+  const handleShare = useCallback(async () => {
+    const shareUrl = `${window.location.origin}/bible?book=${encodeURIComponent(selectedBook)}&chapter=${selectedChapter}`;
+    const shareTitle = `${t(`books.${selectedBook}`)} ${selectedChapter}`;
+    const shareText = chapterData 
+      ? `Read ${shareTitle} - Scripture Forge AI`
+      : shareTitle;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: shareTitle,
+          text: shareText,
+          url: shareUrl,
+        });
+      } catch (err) {
+        // User cancelled or share failed - fall back to copy
+        if ((err as Error).name !== 'AbortError') {
+          await copyToClipboard(shareUrl);
+        }
+      }
+    } else {
+      setShowShareModal(true);
+    }
+  }, [selectedBook, selectedChapter, chapterData, t]);
+
+  const copyToClipboard = useCallback(async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success(t("linkCopied") || "Link copied to clipboard");
+      setShowShareModal(false);
+    } catch {
+      toast.error(t("copyFailed") || "Failed to copy");
+    }
+  }, [t]);
+
+  // Settings functions
+  const handleFontSizeChange = useCallback((newSize: number) => {
+    const clampedSize = Math.max(MIN_FONT_SIZE, Math.min(MAX_FONT_SIZE, newSize));
+    setFontSize(clampedSize);
+    // Save to localStorage
+    if (typeof window !== "undefined") {
+      localStorage.setItem("scripture-forge-font-size", String(clampedSize));
+    }
+  }, []);
+
+  // Load saved font size on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedFontSize = localStorage.getItem("scripture-forge-font-size");
+      if (savedFontSize) {
+        const size = parseInt(savedFontSize, 10);
+        if (!isNaN(size)) {
+          setFontSize(Math.max(MIN_FONT_SIZE, Math.min(MAX_FONT_SIZE, size)));
+        }
+      }
+    }
+  }, []);
 
   const navigateChapter = (direction: "prev" | "next") => {
     setSelectedChapter((prev) =>
@@ -621,16 +791,81 @@ export function BibleReader() {
               >
                 <Search className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="icon" onClick={speakChapter} className="h-9 w-9 hidden sm:flex">
-                <Volume2 className="w-4 h-4" />
+              
+              {/* Audio controls */}
+              {audio.isPlaying ? (
+                <div className="flex items-center gap-0.5">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={handleToggleAudio}
+                    className="h-9 w-9 text-primary"
+                  >
+                    {audio.isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={handleStopAudio}
+                    className="h-9 w-9 text-destructive"
+                  >
+                    <Square className="w-4 h-4" />
+                  </Button>
+                </div>
+              ) : (
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={handlePlayAudio}
+                  className="h-9 w-9"
+                  disabled={!chapterData || isLoading}
+                >
+                  <Volume2 className="w-4 h-4" />
+                </Button>
+              )}
+              
+              {/* Bookmark button */}
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={toggleBookmark}
+                className={`h-9 w-9 hidden sm:flex ${isCurrentChapterBookmarked ? 'text-primary' : ''}`}
+              >
+                {isCurrentChapterBookmarked ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
               </Button>
-              <Button variant="ghost" size="icon" className="h-9 w-9 hidden sm:flex">
+              
+              {/* Bookmarks list button */}
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setShowBookmarksPanel(!showBookmarksPanel)}
+                className="h-9 w-9 hidden sm:flex relative"
+              >
                 <Bookmark className="w-4 h-4" />
+                {bookmarks.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                    {bookmarks.length}
+                  </span>
+                )}
               </Button>
-              <Button variant="ghost" size="icon" className="h-9 w-9 hidden md:flex">
+              
+              {/* Share button */}
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={handleShare}
+                className="h-9 w-9 hidden md:flex"
+              >
                 <Share2 className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="icon" className="h-9 w-9 hidden md:flex">
+              
+              {/* Settings button */}
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setShowSettingsPanel(!showSettingsPanel)}
+                className="h-9 w-9"
+              >
                 <Settings className="w-4 h-4" />
               </Button>
             </div>
@@ -1027,6 +1262,261 @@ export function BibleReader() {
           </Button>
         </div>
       </div>
+
+      {/* Settings Panel */}
+      <AnimatePresence>
+        {showSettingsPanel && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 z-50"
+              onClick={() => setShowSettingsPanel(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, x: 300 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 300 }}
+              className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-background border-l shadow-xl z-50 overflow-y-auto"
+            >
+              <div className="p-4 border-b flex items-center justify-between">
+                <h2 className="text-lg font-semibold flex items-center gap-2">
+                  <Settings className="w-5 h-5" />
+                  {t("settings") || "Settings"}
+                </h2>
+                <Button variant="ghost" size="icon" onClick={() => setShowSettingsPanel(false)}>
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+              
+              <div className="p-4 space-y-6">
+                {/* Font Size */}
+                <div>
+                  <h3 className="font-medium mb-3 flex items-center gap-2">
+                    <Type className="w-4 h-4" />
+                    {t("fontSize") || "Font Size"}
+                  </h3>
+                  <div className="flex items-center gap-4">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleFontSizeChange(fontSize - 2)}
+                      disabled={fontSize <= MIN_FONT_SIZE}
+                    >
+                      A-
+                    </Button>
+                    <div className="flex-1 text-center">
+                      <span className="text-2xl font-medium">{fontSize}px</span>
+                      <div className="w-full h-2 bg-muted rounded-full mt-2 overflow-hidden">
+                        <div 
+                          className="h-full bg-primary rounded-full transition-all"
+                          style={{ width: `${((fontSize - MIN_FONT_SIZE) / (MAX_FONT_SIZE - MIN_FONT_SIZE)) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleFontSizeChange(fontSize + 2)}
+                      disabled={fontSize >= MAX_FONT_SIZE}
+                    >
+                      A+
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2 text-center">
+                    {t("fontSizeHint") || "Tip: You can also pinch to zoom on mobile"}
+                  </p>
+                </div>
+
+                {/* Theme */}
+                <div>
+                  <h3 className="font-medium mb-3 flex items-center gap-2">
+                    <Sun className="w-4 h-4" />
+                    {t("theme") || "Theme"}
+                  </h3>
+                  <div className="grid grid-cols-3 gap-2">
+                    <Button
+                      variant={theme === "light" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setTheme("light")}
+                      className="flex flex-col items-center gap-1 h-auto py-3"
+                    >
+                      <Sun className="w-5 h-5" />
+                      <span className="text-xs">{t("light") || "Light"}</span>
+                    </Button>
+                    <Button
+                      variant={theme === "dark" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setTheme("dark")}
+                      className="flex flex-col items-center gap-1 h-auto py-3"
+                    >
+                      <Moon className="w-5 h-5" />
+                      <span className="text-xs">{t("dark") || "Dark"}</span>
+                    </Button>
+                    <Button
+                      variant={theme === "system" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setTheme("system")}
+                      className="flex flex-col items-center gap-1 h-auto py-3"
+                    >
+                      <Monitor className="w-5 h-5" />
+                      <span className="text-xs">{t("system") || "System"}</span>
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Audio Speed - placeholder for future */}
+                <div>
+                  <h3 className="font-medium mb-3 flex items-center gap-2">
+                    <Volume2 className="w-4 h-4" />
+                    {t("audioSettings") || "Audio"}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {t("audioHint") || "Click the speaker icon in the toolbar to listen to the chapter being read aloud."}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Bookmarks Panel */}
+      <AnimatePresence>
+        {showBookmarksPanel && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 z-50"
+              onClick={() => setShowBookmarksPanel(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, x: 300 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 300 }}
+              className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-background border-l shadow-xl z-50 overflow-y-auto"
+            >
+              <div className="p-4 border-b flex items-center justify-between">
+                <h2 className="text-lg font-semibold flex items-center gap-2">
+                  <Bookmark className="w-5 h-5" />
+                  {t("bookmarks") || "Bookmarks"}
+                </h2>
+                <Button variant="ghost" size="icon" onClick={() => setShowBookmarksPanel(false)}>
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+              
+              <div className="p-4">
+                {bookmarks.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Bookmark className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                    <p className="text-muted-foreground">{t("noBookmarks") || "No bookmarks yet"}</p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {t("bookmarkHint") || "Click the bookmark icon to save your favorite chapters"}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {bookmarks
+                      .sort((a, b) => b.timestamp - a.timestamp)
+                      .map((bookmark) => (
+                        <div
+                          key={`${bookmark.book}-${bookmark.chapter}`}
+                          className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+                        >
+                          <button
+                            onClick={() => goToBookmark(bookmark.book, bookmark.chapter)}
+                            className="flex-1 text-left"
+                          >
+                            <span className="font-medium">
+                              {t(`books.${bookmark.book}`)} {bookmark.chapter}
+                            </span>
+                            <span className="text-xs text-muted-foreground block mt-0.5">
+                              {new Date(bookmark.timestamp).toLocaleDateString()}
+                            </span>
+                          </button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeBookmark(bookmark.book, bookmark.chapter)}
+                            className="h-8 w-8 text-destructive hover:text-destructive"
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Share Modal */}
+      <AnimatePresence>
+        {showShareModal && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 z-50"
+              onClick={() => setShowShareModal(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-background rounded-xl shadow-xl z-50 p-6"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold flex items-center gap-2">
+                  <Share2 className="w-5 h-5" />
+                  {t("shareChapter") || "Share Chapter"}
+                </h2>
+                <Button variant="ghost" size="icon" onClick={() => setShowShareModal(false)}>
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    {t("shareDescription") || "Share this chapter with others"}
+                  </p>
+                  <p className="font-medium text-lg">
+                    {t(`books.${selectedBook}`)} {selectedChapter}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+                  <Link2 className="w-4 h-4 text-muted-foreground shrink-0" />
+                  <code className="flex-1 text-sm truncate">
+                    {typeof window !== 'undefined' 
+                      ? `${window.location.origin}/bible?book=${selectedBook}&chapter=${selectedChapter}`
+                      : `/bible?book=${selectedBook}&chapter=${selectedChapter}`
+                    }
+                  </code>
+                </div>
+
+                <Button 
+                  className="w-full" 
+                  onClick={() => copyToClipboard(
+                    `${window.location.origin}/bible?book=${encodeURIComponent(selectedBook)}&chapter=${selectedChapter}`
+                  )}
+                >
+                  <Copy className="w-4 h-4 mr-2" />
+                  {t("copyLink") || "Copy Link"}
+                </Button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
