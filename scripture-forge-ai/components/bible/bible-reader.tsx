@@ -306,12 +306,12 @@ export function BibleReader() {
 
   // Audio control functions
   const handlePlayAudio = useCallback(() => {
-    if (chapterData && !audio.isPlaying) {
-      const text = chapterData.verses.map((v) => `Verse ${v.number}. ${v.text}`).join(" ");
-      audio.speak(text);
+    if (chapterData && !audio.isPlaying && !audio.isLoading) {
+      const text = chapterData.verses.map((v) => `${v.text}`).join(" ");
+      audio.speak(text, locale);
       toast.success(t("audioStarted") || "Playing audio...");
     }
-  }, [chapterData, audio, t]);
+  }, [chapterData, audio, locale, t]);
 
   const handleStopAudio = useCallback(() => {
     audio.stop();
@@ -322,13 +322,15 @@ export function BibleReader() {
     if (audio.isPlaying) {
       if (audio.isPaused) {
         audio.resume();
+        toast.info(t("audioResumed") || "Audio resumed");
       } else {
         audio.pause();
+        toast.info(t("audioPaused") || "Audio paused");
       }
     } else {
       handlePlayAudio();
     }
-  }, [audio, handlePlayAudio]);
+  }, [audio, handlePlayAudio, t]);
 
   // Bookmark functions
   const toggleBookmark = useCallback(() => {
@@ -793,7 +795,16 @@ export function BibleReader() {
               </Button>
               
               {/* Audio controls */}
-              {audio.isPlaying ? (
+              {audio.isLoading ? (
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-9 w-9"
+                  disabled
+                >
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                </Button>
+              ) : audio.isPlaying ? (
                 <div className="flex items-center gap-0.5">
                   <Button 
                     variant="ghost" 
@@ -819,6 +830,7 @@ export function BibleReader() {
                   onClick={handlePlayAudio}
                   className="h-9 w-9"
                   disabled={!chapterData || isLoading}
+                  title={t("playAudio") || "Play chapter audio"}
                 >
                   <Volume2 className="w-4 h-4" />
                 </Button>
