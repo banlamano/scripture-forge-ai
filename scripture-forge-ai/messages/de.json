@@ -188,6 +188,9 @@
     "resultsFound": "Ergebnisse gefunden",
     "noResults": "Keine Ergebnisse gefunden",
     "tryDifferentSearch": "Versuchen Sie einen anderen Suchbegriff",
+    "clearSearch": "Löschen",
+    "searchResults": "Suchergebnisse",
+    "backToReading": "Zurück zum Lesen",
     "books": {
       "Genesis": "1. Mose",
       "Exodus": "2. Mose",

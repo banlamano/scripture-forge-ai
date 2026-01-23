@@ -109,8 +109,8 @@ export function BibleReader() {
   }>>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [searchMode, setSearchMode] = useState(false); // When true, show search results in main content
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const searchResultsRef = useRef<HTMLDivElement>(null);
   const [fontSize, setFontSize] = useState(18);
   const [chapterData, setChapterData] = useState<ChapterData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -235,16 +235,16 @@ export function BibleReader() {
   const handleSearch = useCallback(async () => {
     if (!searchQuery.trim()) {
       setSearchResults([]);
-      setShowSearchResults(false);
+      setSearchMode(false);
       return;
     }
 
     setIsSearching(true);
-    setShowSearchResults(true);
+    setSearchMode(true);
 
     try {
       const response = await fetch(
-        `/api/bible/search?q=${encodeURIComponent(searchQuery)}&limit=20&bibleId=${selectedBibleId}`
+        `/api/bible/search?q=${encodeURIComponent(searchQuery)}&limit=30&bibleId=${selectedBibleId}`
       );
       
       if (!response.ok) {
@@ -266,9 +266,15 @@ export function BibleReader() {
     if (e.key === "Enter") {
       handleSearch();
     } else if (e.key === "Escape") {
-      setShowSearchResults(false);
-      setSearchQuery("");
+      clearSearch();
     }
+  };
+
+  // Clear search and return to normal view
+  const clearSearch = () => {
+    setSearchMode(false);
+    setSearchResults([]);
+    setSearchQuery("");
   };
 
   // Navigate to search result
@@ -276,26 +282,22 @@ export function BibleReader() {
     setSelectedBook(book);
     setSelectedChapter(chapter);
     setSelectedVerses([verse]);
-    setShowSearchResults(false);
-    setSearchQuery("");
+    clearSearch();
   };
 
-  // Close search results when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        searchResultsRef.current &&
-        !searchResultsRef.current.contains(event.target as Node) &&
-        searchInputRef.current &&
-        !searchInputRef.current.contains(event.target as Node)
-      ) {
-        setShowSearchResults(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  // Highlight search term in text
+  const highlightSearchTerm = (text: string, term: string) => {
+    if (!term.trim()) return text;
+    const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    const parts = text.split(regex);
+    return parts.map((part, i) => 
+      regex.test(part) ? (
+        <mark key={i} className="bg-yellow-300 dark:bg-yellow-600 text-black dark:text-white px-0.5 rounded">
+          {part}
+        </mark>
+      ) : part
+    );
+  };
 
   return (
     <div className="flex h-[calc(100vh-4rem)]">
@@ -379,79 +381,41 @@ export function BibleReader() {
 
             {/* Search */}
             <div className="flex-1 max-w-sm hidden lg:block">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  ref={searchInputRef}
-                  placeholder={t("searchPlaceholder") || "Search the Bible..."}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={handleSearchKeyDown}
-                  onFocus={() => searchResults.length > 0 && setShowSearchResults(true)}
-                  className="pl-9 pr-10"
-                />
-                {isSearching && (
-                  <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-muted-foreground" />
-                )}
-                {!isSearching && searchQuery && (
+              <div className="relative flex items-center gap-2">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    ref={searchInputRef}
+                    placeholder={t("searchPlaceholder") || "Search the Bible..."}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={handleSearchKeyDown}
+                    className="pl-9 pr-10"
+                  />
+                  {isSearching && (
+                    <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-muted-foreground" />
+                  )}
+                  {!isSearching && searchQuery && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                      onClick={handleSearch}
+                    >
+                      <Sparkles className="w-4 h-4 text-primary" />
+                    </Button>
+                  )}
+                </div>
+                {searchMode && (
                   <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
-                    onClick={handleSearch}
+                    variant="outline"
+                    size="sm"
+                    onClick={clearSearch}
+                    className="shrink-0"
                   >
-                    <Sparkles className="w-4 h-4 text-primary" />
+                    {t("clearSearch") || "Clear"}
                   </Button>
                 )}
-
-                {/* Search Results Dropdown */}
-                <AnimatePresence>
-                  {showSearchResults && (
-                    <motion.div
-                      ref={searchResultsRef}
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="absolute top-full left-0 right-0 mt-2 bg-background border rounded-lg shadow-lg z-50 max-h-[400px] overflow-auto"
-                    >
-                      {isSearching ? (
-                        <div className="p-4 text-center">
-                          <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-primary" />
-                          <p className="text-sm text-muted-foreground">{t("searching") || "Searching..."}</p>
-                        </div>
-                      ) : searchResults.length > 0 ? (
-                        <div className="py-2">
-                          <div className="px-3 py-2 text-xs font-medium text-muted-foreground border-b">
-                            {searchResults.length} {t("resultsFound") || "results found"}
-                          </div>
-                          {searchResults.map((result, index) => (
-                            <button
-                              key={`${result.book}-${result.chapter}-${result.verse}-${index}`}
-                              onClick={() => goToSearchResult(result.book, result.chapter, result.verse)}
-                              className="w-full px-3 py-2 text-left hover:bg-muted transition-colors border-b last:border-b-0"
-                            >
-                              <div className="flex items-start gap-2">
-                                <span className="text-xs font-semibold text-primary whitespace-nowrap">
-                                  {t(`books.${result.book}`) || result.book} {result.chapter}:{result.verse}
-                                </span>
-                              </div>
-                              <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
-                                {result.text}
-                              </p>
-                            </button>
-                          ))}
-                        </div>
-                      ) : searchQuery.trim() ? (
-                        <div className="p-4 text-center">
-                          <p className="text-sm text-muted-foreground">{t("noResults") || "No results found"}</p>
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {t("tryDifferentSearch") || "Try a different search term"}
-                          </p>
-                        </div>
-                      ) : null}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </div>
             </div>
 
@@ -476,24 +440,107 @@ export function BibleReader() {
         {/* Scripture content */}
         <ScrollArea className="flex-1">
           <div className="max-w-3xl mx-auto px-6 py-8">
-            {/* Loading state */}
-            {isLoading && (
-              <div className="flex flex-col items-center justify-center py-20">
-                <Loader2 className="w-8 h-8 animate-spin text-primary mb-4" />
-                <p className="text-muted-foreground">{tCommon("loading")}</p>
-              </div>
+            {/* Search Results Mode */}
+            {searchMode && (
+              <>
+                {/* Search header */}
+                <div className="mb-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <h2 className="text-xl font-semibold flex items-center gap-2">
+                      <Search className="w-5 h-5 text-primary" />
+                      {t("searchResults") || "Search Results"}
+                    </h2>
+                    <Button variant="ghost" size="sm" onClick={clearSearch}>
+                      ← {t("backToReading") || "Back to Reading"}
+                    </Button>
+                  </div>
+                  {!isSearching && (
+                    <p className="text-sm text-muted-foreground">
+                      {searchResults.length} {t("resultsFound") || "results found"} for &quot;{searchQuery}&quot;
+                    </p>
+                  )}
+                </div>
+
+                {/* Loading search */}
+                {isSearching && (
+                  <div className="flex flex-col items-center justify-center py-20">
+                    <Loader2 className="w-8 h-8 animate-spin text-primary mb-4" />
+                    <p className="text-muted-foreground">{t("searching") || "Searching..."}</p>
+                  </div>
+                )}
+
+                {/* Search results list */}
+                {!isSearching && searchResults.length > 0 && (
+                  <div className="space-y-3">
+                    {searchResults.map((result, index) => (
+                      <motion.div
+                        key={`${result.book}-${result.chapter}-${result.verse}-${index}`}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.03 }}
+                      >
+                        <Card
+                          className="cursor-pointer hover:bg-muted/50 transition-colors border-l-4 border-l-primary"
+                          onClick={() => goToSearchResult(result.book, result.chapter, result.verse)}
+                        >
+                          <CardContent className="p-4">
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex-1">
+                                <p className="text-base leading-relaxed">
+                                  {highlightSearchTerm(result.text, searchQuery)}
+                                </p>
+                              </div>
+                              <div className="shrink-0 text-right">
+                                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
+                                  <BookOpen className="w-3.5 h-3.5" />
+                                  {t(`books.${result.book}`) || result.book} {result.chapter}:{result.verse}
+                                </span>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+
+                {/* No results */}
+                {!isSearching && searchResults.length === 0 && searchQuery.trim() && (
+                  <div className="flex flex-col items-center justify-center py-20">
+                    <Search className="w-12 h-12 text-muted-foreground mb-4" />
+                    <p className="text-lg font-medium mb-2">{t("noResults") || "No results found"}</p>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {t("tryDifferentSearch") || "Try a different search term"}
+                    </p>
+                    <Button variant="outline" onClick={clearSearch}>
+                      {t("backToReading") || "Back to Reading"}
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
 
-            {/* Error state */}
-            {error && !isLoading && (
-              <div className="flex flex-col items-center justify-center py-20">
-                <p className="text-destructive mb-4">{t("failedToLoad")}</p>
-                <Button onClick={() => window.location.reload()}>{t("tryAgain")}</Button>
-              </div>
-            )}
+            {/* Normal Bible Reading Mode */}
+            {!searchMode && (
+              <>
+                {/* Loading state */}
+                {isLoading && (
+                  <div className="flex flex-col items-center justify-center py-20">
+                    <Loader2 className="w-8 h-8 animate-spin text-primary mb-4" />
+                    <p className="text-muted-foreground">{tCommon("loading")}</p>
+                  </div>
+                )}
 
-            {/* Chapter content */}
-            {!isLoading && !error && chapterData && (
+                {/* Error state */}
+                {error && !isLoading && (
+                  <div className="flex flex-col items-center justify-center py-20">
+                    <p className="text-destructive mb-4">{t("failedToLoad")}</p>
+                    <Button onClick={() => window.location.reload()}>{t("tryAgain")}</Button>
+                  </div>
+                )}
+
+                {/* Chapter content */}
+                {!isLoading && !error && chapterData && (
               <>
                 {/* Chapter header */}
                 <div className="text-center mb-8">
@@ -604,6 +651,8 @@ export function BibleReader() {
                     selectedWord={selectedWord.word}
                   />
                 )}
+              </>
+            )}
               </>
             )}
           </div>

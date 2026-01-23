@@ -188,6 +188,9 @@
     "resultsFound": "条结果",
     "noResults": "未找到结果",
     "tryDifferentSearch": "尝试其他搜索词",
+    "clearSearch": "清除",
+    "searchResults": "搜索结果",
+    "backToReading": "返回阅读",
     "books": {
       "Genesis": "创世记",
       "Exodus": "出埃及记",

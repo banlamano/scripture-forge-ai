@@ -188,6 +188,9 @@
     "resultsFound": "résultats trouvés",
     "noResults": "Aucun résultat trouvé",
     "tryDifferentSearch": "Essayez un autre terme de recherche",
+    "clearSearch": "Effacer",
+    "searchResults": "Résultats de Recherche",
+    "backToReading": "Retour à la Lecture",
     "books": {
       "Genesis": "Genèse",
       "Exodus": "Exode",
