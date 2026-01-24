@@ -80,25 +80,36 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("TTS error:", error);
     
-    // Provide more specific error messages
+    // Provide more specific error messages and fallback flags
     if (error instanceof Error) {
-      if (error.message.includes("API key")) {
+      // Quota exceeded - use fallback
+      if (error.message.includes("quota") || error.message.includes("insufficient_quota")) {
+        console.log("OpenAI quota exceeded, returning fallback flag");
         return NextResponse.json(
-          { error: "TTS service authentication failed" },
-          { status: 401 }
+          { error: "TTS quota exceeded", useFallback: true },
+          { status: 503 }
         );
       }
-      if (error.message.includes("rate limit")) {
+      // API key issues
+      if (error.message.includes("API key") || error.message.includes("authentication")) {
         return NextResponse.json(
-          { error: "TTS service is busy. Please try again." },
-          { status: 429 }
+          { error: "TTS service authentication failed", useFallback: true },
+          { status: 503 }
+        );
+      }
+      // Rate limit
+      if (error.message.includes("rate limit") || error.message.includes("429")) {
+        return NextResponse.json(
+          { error: "TTS service is busy", useFallback: true },
+          { status: 503 }
         );
       }
     }
     
+    // Any other error - use fallback
     return NextResponse.json(
-      { error: "Failed to generate audio. Please try again." },
-      { status: 500 }
+      { error: "TTS service unavailable", useFallback: true },
+      { status: 503 }
     );
   }
 }
