@@ -44,6 +44,71 @@ export function useAudio(options: UseAudioOptions = {}) {
     };
   }, [cleanupAudio]);
 
+  // Browser speech synthesis fallback
+  const useBrowserFallback = useCallback((text: string, language: string) => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) {
+      setError("Speech synthesis not supported");
+      setIsLoading(false);
+      return;
+    }
+
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.9;
+    utterance.volume = Math.max(0.1, Math.min(1, volume));
+
+    // Find voice for language
+    const voices = window.speechSynthesis.getVoices();
+    const langVoice = voices.find((v) => v.lang.startsWith(language));
+    if (langVoice) {
+      utterance.voice = langVoice;
+      utterance.lang = langVoice.lang;
+    } else {
+      utterance.lang = language;
+    }
+
+    utterance.onstart = () => {
+      setIsPlaying(true);
+      setIsPaused(false);
+      setIsLoading(false);
+    };
+
+    utterance.onend = () => {
+      setIsPlaying(false);
+      setIsPaused(false);
+    };
+
+    utterance.onerror = (e) => {
+      console.error("Browser TTS error:", e);
+      setError("Audio playback failed");
+      setIsPlaying(false);
+      setIsPaused(false);
+      setIsLoading(false);
+    };
+
+    // Chrome long text bug workaround
+    const checkInterval = setInterval(() => {
+      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+        window.speechSynthesis.pause();
+        window.speechSynthesis.resume();
+      } else if (!window.speechSynthesis.speaking) {
+        clearInterval(checkInterval);
+      }
+    }, 10000);
+
+    window.speechSynthesis.speak(utterance);
+
+    // Set playing immediately since onstart may not fire
+    setTimeout(() => {
+      if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+        setIsPlaying(true);
+        setIsLoading(false);
+      }
+    }, 200);
+  }, [volume]);
+
   const speak = useCallback(
     async (text: string, language: string = "en") => {
       try {
@@ -70,6 +135,14 @@ export function useAudio(options: UseAudioOptions = {}) {
 
         if (!response.ok) {
           const errorData = await response.json();
+          
+          // If API returns fallback flag, use browser speech synthesis
+          if (errorData.useFallback) {
+            console.log("TTS API not configured, using browser fallback");
+            useBrowserFallback(text, language);
+            return;
+          }
+          
           throw new Error(errorData.error || "Failed to generate audio");
         }
 
@@ -177,6 +250,10 @@ export function useAudio(options: UseAudioOptions = {}) {
 
   const stop = useCallback(() => {
     cleanupAudio();
+    // Also stop browser speech synthesis if active
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
     textRef.current = "";
     setIsPlaying(false);
     setIsPaused(false);

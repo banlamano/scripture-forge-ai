@@ -40,10 +40,10 @@ export async function POST(request: NextRequest) {
     // Check for OpenAI API key
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
-      console.error("OPENAI_API_KEY not configured");
+      console.error("OPENAI_API_KEY not configured - returning fallback flag");
       return NextResponse.json(
-        { error: "TTS service not configured" },
-        { status: 500 }
+        { error: "TTS not configured", useFallback: true },
+        { status: 503 }
       );
     }
 
