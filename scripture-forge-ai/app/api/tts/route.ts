@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 
 // Azure Speech Neural Voice mapping - high quality, natural sounding
 // Full list: https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support
@@ -38,34 +37,37 @@ const AZURE_VOICES_FEMALE: Record<string, { voice: string; locale: string }> = {
   ko: { voice: "ko-KR-SunHiNeural", locale: "ko-KR" },
 };
 
-async function synthesizeSpeechAzure(text: string, voiceName: string, subscriptionKey: string, region: string): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
-    const speechConfig = sdk.SpeechConfig.fromSubscription(subscriptionKey, region);
-    speechConfig.speechSynthesisVoiceName = voiceName;
-    speechConfig.speechSynthesisOutputFormat = sdk.SpeechSynthesisOutputFormat.Audio16Khz32KBitRateMonoMp3;
+// Use Azure REST API instead of SDK for serverless compatibility
+async function synthesizeSpeechAzure(text: string, voiceName: string, locale: string, subscriptionKey: string, region: string): Promise<Buffer> {
+  // Create SSML
+  const ssml = `<speak version='1.0' xml:lang='${locale}'>
+    <voice xml:lang='${locale}' name='${voiceName}'>
+      <prosody rate='-5%'>
+        ${text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}
+      </prosody>
+    </voice>
+  </speak>`;
 
-    // Use pull stream for serverless environment
-    const synthesizer = new sdk.SpeechSynthesizer(speechConfig, null as unknown as sdk.AudioConfig);
-
-    synthesizer.speakTextAsync(
-      text,
-      (result) => {
-        if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
-          const audioBuffer = Buffer.from(result.audioData);
-          synthesizer.close();
-          resolve(audioBuffer);
-        } else {
-          const errorMessage = result.errorDetails || "Speech synthesis failed";
-          synthesizer.close();
-          reject(new Error(errorMessage));
-        }
-      },
-      (error) => {
-        synthesizer.close();
-        reject(new Error(error));
-      }
-    );
+  const endpoint = `https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`;
+  
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Ocp-Apim-Subscription-Key': subscriptionKey,
+      'Content-Type': 'application/ssml+xml',
+      'X-Microsoft-OutputFormat': 'audio-16khz-128kbitrate-mono-mp3',
+      'User-Agent': 'ScriptureForgeAI',
+    },
+    body: ssml,
   });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Azure TTS error ${response.status}: ${errorText}`);
+  }
+
+  const arrayBuffer = await response.arrayBuffer();
+  return Buffer.from(arrayBuffer);
 }
 
 export async function POST(request: NextRequest) {
@@ -98,8 +100,8 @@ export async function POST(request: NextRequest) {
 
     console.log(`TTS: Generating audio with Azure, voice: ${voiceConfig.voice}, text length: ${truncatedText.length}`);
 
-    // Generate speech using Azure Speech
-    const audioBuffer = await synthesizeSpeechAzure(truncatedText, voiceConfig.voice, subscriptionKey, region);
+    // Generate speech using Azure Speech REST API
+    const audioBuffer = await synthesizeSpeechAzure(truncatedText, voiceConfig.voice, voiceConfig.locale, subscriptionKey, region);
     const base64Audio = audioBuffer.toString("base64");
 
     console.log(`TTS: Generated audio, size: ${audioBuffer.length} bytes`);
