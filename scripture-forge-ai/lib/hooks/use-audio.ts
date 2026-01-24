@@ -134,11 +134,16 @@ export function useAudio(options: UseAudioOptions = {}) {
         });
 
         if (!response.ok) {
-          const errorData = await response.json();
+          let errorData;
+          try {
+            errorData = await response.json();
+          } catch {
+            errorData = { error: "Failed to generate audio" };
+          }
           
-          // If API returns fallback flag, use browser speech synthesis
-          if (errorData.useFallback) {
-            console.log("TTS API not configured, using browser fallback");
+          // If API returns fallback flag OR any server error, use browser speech synthesis
+          if (errorData.useFallback || response.status >= 500) {
+            console.log("TTS API unavailable, using browser fallback");
             useBrowserFallback(text, language);
             return;
           }
