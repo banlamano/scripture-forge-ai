@@ -56,9 +56,11 @@ export const BIBLE_TRANSLATIONS: Record<string, { id: string; name: string; abbr
   ],
   de: [
     // Bolls.life German translations (free, no API key needed) - listed first as default
+    { id: "bolls:HFA", name: "Hoffnung für Alle 2015", abbreviation: "HFA" },
     { id: "bolls:LUT", name: "Luther 1912", abbreviation: "LUT" },
     { id: "bolls:SCH", name: "Schlachter 1951", abbreviation: "SCH" },
     { id: "bolls:S00", name: "Schlachter 2000", abbreviation: "S00" },
+    { id: "bolls:MB", name: "Menge-Bibel", abbreviation: "MB" },
     // API.Bible German translations (requires API key)
     { id: "926aa5efbc5e04e2-01", name: "Luther Bibel 1912 (API)", abbreviation: "LUT12" },
     { id: "95410db44ef800c1-01", name: "Elberfelder Bibel", abbreviation: "ELB" },

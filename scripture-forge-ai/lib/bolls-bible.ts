@@ -107,6 +107,7 @@ export const BOLLS_TRANSLATIONS: Record<string, { id: string; name: string; abbr
     { id: "FRPDV17", name: "Parole de Vie 2017", abbreviation: "PDV" },
   ],
   de: [
+    { id: "HFA", name: "Hoffnung für Alle 2015", abbreviation: "HFA" },
     { id: "LUT", name: "Luther 1912", abbreviation: "LUT" },
     { id: "SCH", name: "Schlachter 1951", abbreviation: "SCH" },
     { id: "ELB", name: "Elberfelder Bibel 1871", abbreviation: "ELB" },
