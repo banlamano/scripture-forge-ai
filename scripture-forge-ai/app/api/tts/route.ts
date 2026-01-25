@@ -1,74 +1,95 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Azure Speech Neural Voice mapping - high quality, natural sounding
-// Full list: https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support
-// Using voices that support styles for more expressive reading
-const AZURE_VOICES: Record<string, { voice: string; locale: string; style?: string }> = {
-  en: { voice: "en-US-DavisNeural", locale: "en-US", style: "calm" },           // Davis supports styles
-  es: { voice: "es-MX-JorgeNeural", locale: "es-MX", style: "calm" },           // Mexican Spanish with style
-  fr: { voice: "fr-FR-HenriNeural", locale: "fr-FR" },                          // French
-  de: { voice: "de-DE-ConradNeural", locale: "de-DE", style: "calm" },          // German with style
-  it: { voice: "it-IT-DiegoNeural", locale: "it-IT" },                          // Italian
-  pt: { voice: "pt-BR-AntonioNeural", locale: "pt-BR" },                        // Portuguese (Brazil)
-  zh: { voice: "zh-CN-YunxiNeural", locale: "zh-CN", style: "calm" },           // Chinese with style
-  ja: { voice: "ja-JP-KeitaNeural", locale: "ja-JP" },                          // Japanese
-  ko: { voice: "ko-KR-InJoonNeural", locale: "ko-KR" },                         // Korean
-  nl: { voice: "nl-NL-MaartenNeural", locale: "nl-NL" },                        // Dutch
-  pl: { voice: "pl-PL-MarekNeural", locale: "pl-PL" },                          // Polish
-  ru: { voice: "ru-RU-DmitryNeural", locale: "ru-RU" },                         // Russian
-  ar: { voice: "ar-SA-HamedNeural", locale: "ar-SA" },                          // Arabic (Saudi)
-  hi: { voice: "hi-IN-MadhurNeural", locale: "hi-IN" },                         // Hindi
-  tr: { voice: "tr-TR-AhmetNeural", locale: "tr-TR" },                          // Turkish
-  vi: { voice: "vi-VN-NamMinhNeural", locale: "vi-VN" },                        // Vietnamese
-  th: { voice: "th-TH-NiwatNeural", locale: "th-TH" },                          // Thai
-  id: { voice: "id-ID-ArdiNeural", locale: "id-ID" },                           // Indonesian
-  sw: { voice: "sw-KE-RafikiNeural", locale: "sw-KE" },                         // Swahili
+// Azure Speech Neural Voice mapping - optimized for natural Bible narration
+// Using voices confirmed to support speaking styles
+// Docs: https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-voice-support
+const AZURE_VOICES: Record<string, { voice: string; locale: string; style?: string; styleDegree?: number }> = {
+  // English - Guy is warm and natural for reading
+  en: { voice: "en-US-GuyNeural", locale: "en-US" },
+  // Spanish - Alvaro supports styles
+  es: { voice: "es-ES-AlvaroNeural", locale: "es-ES" },
+  // French - Henri is warm and clear
+  fr: { voice: "fr-FR-HenriNeural", locale: "fr-FR" },
+  // German - Conrad supports calm style
+  de: { voice: "de-DE-ConradNeural", locale: "de-DE", style: "calm", styleDegree: 1.0 },
+  // Italian - Diego is warm
+  it: { voice: "it-IT-DiegoNeural", locale: "it-IT" },
+  // Portuguese - Antonio is clear and warm
+  pt: { voice: "pt-BR-AntonioNeural", locale: "pt-BR" },
+  // Chinese - Yunxi supports many styles including narration
+  zh: { voice: "zh-CN-YunxiNeural", locale: "zh-CN", style: "calm", styleDegree: 1.0 },
+  // Japanese
+  ja: { voice: "ja-JP-KeitaNeural", locale: "ja-JP" },
+  // Korean
+  ko: { voice: "ko-KR-InJoonNeural", locale: "ko-KR" },
+  // Dutch
+  nl: { voice: "nl-NL-MaartenNeural", locale: "nl-NL" },
+  // Polish
+  pl: { voice: "pl-PL-MarekNeural", locale: "pl-PL" },
+  // Russian
+  ru: { voice: "ru-RU-DmitryNeural", locale: "ru-RU" },
+  // Arabic
+  ar: { voice: "ar-SA-HamedNeural", locale: "ar-SA" },
+  // Hindi
+  hi: { voice: "hi-IN-MadhurNeural", locale: "hi-IN" },
+  // Turkish
+  tr: { voice: "tr-TR-AhmetNeural", locale: "tr-TR" },
+  // Vietnamese
+  vi: { voice: "vi-VN-NamMinhNeural", locale: "vi-VN" },
+  // Thai
+  th: { voice: "th-TH-NiwatNeural", locale: "th-TH" },
+  // Indonesian
+  id: { voice: "id-ID-ArdiNeural", locale: "id-ID" },
+  // Swahili
+  sw: { voice: "sw-KE-RafikiNeural", locale: "sw-KE" },
 };
 
 // Alternative female voices
-const AZURE_VOICES_FEMALE: Record<string, { voice: string; locale: string; style?: string }> = {
-  en: { voice: "en-US-JennyNeural", locale: "en-US", style: "calm" },
-  es: { voice: "es-MX-DaliaNeural", locale: "es-MX", style: "calm" },
+const AZURE_VOICES_FEMALE: Record<string, { voice: string; locale: string; style?: string; styleDegree?: number }> = {
+  en: { voice: "en-US-JennyNeural", locale: "en-US" },
+  es: { voice: "es-ES-ElviraNeural", locale: "es-ES" },
   fr: { voice: "fr-FR-DeniseNeural", locale: "fr-FR" },
   de: { voice: "de-DE-KatjaNeural", locale: "de-DE" },
   it: { voice: "it-IT-ElsaNeural", locale: "it-IT" },
   pt: { voice: "pt-BR-FranciscaNeural", locale: "pt-BR" },
-  zh: { voice: "zh-CN-XiaoxiaoNeural", locale: "zh-CN", style: "calm" },
+  zh: { voice: "zh-CN-XiaoxiaoNeural", locale: "zh-CN", style: "calm", styleDegree: 1.0 },
   ja: { voice: "ja-JP-NanamiNeural", locale: "ja-JP" },
   ko: { voice: "ko-KR-SunHiNeural", locale: "ko-KR" },
 };
 
 /**
- * Process text to add natural pauses and emphasis for Bible reading
- * Adds SSML break tags for more natural speech patterns
+ * Process text to add natural pauses for Bible reading
+ * Uses simple SSML break tags for more human-like speech patterns
  */
 function processTextForNaturalSpeech(text: string): string {
-  return text
-    // Escape XML special characters first
+  // First, escape XML special characters
+  let processed = text
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
-    // Add medium pause after periods (end of sentences)
-    .replace(/\. /g, '.<break time="400ms"/> ')
-    // Add medium pause after colons (often introduces quotes or lists in Bible)
-    .replace(/: /g, ':<break time="350ms"/> ')
-    // Add short pause after semicolons
-    .replace(/; /g, ';<break time="250ms"/> ')
-    // Add short pause after commas
-    .replace(/,\s/g, ',<break time="150ms"/> ')
-    // Add pause after question marks
-    .replace(/\? /g, '?<break time="400ms"/> ')
-    // Add pause after exclamation marks
-    .replace(/! /g, '!<break time="400ms"/> ')
-    // Add slight pause before "and" when it starts a new thought (common in Bible)
-    .replace(/ (And|But|For|So|Then|Now|Yet|Therefore|Moreover|Furthermore) /gi, '<break time="200ms"/> $1 ')
-    // Add emphasis to LORD (all caps, common in Bible)
-    .replace(/\bLORD\b/g, '<emphasis level="moderate">LORD</emphasis>')
-    // Add emphasis to God
-    .replace(/\bGod\b/g, '<emphasis level="moderate">God</emphasis>')
-    // Clean up any double breaks
-    .replace(/<break[^>]*\/>\s*<break[^>]*\/>/g, '<break time="400ms"/>');
+    .replace(/'/g, '&apos;');
+  
+  // Add natural pauses after punctuation
+  // Period - longer pause at end of sentences
+  processed = processed.replace(/\.\s+/g, '. <break time="500ms"/> ');
+  
+  // Colon - pause before quoted speech or lists
+  processed = processed.replace(/:\s+/g, ': <break time="400ms"/> ');
+  
+  // Semicolon - medium pause
+  processed = processed.replace(/;\s+/g, '; <break time="300ms"/> ');
+  
+  // Comma - short natural pause
+  processed = processed.replace(/,\s+/g, ', <break time="180ms"/> ');
+  
+  // Question mark
+  processed = processed.replace(/\?\s+/g, '? <break time="500ms"/> ');
+  
+  // Exclamation
+  processed = processed.replace(/!\s+/g, '! <break time="500ms"/> ');
+  
+  return processed;
 }
 
 // Use Azure REST API instead of SDK for serverless compatibility
@@ -78,25 +99,38 @@ async function synthesizeSpeechAzure(
   locale: string, 
   subscriptionKey: string, 
   region: string,
-  style?: string
+  style?: string,
+  styleDegree?: number
 ): Promise<Buffer> {
   // Process text for natural speech patterns
   const processedText = processTextForNaturalSpeech(text);
   
-  // Build SSML with optional style and improved prosody for Bible reading
-  const styleTag = style ? `<mstts:express-as style="${style}" styledegree="0.8">` : '';
-  const styleCloseTag = style ? '</mstts:express-as>' : '';
+  // Build SSML - keep it simple for reliability
+  // Using slower rate for natural Bible reading
+  let ssml: string;
   
-  // Create SSML with namespace for Microsoft extensions (styles)
-  const ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='http://www.w3.org/2001/mstts' xml:lang='${locale}'>
-    <voice name='${voiceName}'>
-      ${styleTag}
-      <prosody rate="-8%" pitch="-2%" volume="loud">
-        ${processedText}
-      </prosody>
-      ${styleCloseTag}
-    </voice>
-  </speak>`;
+  if (style) {
+    // With style support (mstts namespace required)
+    const degree = styleDegree || 1.0;
+    ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="${locale}">
+      <voice name="${voiceName}">
+        <mstts:express-as style="${style}" styledegree="${degree}">
+          <prosody rate="-10%" pitch="-2%">
+            ${processedText}
+          </prosody>
+        </mstts:express-as>
+      </voice>
+    </speak>`;
+  } else {
+    // Without style - simpler SSML
+    ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="${locale}">
+      <voice name="${voiceName}">
+        <prosody rate="-10%" pitch="-2%">
+          ${processedText}
+        </prosody>
+      </voice>
+    </speak>`;
+  }
 
   const endpoint = `https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`;
   
@@ -105,7 +139,8 @@ async function synthesizeSpeechAzure(
     headers: {
       'Ocp-Apim-Subscription-Key': subscriptionKey,
       'Content-Type': 'application/ssml+xml',
-      'X-Microsoft-OutputFormat': 'audio-16khz-128kbitrate-mono-mp3',
+      // Use higher quality audio format (24kHz for richer sound)
+      'X-Microsoft-OutputFormat': 'audio-24khz-160kbitrate-mono-mp3',
       'User-Agent': 'ScriptureForgeAI',
     },
     body: ssml,
@@ -148,10 +183,18 @@ export async function POST(request: NextRequest) {
     const voiceMap = voiceGender === "female" ? AZURE_VOICES_FEMALE : AZURE_VOICES;
     const voiceConfig = voiceMap[language] || AZURE_VOICES[language] || AZURE_VOICES["en"];
 
-    console.log(`TTS: Generating audio with Azure, voice: ${voiceConfig.voice}, style: ${voiceConfig.style || 'default'}, text length: ${truncatedText.length}`);
+    console.log(`TTS: Generating audio with Azure, voice: ${voiceConfig.voice}, style: ${voiceConfig.style || 'default'}, styleDegree: ${voiceConfig.styleDegree || 1.0}, text length: ${truncatedText.length}`);
 
     // Generate speech using Azure Speech REST API
-    const audioBuffer = await synthesizeSpeechAzure(truncatedText, voiceConfig.voice, voiceConfig.locale, subscriptionKey, region, voiceConfig.style);
+    const audioBuffer = await synthesizeSpeechAzure(
+      truncatedText, 
+      voiceConfig.voice, 
+      voiceConfig.locale, 
+      subscriptionKey, 
+      region, 
+      voiceConfig.style,
+      voiceConfig.styleDegree
+    );
     const base64Audio = audioBuffer.toString("base64");
 
     console.log(`TTS: Generated audio, size: ${audioBuffer.length} bytes`);
