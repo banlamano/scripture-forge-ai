@@ -8,6 +8,27 @@ import {
   isBollsTranslation
 } from "@/lib/api-bible";
 import { searchBollsBible, getSearchTranslationId } from "@/lib/bolls-bible";
+import { fetchWithFallback } from "@/lib/bible-fallback";
+
+// Old Testament books for testament detection
+const OT_BOOKS = new Set([
+  "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy",
+  "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel",
+  "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles",
+  "Ezra", "Nehemiah", "Esther", "Job", "Psalms",
+  "Proverbs", "Ecclesiastes", "Song of Solomon", "Isaiah",
+  "Jeremiah", "Lamentations", "Ezekiel", "Daniel",
+  "Hosea", "Joel", "Amos", "Obadiah", "Jonah",
+  "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai",
+  "Zechariah", "Malachi"
+]);
+
+/**
+ * Determine if a book is in the Old or New Testament
+ */
+function getTestament(bookName: string): "OT" | "NT" {
+  return OT_BOOKS.has(bookName) ? "OT" : "NT";
+}
 
 export async function GET(
   request: NextRequest,
@@ -60,12 +81,33 @@ export async function GET(
               });
             }
           } catch (apiBibleError) {
-            console.error("Bible API failed, falling back:", apiBibleError);
-            // Fall through to original API
+            console.error("Primary Bible API (Bolls.life) failed, trying fallbacks:", apiBibleError);
+            // Continue to fallback APIs
           }
         }
 
-        // Fallback to original bible-api.com (English only)
+        // Try fallback APIs (bible-api.com, labs.bible.org)
+        try {
+          const fallbackData = await fetchWithFallback(book, chapter, translation, targetLang);
+          
+          if (fallbackData && fallbackData.verses.length > 0) {
+            console.log(`Using fallback source: ${fallbackData.source} for ${book} ${chapter}`);
+            return NextResponse.json({
+              book: fallbackData.book,
+              chapter: fallbackData.chapter,
+              translation: fallbackData.translation,
+              translationName: fallbackData.translationName,
+              verses: fallbackData.verses,
+              isNativeTranslation: fallbackData.language === targetLang,
+              language: fallbackData.language,
+              source: fallbackData.source, // Include source for debugging
+            });
+          }
+        } catch (fallbackError) {
+          console.error("Fallback APIs also failed:", fallbackError);
+        }
+
+        // Final fallback to original bible-api.com (English only)
         const data = await fetchChapter(book, chapter, translation);
         
         if (!data) {
@@ -130,8 +172,42 @@ export async function GET(
           );
         }
 
-        // Use Bolls.life API for comprehensive search
-        const searchResponse = await searchBollsBible(query, translationForSearch);
+        // Try Bolls.life API first for comprehensive search
+        let searchResponse = await searchBollsBible(query, translationForSearch);
+        
+        // If Bolls.life returns no results (possibly down), try fallback search
+        if (searchResponse.results.length === 0) {
+          console.log("Bolls.life search returned no results, trying fallback search...");
+          // Use the original searchVerses from bible-api.ts as fallback
+          const fallbackResults = await searchVerses(query, "kjv", 50);
+          
+          if (fallbackResults.length > 0) {
+            // Convert to BollsSearchResponse format
+            const results = fallbackResults.map(v => ({
+              book: v.book,
+              bookId: 0, // Not available from fallback
+              chapter: v.chapter,
+              verse: v.verse,
+              text: v.text,
+              testament: getTestament(v.book),
+            }));
+            
+            const otCount = results.filter(r => r.testament === 'OT').length;
+            const ntCount = results.filter(r => r.testament === 'NT').length;
+            const bookCounts: Record<string, number> = {};
+            results.forEach(r => {
+              bookCounts[r.book] = (bookCounts[r.book] || 0) + 1;
+            });
+            
+            searchResponse = {
+              results,
+              totalCount: results.length,
+              otCount,
+              ntCount,
+              bookCounts,
+            };
+          }
+        }
         
         // Apply filter
         let filteredResults = searchResponse.results;

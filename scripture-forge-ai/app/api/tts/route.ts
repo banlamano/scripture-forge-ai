@@ -2,49 +2,99 @@ import { NextRequest, NextResponse } from "next/server";
 
 // Azure Speech Neural Voice mapping - high quality, natural sounding
 // Full list: https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support
-const AZURE_VOICES: Record<string, { voice: string; locale: string }> = {
-  en: { voice: "en-US-GuyNeural", locale: "en-US" },           // Warm, natural male
-  es: { voice: "es-ES-AlvaroNeural", locale: "es-ES" },        // Spanish (Spain)
-  fr: { voice: "fr-FR-HenriNeural", locale: "fr-FR" },         // French
-  de: { voice: "de-DE-ConradNeural", locale: "de-DE" },        // German
-  it: { voice: "it-IT-DiegoNeural", locale: "it-IT" },         // Italian
-  pt: { voice: "pt-BR-AntonioNeural", locale: "pt-BR" },       // Portuguese (Brazil)
-  zh: { voice: "zh-CN-YunxiNeural", locale: "zh-CN" },         // Chinese (Mandarin)
-  ja: { voice: "ja-JP-KeitaNeural", locale: "ja-JP" },         // Japanese
-  ko: { voice: "ko-KR-InJoonNeural", locale: "ko-KR" },        // Korean
-  nl: { voice: "nl-NL-MaartenNeural", locale: "nl-NL" },       // Dutch
-  pl: { voice: "pl-PL-MarekNeural", locale: "pl-PL" },         // Polish
-  ru: { voice: "ru-RU-DmitryNeural", locale: "ru-RU" },        // Russian
-  ar: { voice: "ar-SA-HamedNeural", locale: "ar-SA" },         // Arabic (Saudi)
-  hi: { voice: "hi-IN-MadhurNeural", locale: "hi-IN" },        // Hindi
-  tr: { voice: "tr-TR-AhmetNeural", locale: "tr-TR" },         // Turkish
-  vi: { voice: "vi-VN-NamMinhNeural", locale: "vi-VN" },       // Vietnamese
-  th: { voice: "th-TH-NiwatNeural", locale: "th-TH" },         // Thai
-  id: { voice: "id-ID-ArdiNeural", locale: "id-ID" },          // Indonesian
-  sw: { voice: "sw-KE-RafikiNeural", locale: "sw-KE" },        // Swahili
+// Using voices that support styles for more expressive reading
+const AZURE_VOICES: Record<string, { voice: string; locale: string; style?: string }> = {
+  en: { voice: "en-US-DavisNeural", locale: "en-US", style: "calm" },           // Davis supports styles
+  es: { voice: "es-MX-JorgeNeural", locale: "es-MX", style: "calm" },           // Mexican Spanish with style
+  fr: { voice: "fr-FR-HenriNeural", locale: "fr-FR" },                          // French
+  de: { voice: "de-DE-ConradNeural", locale: "de-DE", style: "calm" },          // German with style
+  it: { voice: "it-IT-DiegoNeural", locale: "it-IT" },                          // Italian
+  pt: { voice: "pt-BR-AntonioNeural", locale: "pt-BR" },                        // Portuguese (Brazil)
+  zh: { voice: "zh-CN-YunxiNeural", locale: "zh-CN", style: "calm" },           // Chinese with style
+  ja: { voice: "ja-JP-KeitaNeural", locale: "ja-JP" },                          // Japanese
+  ko: { voice: "ko-KR-InJoonNeural", locale: "ko-KR" },                         // Korean
+  nl: { voice: "nl-NL-MaartenNeural", locale: "nl-NL" },                        // Dutch
+  pl: { voice: "pl-PL-MarekNeural", locale: "pl-PL" },                          // Polish
+  ru: { voice: "ru-RU-DmitryNeural", locale: "ru-RU" },                         // Russian
+  ar: { voice: "ar-SA-HamedNeural", locale: "ar-SA" },                          // Arabic (Saudi)
+  hi: { voice: "hi-IN-MadhurNeural", locale: "hi-IN" },                         // Hindi
+  tr: { voice: "tr-TR-AhmetNeural", locale: "tr-TR" },                          // Turkish
+  vi: { voice: "vi-VN-NamMinhNeural", locale: "vi-VN" },                        // Vietnamese
+  th: { voice: "th-TH-NiwatNeural", locale: "th-TH" },                          // Thai
+  id: { voice: "id-ID-ArdiNeural", locale: "id-ID" },                           // Indonesian
+  sw: { voice: "sw-KE-RafikiNeural", locale: "sw-KE" },                         // Swahili
 };
 
 // Alternative female voices
-const AZURE_VOICES_FEMALE: Record<string, { voice: string; locale: string }> = {
-  en: { voice: "en-US-JennyNeural", locale: "en-US" },
-  es: { voice: "es-ES-ElviraNeural", locale: "es-ES" },
+const AZURE_VOICES_FEMALE: Record<string, { voice: string; locale: string; style?: string }> = {
+  en: { voice: "en-US-JennyNeural", locale: "en-US", style: "calm" },
+  es: { voice: "es-MX-DaliaNeural", locale: "es-MX", style: "calm" },
   fr: { voice: "fr-FR-DeniseNeural", locale: "fr-FR" },
   de: { voice: "de-DE-KatjaNeural", locale: "de-DE" },
   it: { voice: "it-IT-ElsaNeural", locale: "it-IT" },
   pt: { voice: "pt-BR-FranciscaNeural", locale: "pt-BR" },
-  zh: { voice: "zh-CN-XiaoxiaoNeural", locale: "zh-CN" },
+  zh: { voice: "zh-CN-XiaoxiaoNeural", locale: "zh-CN", style: "calm" },
   ja: { voice: "ja-JP-NanamiNeural", locale: "ja-JP" },
   ko: { voice: "ko-KR-SunHiNeural", locale: "ko-KR" },
 };
 
+/**
+ * Process text to add natural pauses and emphasis for Bible reading
+ * Adds SSML break tags for more natural speech patterns
+ */
+function processTextForNaturalSpeech(text: string): string {
+  return text
+    // Escape XML special characters first
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    // Add medium pause after periods (end of sentences)
+    .replace(/\. /g, '.<break time="400ms"/> ')
+    // Add medium pause after colons (often introduces quotes or lists in Bible)
+    .replace(/: /g, ':<break time="350ms"/> ')
+    // Add short pause after semicolons
+    .replace(/; /g, ';<break time="250ms"/> ')
+    // Add short pause after commas
+    .replace(/,\s/g, ',<break time="150ms"/> ')
+    // Add pause after question marks
+    .replace(/\? /g, '?<break time="400ms"/> ')
+    // Add pause after exclamation marks
+    .replace(/! /g, '!<break time="400ms"/> ')
+    // Add slight pause before "and" when it starts a new thought (common in Bible)
+    .replace(/ (And|But|For|So|Then|Now|Yet|Therefore|Moreover|Furthermore) /gi, '<break time="200ms"/> $1 ')
+    // Add emphasis to LORD (all caps, common in Bible)
+    .replace(/\bLORD\b/g, '<emphasis level="moderate">LORD</emphasis>')
+    // Add emphasis to God
+    .replace(/\bGod\b/g, '<emphasis level="moderate">God</emphasis>')
+    // Clean up any double breaks
+    .replace(/<break[^>]*\/>\s*<break[^>]*\/>/g, '<break time="400ms"/>');
+}
+
 // Use Azure REST API instead of SDK for serverless compatibility
-async function synthesizeSpeechAzure(text: string, voiceName: string, locale: string, subscriptionKey: string, region: string): Promise<Buffer> {
-  // Create SSML
-  const ssml = `<speak version='1.0' xml:lang='${locale}'>
-    <voice xml:lang='${locale}' name='${voiceName}'>
-      <prosody rate='-5%'>
-        ${text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}
+async function synthesizeSpeechAzure(
+  text: string, 
+  voiceName: string, 
+  locale: string, 
+  subscriptionKey: string, 
+  region: string,
+  style?: string
+): Promise<Buffer> {
+  // Process text for natural speech patterns
+  const processedText = processTextForNaturalSpeech(text);
+  
+  // Build SSML with optional style and improved prosody for Bible reading
+  const styleTag = style ? `<mstts:express-as style="${style}" styledegree="0.8">` : '';
+  const styleCloseTag = style ? '</mstts:express-as>' : '';
+  
+  // Create SSML with namespace for Microsoft extensions (styles)
+  const ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='http://www.w3.org/2001/mstts' xml:lang='${locale}'>
+    <voice name='${voiceName}'>
+      ${styleTag}
+      <prosody rate="-8%" pitch="-2%" volume="loud">
+        ${processedText}
       </prosody>
+      ${styleCloseTag}
     </voice>
   </speak>`;
 
@@ -98,10 +148,10 @@ export async function POST(request: NextRequest) {
     const voiceMap = voiceGender === "female" ? AZURE_VOICES_FEMALE : AZURE_VOICES;
     const voiceConfig = voiceMap[language] || AZURE_VOICES[language] || AZURE_VOICES["en"];
 
-    console.log(`TTS: Generating audio with Azure, voice: ${voiceConfig.voice}, text length: ${truncatedText.length}`);
+    console.log(`TTS: Generating audio with Azure, voice: ${voiceConfig.voice}, style: ${voiceConfig.style || 'default'}, text length: ${truncatedText.length}`);
 
     // Generate speech using Azure Speech REST API
-    const audioBuffer = await synthesizeSpeechAzure(truncatedText, voiceConfig.voice, voiceConfig.locale, subscriptionKey, region);
+    const audioBuffer = await synthesizeSpeechAzure(truncatedText, voiceConfig.voice, voiceConfig.locale, subscriptionKey, region, voiceConfig.style);
     const base64Audio = audioBuffer.toString("base64");
 
     console.log(`TTS: Generated audio, size: ${audioBuffer.length} bytes`);

@@ -132,7 +132,13 @@ export const BOLLS_TRANSLATIONS: Record<string, { id: string; name: string; abbr
   ],
   it: [
     { id: "NR06", name: "Nuova Riveduta 2006", abbreviation: "NR06" },
+    { id: "CEI", name: "Conferenza Episcopale Italiana 2008", abbreviation: "CEI" },
     { id: "VULG", name: "Biblia Sacra Vulgata (Latin)", abbreviation: "VULG" },
+  ],
+  zh: [
+    { id: "CUNPS", name: "Chinese Union New Punctuation (Simplified)", abbreviation: "CUNPS" },
+    { id: "CUV", name: "Chinese Union (Traditional)", abbreviation: "CUV" },
+    { id: "CUNP", name: "Chinese Union New Punctuation (Traditional)", abbreviation: "CUNP" },
   ],
 };
 
@@ -324,16 +330,13 @@ export interface BollsSearchResponse {
  * Get the appropriate translation ID for search based on locale
  */
 export function getSearchTranslationId(locale: string): string {
-  const translationMap: Record<string, string> = {
-    en: "KJV",
-    de: "LUT",      // Luther 1912
-    fr: "FRLSG",    // Louis Segond 1910
-    es: "RV1960",   // Reina Valera 1960
-    pt: "ARA",      // Almeida Revista e Atualizada
-    it: "NR06",     // Nuova Riveduta 2006
-    zh: "CUVS",     // Chinese Union Version Simplified
-  };
-  return translationMap[locale] || "KJV";
+  // Use the first available translation for the locale from BOLLS_TRANSLATIONS
+  const translations = BOLLS_TRANSLATIONS[locale];
+  if (translations && translations.length > 0) {
+    return translations[0].id;
+  }
+  // Fallback to KJV for unsupported languages
+  return "KJV";
 }
 
 /**

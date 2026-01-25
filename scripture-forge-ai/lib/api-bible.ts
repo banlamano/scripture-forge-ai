@@ -80,12 +80,18 @@ export const BIBLE_TRANSLATIONS: Record<string, { id: string; name: string; abbr
     { id: "90799bb5b996fddc-01", name: "Tradução para Tradutores", abbreviation: "TfT" },
   ],
   zh: [
+    // Bolls.life Chinese translations (free, no API key needed) - listed first as default
+    { id: "bolls:CUNPS", name: "Chinese Union New Punctuation (Simplified)", abbreviation: "CUNPS" },
+    { id: "bolls:CUV", name: "Chinese Union (Traditional)", abbreviation: "CUV" },
+    { id: "bolls:CUNP", name: "Chinese Union New Punctuation (Traditional)", abbreviation: "CUNP" },
+    // API.Bible Chinese translations (requires API key)
     { id: "7ea794434e9ea7ee-01", name: "当代译本 (简体)", abbreviation: "CCB" },
     { id: "a6e06d2c5b90ad89-01", name: "當代譯本 (繁體)", abbreviation: "CCBT" },
   ],
   it: [
     // Bolls.life Italian translations (free, no API key needed)
     { id: "bolls:NR06", name: "Nuova Riveduta 2006", abbreviation: "NR06" },
+    { id: "bolls:CEI", name: "Conferenza Episcopale Italiana 2008", abbreviation: "CEI" },
     { id: "bolls:VULG", name: "Biblia Sacra Vulgata (Latin)", abbreviation: "VULG" },
     // API.Bible Italian translations (requires API key)
     { id: "41aa25bc421df6bc-01", name: "La Sacra Bibbia (Diodati)", abbreviation: "DIO" },

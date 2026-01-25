@@ -44,7 +44,7 @@ export function useAudio(options: UseAudioOptions = {}) {
     };
   }, [cleanupAudio]);
 
-  // Browser speech synthesis fallback
+  // Browser speech synthesis fallback with improved naturalness
   const useBrowserFallback = useCallback((text: string, language: string) => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) {
       setError("Speech synthesis not supported");
@@ -56,17 +56,60 @@ export function useAudio(options: UseAudioOptions = {}) {
     window.speechSynthesis.cancel();
 
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.9;
+    
+    // Slower rate for more natural Bible reading
+    utterance.rate = 0.85;
+    // Slightly lower pitch for a more reverent tone
+    utterance.pitch = 0.95;
     utterance.volume = Math.max(0.1, Math.min(1, volume));
 
-    // Find voice for language
+    // Find the best voice for language - prefer natural/enhanced voices
     const voices = window.speechSynthesis.getVoices();
-    const langVoice = voices.find((v) => v.lang.startsWith(language));
-    if (langVoice) {
-      utterance.voice = langVoice;
-      utterance.lang = langVoice.lang;
+    
+    // Map language codes to full locale patterns
+    const localeMap: Record<string, string[]> = {
+      en: ["en-US", "en-GB", "en"],
+      es: ["es-ES", "es-MX", "es"],
+      fr: ["fr-FR", "fr-CA", "fr"],
+      de: ["de-DE", "de"],
+      it: ["it-IT", "it"],
+      pt: ["pt-BR", "pt-PT", "pt"],
+      zh: ["zh-CN", "zh-TW", "zh"],
+    };
+    
+    const preferredLocales = localeMap[language] || [language];
+    
+    // Find best matching voice - prefer "Natural", "Premium", or "Enhanced" voices
+    let selectedVoice = null;
+    
+    for (const locale of preferredLocales) {
+      // First try to find a natural/premium voice
+      const naturalVoice = voices.find(
+        (v) => v.lang.startsWith(locale) && 
+        (v.name.toLowerCase().includes("natural") || 
+         v.name.toLowerCase().includes("premium") ||
+         v.name.toLowerCase().includes("enhanced") ||
+         v.name.toLowerCase().includes("neural"))
+      );
+      if (naturalVoice) {
+        selectedVoice = naturalVoice;
+        break;
+      }
+      
+      // Fall back to any voice for this locale
+      const anyVoice = voices.find((v) => v.lang.startsWith(locale));
+      if (anyVoice && !selectedVoice) {
+        selectedVoice = anyVoice;
+      }
+    }
+    
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+      utterance.lang = selectedVoice.lang;
+      console.log(`Browser TTS: Using voice "${selectedVoice.name}" for language ${language}`);
     } else {
       utterance.lang = language;
+      console.log(`Browser TTS: No specific voice found, using default for ${language}`);
     }
 
     utterance.onstart = () => {
@@ -88,7 +131,7 @@ export function useAudio(options: UseAudioOptions = {}) {
       setIsLoading(false);
     };
 
-    // Chrome long text bug workaround
+    // Chrome long text bug workaround - pause/resume every 10 seconds
     const checkInterval = setInterval(() => {
       if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
         window.speechSynthesis.pause();
