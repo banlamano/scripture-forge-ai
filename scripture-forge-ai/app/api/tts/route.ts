@@ -1,17 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import OpenAI from "openai";
 
 /**
- * OpenAI TTS - Primary provider (most natural sounding)
- * Voices: alloy, echo, fable, onyx, nova, shimmer
- * - onyx: deep, warm male voice - great for Bible reading
- * - nova: warm female voice
- * - alloy: neutral, clear
+ * Murf.ai TTS - Primary provider (very natural, studio-quality voices)
+ * Using verified voice IDs with Calm/Conversational styles for Bible reading
  */
-const OPENAI_VOICES = {
-  male: "onyx",      // Deep, warm - perfect for scripture
-  female: "nova",    // Warm, clear female voice
-  neutral: "alloy",  // Neutral, versatile
+const MURF_VOICES: Record<string, { voiceId: string; style: string; locale: string }> = {
+  en: { voiceId: "en-US-wayne", style: "Calm", locale: "en-US" },           // Middle-aged, warm calm voice
+  es: { voiceId: "es-MX-alejandro", style: "Calm", locale: "es-MX" },       // Spanish calm voice
+  fr: { voiceId: "fr-FR-maxime", style: "Conversational", locale: "fr-FR" }, // French male
+  de: { voiceId: "de-DE-josephine", style: "Calm", locale: "de-DE" },       // German calm (female available)
+  it: { voiceId: "it-IT-giorgio", style: "Conversational", locale: "it-IT" }, // Italian male
+  pt: { voiceId: "pt-BR-yago", style: "Conversational", locale: "pt-BR" }, // Portuguese male
+  zh: { voiceId: "zh-CN-wei", style: "Calm", locale: "zh-CN" },             // Chinese calm voice
+};
+
+const MURF_VOICES_FEMALE: Record<string, { voiceId: string; style: string; locale: string }> = {
+  en: { voiceId: "en-AU-joyce", style: "Narration", locale: "en-AU" },      // Warm female narration
+  es: { voiceId: "es-ES-carla", style: "Conversational", locale: "es-ES" }, // Spanish female
+  fr: { voiceId: "fr-FR-justine", style: "Calm", locale: "fr-FR" },         // French female calm
+  de: { voiceId: "de-DE-josephine", style: "Calm", locale: "de-DE" },       // German female calm
+  it: { voiceId: "it-IT-greta", style: "Conversational", locale: "it-IT" }, // Italian female
+  pt: { voiceId: "pt-BR-isadora", style: "Conversational", locale: "pt-BR" }, // Portuguese female
+  zh: { voiceId: "zh-CN-wei", style: "Calm", locale: "zh-CN" },             // Chinese female calm
 };
 
 /**
@@ -40,29 +50,60 @@ const AZURE_VOICES: Record<string, { voice: string; locale: string; style?: stri
 };
 
 /**
- * Generate speech using OpenAI TTS (most natural)
- * OpenAI TTS produces incredibly human-like speech
+ * Generate speech using Murf.ai (studio-quality natural voices)
+ * Returns the audio as a Buffer
  */
-async function synthesizeWithOpenAI(
+async function synthesizeWithMurf(
   text: string,
-  voice: "alloy" | "echo" | "fable" | "onyx" | "nova" | "shimmer" = "onyx"
-): Promise<Buffer> {
-  const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+  language: string,
+  voiceGender: string = "male"
+): Promise<{ buffer: Buffer; format: string }> {
+  const apiKey = process.env.MURF_API_KEY;
+  
+  if (!apiKey) {
+    throw new Error("Murf API key not configured");
+  }
+
+  // Select voice based on language and gender
+  const voiceMap = voiceGender === "female" ? MURF_VOICES_FEMALE : MURF_VOICES;
+  const voiceConfig = voiceMap[language] || voiceMap["en"];
+
+  // Murf.ai request
+  const response = await fetch("https://api.murf.ai/v1/speech/generate", {
+    method: "POST",
+    headers: {
+      "api-key": apiKey,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      text: text,
+      voiceId: voiceConfig.voiceId,
+      style: voiceConfig.style,
+      format: "MP3",
+      sampleRate: 24000,
+      channelType: "MONO",
+    }),
   });
 
-  // OpenAI TTS has a 4096 character limit
-  const truncatedText = text.length > 4096 ? text.substring(0, 4096) : text;
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Murf.ai error ${response.status}: ${errorText}`);
+  }
 
-  const response = await openai.audio.speech.create({
-    model: "tts-1-hd",  // High-definition model for best quality
-    voice: voice,
-    input: truncatedText,
-    speed: 0.95,  // Slightly slower for Bible reading
-  });
+  const data = await response.json();
+  
+  if (!data.audioFile) {
+    throw new Error("No audio URL in Murf.ai response");
+  }
 
-  const arrayBuffer = await response.arrayBuffer();
-  return Buffer.from(arrayBuffer);
+  // Download the audio file
+  const audioResponse = await fetch(data.audioFile);
+  if (!audioResponse.ok) {
+    throw new Error("Failed to download Murf.ai audio");
+  }
+
+  const arrayBuffer = await audioResponse.arrayBuffer();
+  return { buffer: Buffer.from(arrayBuffer), format: "audio/mpeg" };
 }
 
 /**
@@ -145,31 +186,32 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Text is required" }, { status: 400 });
     }
 
-    // Limit text length
-    const maxLength = 4000;
+    // Limit text length (Murf.ai has generous limits)
+    const maxLength = 5000;
     const truncatedText = text.length > maxLength ? text.substring(0, maxLength) : text;
 
     let audioBuffer: Buffer;
 
-    // Try OpenAI TTS first (most natural sounding)
-    if (process.env.OPENAI_API_KEY) {
+    // Try Murf.ai first (studio-quality natural voices)
+    if (process.env.MURF_API_KEY) {
       try {
-        // Select voice based on gender preference
-        const voice = voiceGender === "female" ? "nova" : "onyx";
+        const voiceConfig = voiceGender === "female" 
+          ? MURF_VOICES_FEMALE[language] || MURF_VOICES_FEMALE["en"]
+          : MURF_VOICES[language] || MURF_VOICES["en"];
         
-        console.log(`TTS: Using OpenAI (${voice}), text length: ${truncatedText.length}`);
+        console.log(`TTS: Using Murf.ai (${voiceConfig.voiceId}, ${voiceConfig.style}), text length: ${truncatedText.length}`);
         
-        audioBuffer = await synthesizeWithOpenAI(truncatedText, voice);
+        const result = await synthesizeWithMurf(truncatedText, language, voiceGender);
         
-        console.log(`TTS: OpenAI generated ${audioBuffer.length} bytes`);
+        console.log(`TTS: Murf.ai generated ${result.buffer.length} bytes`);
         
         return NextResponse.json({
-          audioContent: audioBuffer.toString("base64"),
-          contentType: "audio/mpeg",
-          provider: "openai",
+          audioContent: result.buffer.toString("base64"),
+          contentType: result.format,
+          provider: "murf",
         });
-      } catch (openaiError) {
-        console.error("OpenAI TTS failed, trying Azure:", openaiError);
+      } catch (murfError) {
+        console.error("Murf.ai TTS failed, trying Azure:", murfError);
         // Fall through to Azure
       }
     }
@@ -210,16 +252,19 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const language = searchParams.get("language") || "en";
 
-  const hasOpenAI = !!process.env.OPENAI_API_KEY;
+  const hasMurf = !!process.env.MURF_API_KEY;
   const hasAzure = !!process.env.AZURE_SPEECH_KEY;
+
+  const murfVoice = MURF_VOICES[language] || MURF_VOICES["en"];
+  const azureVoice = AZURE_VOICES[language] || AZURE_VOICES["en"];
 
   return NextResponse.json({
     language,
-    primaryProvider: hasOpenAI ? "OpenAI TTS (natural voices)" : "Azure Speech",
+    primaryProvider: hasMurf ? "Murf.ai (studio-quality)" : hasAzure ? "Azure Speech" : "Browser",
     fallbackProvider: hasAzure ? "Azure Speech" : "Browser",
     voices: {
-      openai: ["onyx (male)", "nova (female)", "alloy (neutral)"],
-      azure: AZURE_VOICES[language]?.voice || "en-US-GuyNeural",
+      murf: murfVoice ? `${murfVoice.voiceId} (${murfVoice.style})` : "Not configured",
+      azure: azureVoice?.voice || "en-US-GuyNeural",
     },
     supported: true,
   });
