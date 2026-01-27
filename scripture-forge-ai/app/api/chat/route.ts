@@ -11,39 +11,132 @@ function getGroqClient() {
   });
 }
 
-// Language names for system prompt
-const LANGUAGE_NAMES: Record<string, string> = {
-  en: "English",
-  es: "Spanish",
-  de: "German",
-  fr: "French",
-  pt: "Portuguese",
-  zh: "Chinese (Simplified)",
+// Language configurations for professional multi-language support
+const LANGUAGE_CONFIG: Record<string, { 
+  name: string; 
+  nativeName: string;
+  bibleTranslation: string;
+  greeting: string;
+}> = {
+  en: { 
+    name: "English", 
+    nativeName: "English",
+    bibleTranslation: "ESV, NIV, or KJV",
+    greeting: "Hello! I'm here to help you explore God's Word."
+  },
+  es: { 
+    name: "Spanish", 
+    nativeName: "Español",
+    bibleTranslation: "Reina Valera 1960 or NVI",
+    greeting: "¡Hola! Estoy aquí para ayudarte a explorar la Palabra de Dios."
+  },
+  de: { 
+    name: "German", 
+    nativeName: "Deutsch",
+    bibleTranslation: "Luther Bibel or Schlachter",
+    greeting: "Hallo! Ich bin hier, um dir zu helfen, Gottes Wort zu erforschen."
+  },
+  fr: { 
+    name: "French", 
+    nativeName: "Français",
+    bibleTranslation: "Louis Segond or NBS",
+    greeting: "Bonjour! Je suis là pour vous aider à explorer la Parole de Dieu."
+  },
+  pt: { 
+    name: "Portuguese", 
+    nativeName: "Português",
+    bibleTranslation: "Almeida Revista e Atualizada or NVI",
+    greeting: "Olá! Estou aqui para ajudá-lo a explorar a Palavra de Deus."
+  },
+  zh: { 
+    name: "Chinese (Simplified)", 
+    nativeName: "中文",
+    bibleTranslation: "和合本 (Chinese Union Version)",
+    greeting: "你好！我在这里帮助你探索上帝的话语。"
+  },
+  it: { 
+    name: "Italian", 
+    nativeName: "Italiano",
+    bibleTranslation: "Nuova Riveduta or CEI",
+    greeting: "Ciao! Sono qui per aiutarti ad esplorare la Parola di Dio."
+  },
 };
 
-// Get system prompt with language instruction
+// Get comprehensive system prompt for professional ChatGPT-like experience
 function getSystemPrompt(lang: string = "en"): string {
-  const languageName = LANGUAGE_NAMES[lang] || "English";
+  const config = LANGUAGE_CONFIG[lang] || LANGUAGE_CONFIG["en"];
+  
   const languageInstruction = lang !== "en" 
-    ? `\n\nIMPORTANT: You MUST respond entirely in ${languageName}. All your explanations, context, and applications should be written in ${languageName}. When quoting Bible verses, use a ${languageName} translation if possible, or provide both the original and a ${languageName} translation.`
+    ? `
+
+## CRITICAL LANGUAGE REQUIREMENT
+You MUST respond ENTIRELY in ${config.nativeName} (${config.name}). This is non-negotiable.
+- All explanations, insights, and applications must be in ${config.nativeName}
+- When quoting Bible verses, use ${config.bibleTranslation} translation
+- If you don't know the exact translation, provide your best ${config.nativeName} translation of the verse
+- Never mix languages - respond 100% in ${config.nativeName}`
     : "";
 
-  return `You are ScriptureForge AI, a knowledgeable and compassionate Bible study companion. 
+  return `You are ScriptureForge AI — a warm, knowledgeable, and spiritually encouraging Bible study companion. You combine deep biblical scholarship with pastoral warmth to help users grow in their faith and understanding of Scripture.
 
-IMPORTANT RULES:
-1. Always cite Bible verses accurately with book, chapter, and verse numbers
-2. When quoting scripture, use the exact text - do not paraphrase
-3. Provide historical and cultural context when explaining passages
-4. Be warm, encouraging, and pastoral in tone
-5. If unsure about something, say so honestly
-6. You are an AI assistant, not a replacement for pastoral care
+## YOUR PERSONALITY
+- **Warm & Welcoming**: Like a trusted pastor or mentor who genuinely cares
+- **Knowledgeable**: Deep understanding of biblical text, history, theology, and original languages
+- **Balanced**: Present mainstream Christian interpretations while acknowledging where traditions differ
+- **Encouraging**: Always point users toward hope, growth, and deeper relationship with God
+- **Humble**: Acknowledge limitations and recommend professional pastoral care when appropriate
 
-When asked about a specific verse:
-1. Quote the verse exactly
-2. Explain its context (what comes before/after)
-3. Provide historical background
-4. Share practical application
-5. Suggest related verses${languageInstruction}`;
+## RESPONSE GUIDELINES
+
+### For Bible Verse Questions:
+1. **Quote the verse** accurately with the reference (Book Chapter:Verse)
+2. **Context**: Explain what comes before and after this passage
+3. **Historical Background**: Share relevant cultural, geographical, or historical insights
+4. **Original Language**: When helpful, explain key Hebrew (OT) or Greek (NT) words
+5. **Theological Significance**: What does this teach us about God, humanity, or salvation?
+6. **Practical Application**: How can this truth transform our daily lives?
+7. **Cross-References**: Suggest 2-3 related passages for deeper study
+
+### For Topical Questions:
+1. Provide a clear, direct answer grounded in Scripture
+2. Support with multiple relevant Bible passages (3-5 verses)
+3. Acknowledge different perspectives if the topic is debated among Christians
+4. Offer practical wisdom for applying biblical principles
+
+### For Devotional Requests:
+1. Start with an engaging hook or reflection question
+2. Present the Scripture passage with full text
+3. Offer deep, meaningful meditation on the text
+4. Include practical application points
+5. Close with a prayer the user can pray
+6. Suggest further reading
+
+### For Prayer Guidance:
+1. Acknowledge the user's situation with compassion
+2. Share relevant Scripture promises
+3. Offer a model prayer they can use or adapt
+4. Encourage continued conversation with God
+
+## FORMATTING
+- Use **bold** for emphasis and key terms
+- Use bullet points for lists and applications
+- Use > blockquotes for Scripture quotations
+- Structure longer responses with clear headings
+- Keep paragraphs focused and readable
+
+## IMPORTANT BOUNDARIES
+- Never claim divine revelation or make personal prophecies
+- Don't provide medical, legal, or financial advice
+- Avoid taking sides on divisive political issues
+- For serious struggles (mental health, abuse, etc.), always recommend professional help
+- Be honest when a question goes beyond what Scripture directly addresses
+
+## WHAT MAKES YOU SPECIAL
+Unlike generic AI, you are specifically trained to:
+- Always ground responses in biblical truth
+- Maintain theological accuracy and reverence
+- Provide spiritually nourishing conversations
+- Help users encounter God through His Word${languageInstruction}`;
 }
 
 // Fetch verse from bible-api.com for accuracy
@@ -103,6 +196,21 @@ async function retryWithBackoff<T>(
 
 export const maxDuration = 60;
 
+// CORS headers for development
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+// Handle OPTIONS preflight request
+export async function OPTIONS(req: Request) {
+  return new Response(null, {
+    status: 200,
+    headers: corsHeaders,
+  });
+}
+
 export async function POST(req: Request) {
   try {
     const { messages, lang = "en" } = await req.json();
@@ -110,7 +218,7 @@ export async function POST(req: Request) {
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return new Response(
         JSON.stringify({ error: "Messages are required" }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
@@ -149,6 +257,12 @@ export async function POST(req: Request) {
     let result;
     let provider = "none";
     
+    // Configuration for professional-quality responses
+    const chatConfig = {
+      temperature: 0.75, // Slightly higher for more natural, conversational responses
+      maxTokens: 4000,   // Allow longer, more comprehensive responses
+    };
+
     // Try Groq first (fastest), then OpenAI, then Anthropic
     if (hasGroq) {
       try {
@@ -157,8 +271,8 @@ export async function POST(req: Request) {
           model: groqClient("llama-3.3-70b-versatile"),
           system: systemPrompt + bibleContext,
           messages: messages,
-          temperature: 0.7,
-          maxTokens: 2000,
+          temperature: chatConfig.temperature,
+          maxTokens: chatConfig.maxTokens,
         });
         provider = "groq";
       } catch (groqError: any) {
@@ -172,8 +286,8 @@ export async function POST(req: Request) {
                 model: openai("gpt-4o-mini"),
                 system: systemPrompt + bibleContext,
                 messages: messages,
-                temperature: 0.7,
-                maxTokens: 1000,
+                temperature: chatConfig.temperature,
+                maxTokens: chatConfig.maxTokens,
               });
             }, 2, 1000);
             provider = "openai";
@@ -184,8 +298,8 @@ export async function POST(req: Request) {
                 model: anthropic("claude-3-haiku-20240307"),
                 system: systemPrompt + bibleContext,
                 messages: messages,
-                temperature: 0.7,
-                maxTokens: 1500,
+                temperature: chatConfig.temperature,
+                maxTokens: chatConfig.maxTokens,
               });
               provider = "anthropic";
             } else {
@@ -197,8 +311,8 @@ export async function POST(req: Request) {
             model: anthropic("claude-3-haiku-20240307"),
             system: systemPrompt + bibleContext,
             messages: messages,
-            temperature: 0.7,
-            maxTokens: 1500,
+            temperature: chatConfig.temperature,
+            maxTokens: chatConfig.maxTokens,
           });
           provider = "anthropic";
         } else {
@@ -211,8 +325,8 @@ export async function POST(req: Request) {
           model: openai("gpt-4o-mini"),
           system: systemPrompt + bibleContext,
           messages: messages,
-          temperature: 0.7,
-          maxTokens: 1000,
+          temperature: chatConfig.temperature,
+          maxTokens: chatConfig.maxTokens,
         });
       }, 3, 2000);
       provider = "openai";
@@ -221,8 +335,8 @@ export async function POST(req: Request) {
         model: anthropic("claude-3-haiku-20240307"),
         system: systemPrompt + bibleContext,
         messages: messages,
-        temperature: 0.7,
-        maxTokens: 1500,
+        temperature: chatConfig.temperature,
+        maxTokens: chatConfig.maxTokens,
       });
       provider = "anthropic";
     } else {
@@ -231,8 +345,20 @@ export async function POST(req: Request) {
 
     console.log(`Response served via ${provider}`);
 
-    // Use toDataStreamResponse for Vercel AI SDK format
-    return result.toDataStreamResponse();
+    // Use toDataStreamResponse for Vercel AI SDK format with CORS headers
+    const response = result.toDataStreamResponse();
+    
+    // Add CORS headers to the streaming response
+    const headers = new Headers(response.headers);
+    headers.set("Access-Control-Allow-Origin", "*");
+    headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers,
+    });
     
   } catch (error: any) {
     console.error("Chat API error:", error);
@@ -257,7 +383,7 @@ export async function POST(req: Request) {
     
     return new Response(
       JSON.stringify({ error: errorMessage }),
-      { status: statusCode, headers: { "Content-Type": "application/json" } }
+      { status: statusCode, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
   }
 }
@@ -265,6 +391,6 @@ export async function POST(req: Request) {
 export async function GET() {
   return new Response(JSON.stringify({ status: "ok" }), { 
     status: 200, 
-    headers: { "Content-Type": "application/json" } 
+    headers: { "Content-Type": "application/json", ...corsHeaders } 
   });
 }

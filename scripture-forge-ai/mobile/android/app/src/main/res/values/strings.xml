@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ScriptureForge AI</string>
+    <string name="title_activity_main">ScriptureForge AI</string>
+    <string name="package_name">app.scriptureforge.ai</string>
+    <string name="custom_url_scheme">app.scriptureforge.ai</string>
+
+    <!-- Google OAuth Web client id (required for native Google Sign-In ID tokens) -->
+    <string name="google_web_client_id">132585616374-ahrk7g2p2ssnkjpou75rc008qc8f1g99.apps.googleusercontent.com</string>
+</resources>

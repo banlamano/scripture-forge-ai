@@ -1,0 +1,28 @@
+{
+  "name": "mobile",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "cap:sync": "cap sync",
+    "cap:open:android": "cap open android",
+    "cap:open:ios": "cap open ios",
+    "cap:run:android": "cap run android",
+    "cap:run:ios": "cap run ios",
+    "assets:generate": "capacitor-assets generate --assetPath assets --iosProject ios/App --androidProject android",
+    "android:apk": "powershell -ExecutionPolicy Bypass -File build-debug-apk.ps1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@capacitor/android": "^8.0.1",
+    "@capacitor/cli": "^8.0.1",
+    "@capacitor/core": "^8.0.1",
+    "@capacitor/ios": "^8.0.1"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5"
+  }
+}

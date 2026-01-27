@@ -1,6 +1,7 @@
 "use client";
 
 import { signIn } from "next-auth/react";
+import { SFGoogleAuth, isCapacitorNative } from "@/lib/mobile/sf-google-auth";
 import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -27,7 +28,37 @@ function SignInContent() {
     setIsGoogleLoading(true);
     setError("");
     setSuccess("");
-    await signIn("google", { callbackUrl });
+
+    try {
+      // In the Capacitor mobile app, use native Google Sign-In to avoid Google's WebView restriction.
+      if (isCapacitorNative()) {
+        const { idToken } = await SFGoogleAuth.signIn();
+
+        const result = await signIn("google-id-token", {
+          idToken,
+          redirect: false,
+          callbackUrl,
+        });
+
+        if (result?.error) {
+          setError(t("error"));
+        } else if (result?.url) {
+          window.location.href = result.url;
+        } else {
+          window.location.href = callbackUrl;
+        }
+
+        return;
+      }
+
+      // Regular web flow
+      await signIn("google", { callbackUrl });
+    } catch (e) {
+      console.error(e);
+      setError(t("error"));
+    } finally {
+      setIsGoogleLoading(false);
+    }
   };
 
   const handleRegister = async (e: React.FormEvent) => {

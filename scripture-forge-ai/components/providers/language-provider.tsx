@@ -116,6 +116,8 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
     localStorage.setItem('preferred-language', newLocale);
     // Update HTML lang attribute
     document.documentElement.lang = newLocale;
+    // Dispatch custom event so other components can react to locale changes
+    window.dispatchEvent(new CustomEvent('locale-changed', { detail: { locale: newLocale } }));
   };
 
   const messages = messagesMap[locale] || messagesMap[defaultLocale];

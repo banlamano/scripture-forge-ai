@@ -50,6 +50,7 @@ import { useLanguage } from "@/components/providers/language-provider";
 import { useTheme } from "next-themes";
 import { useAudio } from "@/lib/hooks/use-audio";
 import { toast } from "sonner";
+import { useBibleStore, DEFAULT_TRANSLATIONS_BY_LOCALE } from "@/lib/stores/bible-store";
 
 interface ChapterData {
   book: string;
@@ -223,6 +224,13 @@ export function BibleReader() {
     }
   }, []);
   
+  // Bible store for locale-aware translation management
+  const { 
+    setLocale: setStoreLocale, 
+    getTranslationForLocale,
+    setTranslationForLocale 
+  } = useBibleStore();
+
   // Update selected translation when locale changes
   useEffect(() => {
     const translations = BIBLE_TRANSLATIONS[locale] || BIBLE_TRANSLATIONS["en"];
@@ -230,10 +238,46 @@ export function BibleReader() {
       // Check if current selection is valid for this language
       const isValidForLanguage = translations.some(t => t.id === selectedBibleId);
       if (!isValidForLanguage) {
-        setSelectedBibleId(translations[0].id);
+        // Get the user's preferred translation for this locale, or use default
+        const preferredTranslation = getTranslationForLocale(locale);
+        const isPreferredValid = translations.some(t => t.id === preferredTranslation);
+        const newTranslation = isPreferredValid ? preferredTranslation : translations[0].id;
+        setSelectedBibleId(newTranslation);
       }
     }
-  }, [locale, selectedBibleId]);
+    // Sync with store
+    setStoreLocale(locale);
+  }, [locale, selectedBibleId, getTranslationForLocale, setStoreLocale]);
+
+  // Listen for locale changes from other parts of the app
+  useEffect(() => {
+    const handleLocaleChange = (event: CustomEvent<{ locale: string }>) => {
+      const newLocale = event.detail.locale;
+      const translations = BIBLE_TRANSLATIONS[newLocale] || BIBLE_TRANSLATIONS["en"];
+      if (translations.length > 0) {
+        // Get the user's preferred translation for this locale
+        const preferredTranslation = getTranslationForLocale(newLocale);
+        const isPreferredValid = translations.some(t => t.id === preferredTranslation);
+        const newTranslation = isPreferredValid ? preferredTranslation : translations[0].id;
+        setSelectedBibleId(newTranslation);
+      }
+    };
+
+    window.addEventListener('locale-changed', handleLocaleChange as EventListener);
+    return () => {
+      window.removeEventListener('locale-changed', handleLocaleChange as EventListener);
+    };
+  }, [getTranslationForLocale]);
+
+  // Save translation preference when user manually changes it
+  const handleTranslationChange = useCallback((newTranslationId: string) => {
+    setSelectedBibleId(newTranslationId);
+    setTranslationForLocale(locale, newTranslationId);
+    // Also save to localStorage for profile page compatibility
+    if (typeof window !== "undefined") {
+      localStorage.setItem(TRANSLATION_PREFERENCE_KEY, newTranslationId);
+    }
+  }, [locale, setTranslationForLocale]);
 
   // Update book and chapter when URL parameters change (e.g., from reading plans navigation)
   useEffect(() => {

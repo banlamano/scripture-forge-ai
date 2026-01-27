@@ -47,6 +47,121 @@ const authConfig: NextAuthConfig = {
   // Note: Don't use adapter with credentials provider - they don't work well together
   // The adapter is for OAuth providers that need to store accounts
   providers: [
+    // Mobile app native Google Sign-In (ID token) provider.
+    // This avoids Google's "disallowed_useragent" WebView restriction by using native sign-in
+    // and exchanging the resulting ID token for a NextAuth session.
+    Credentials({
+      id: "google-id-token",
+      name: "Google (Native)",
+      credentials: {
+        idToken: { label: "Google ID Token", type: "text" },
+      },
+      async authorize(credentials) {
+        const idToken = (credentials?.idToken as string | undefined) ?? "";
+        if (!idToken) return null;
+
+        const googleClientId = process.env.AUTH_GOOGLE_ID;
+        if (!googleClientId) {
+          console.error("AUTH_GOOGLE_ID is not configured; cannot verify Google ID token");
+          return null;
+        }
+
+        // Verify token with Google. (Simple and reliable; for very high scale you can switch to JWKS verification.)
+        const tokenInfoRes = await fetch(
+          `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`
+        );
+
+        if (!tokenInfoRes.ok) {
+          console.error("Google tokeninfo verification failed", await tokenInfoRes.text());
+          return null;
+        }
+
+        const tokenInfo = (await tokenInfoRes.json()) as {
+          aud?: string;
+          sub?: string;
+          email?: string;
+          email_verified?: string;
+          name?: string;
+          picture?: string;
+        };
+
+        if (tokenInfo.aud !== googleClientId) {
+          console.error("Google ID token aud mismatch", {
+            expected: googleClientId,
+            got: tokenInfo.aud,
+          });
+          return null;
+        }
+
+        if (!tokenInfo.sub || !tokenInfo.email) return null;
+
+        // Google returns email_verified as string "true"/"false"
+        const emailVerified = tokenInfo.email_verified === "true";
+
+        // Try database first if configured
+        if (isDatabaseConfigured) {
+          try {
+            const normalizedEmail = tokenInfo.email.toLowerCase();
+            const existing = await db
+              .select()
+              .from(users)
+              .where(eq(users.email, normalizedEmail))
+              .limit(1);
+
+            if (existing.length > 0) {
+              const user = existing[0];
+              // Best-effort profile refresh
+              await db
+                .update(users)
+                .set({
+                  name: tokenInfo.name ?? user.name,
+                  image: tokenInfo.picture ?? user.image,
+                  emailVerified: emailVerified ? new Date() : user.emailVerified,
+                  updatedAt: new Date(),
+                })
+                .where(eq(users.id, user.id));
+
+              return {
+                id: user.id,
+                name: tokenInfo.name ?? user.name ?? undefined,
+                email: normalizedEmail,
+                image: tokenInfo.picture ?? user.image ?? undefined,
+              };
+            }
+
+            // Create new user
+            const created = await db
+              .insert(users)
+              .values({
+                email: normalizedEmail,
+                name: tokenInfo.name ?? null,
+                image: tokenInfo.picture ?? null,
+                emailVerified: emailVerified ? new Date() : null,
+              })
+              .returning();
+
+            const newUser = created[0];
+            return {
+              id: newUser.id,
+              name: newUser.name ?? undefined,
+              email: newUser.email,
+              image: newUser.image ?? undefined,
+            };
+          } catch (error) {
+            console.error("Database Google ID token auth error:", error);
+            return null;
+          }
+        }
+
+        // Demo/no-DB mode: use token sub as stable id
+        return {
+          id: tokenInfo.sub,
+          name: tokenInfo.name ?? undefined,
+          email: tokenInfo.email.toLowerCase(),
+          image: tokenInfo.picture ?? undefined,
+        };
+      },
+    }),
     Credentials({
       id: "credentials",
       name: "Email & Password",
