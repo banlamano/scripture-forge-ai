@@ -55,7 +55,15 @@ function SignInContent() {
       await signIn("google", { callbackUrl });
     } catch (e) {
       console.error(e);
-      setError(t("error"));
+      const message =
+        e instanceof Error
+          ? e.message
+          : typeof e === "string"
+            ? e
+            : JSON.stringify(e);
+
+      // Show the real error (especially important for Capacitor native flows)
+      setError(message || t("error"));
     } finally {
       setIsGoogleLoading(false);
     }
