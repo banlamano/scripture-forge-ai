@@ -21,7 +21,31 @@ function SignInContent() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
+
+  const normalizeCallbackUrl = (raw: string | null): string => {
+    if (!raw) return "/";
+
+    // Some flows may pass a full URL (or even a Google URL) as callbackUrl.
+    // For security and to avoid WebView "spinning" redirects, only allow same-origin
+    // callbacks and never redirect into NextAuth callback routes.
+    try {
+      const url = new URL(raw, window.location.origin);
+
+      const isSameOrigin = url.origin === window.location.origin;
+      if (!isSameOrigin) return "/";
+
+      if (url.pathname.startsWith("/api/auth")) return "/";
+
+      return url.pathname + url.search + url.hash;
+    } catch {
+      // If it's a relative path, keep it (but block auth callback paths)
+      if (raw.startsWith("/api/auth")) return "/";
+      if (raw.startsWith("/")) return raw;
+      return "/";
+    }
+  };
+
+  const callbackUrl = normalizeCallbackUrl(searchParams.get("callbackUrl"));
   const t = useTranslations("auth");
 
   const handleGoogleSignIn = async () => {
