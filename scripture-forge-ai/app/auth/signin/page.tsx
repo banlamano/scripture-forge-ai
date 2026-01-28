@@ -37,17 +37,19 @@ function SignInContent() {
         const result = await signIn("google-id-token", {
           idToken,
           redirect: false,
+          // NextAuth may return a url, but in WebViews it can be safer to hard-navigate.
           callbackUrl,
         });
 
         if (result?.error) {
-          setError(t("error"));
-        } else if (result?.url) {
-          window.location.href = result.url;
-        } else {
-          window.location.href = callbackUrl;
+          // If NextAuth returns an error string, show it; otherwise show a generic message.
+          setError(result.error || t("error"));
+          return;
         }
 
+        // Always hard-navigate (prevents "spinning" state in some WebViews)
+        const destination = result?.url || callbackUrl || "/";
+        window.location.replace(destination);
         return;
       }
 

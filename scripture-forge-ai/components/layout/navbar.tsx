@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { cn } from "@/lib/utils";
+import { isCapacitorNative } from "@/lib/mobile/sf-google-auth";
 
 const navigationItems = [
   { key: "home", href: "/", icon: Home },
@@ -101,6 +102,13 @@ export const Navbar = memo(function Navbar() {
             <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             <span className="sr-only">Toggle theme</span>
           </Button>
+
+          {/* In-app session indicator (only inside the Capacitor mobile app) */}
+          {isCapacitorNative() && session?.user?.email && (
+            <span className="hidden lg:inline text-xs text-muted-foreground max-w-[220px] truncate">
+              Logged in as {session.user.email}
+            </span>
+          )}
 
           {/* User menu */}
           {status === "loading" ? (

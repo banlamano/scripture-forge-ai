@@ -8,13 +8,10 @@ const config: CapacitorConfig = {
   webDir: 'www',
 
   server: {
-    // Live website to wrap
+    // Load the live website inside the Capacitor WebView.
+    // This keeps the Capacitor JS bridge available (required for native Google Sign-In).
     url: 'https://scripture-forge-ai.vercel.app',
-    // Required so the app can load the remote URL from the app bundle context
     cleartext: false,
-
-    // Allow navigation to your domain + common external services used by the site.
-    // (This is important when `server.url` is used.)
     allowNavigation: [
       'scripture-forge-ai.vercel.app',
       '*.vercel.app',
