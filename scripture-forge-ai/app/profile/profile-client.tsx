@@ -1,6 +1,7 @@
 "use client";
 
-import { useSession, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
+import type { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
@@ -55,8 +56,7 @@ interface SavedVerse {
 // Local storage key for default translation preference
 const TRANSLATION_PREFERENCE_KEY = "scripture-forge-default-translation";
 
-export default function ProfileClient() {
-  const { data: session, status } = useSession();
+export default function ProfileClient({ session }: { session: Session }) {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
   const { locale } = useLanguage();
@@ -118,24 +118,10 @@ export default function ProfileClient() {
     toast.success(t("translationSaved"));
   };
 
-  // Server component (page.tsx) handles auth redirect; keep client logic simple.
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.replace("/auth/signin?callbackUrl=/profile");
-    }
-  }, [status, router]);
+  // Server component (page.tsx) handles auth redirect; no client-side auth gating needed.
 
-  if (status === "loading" || !mounted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  if (!session?.user) {
-    return null;
-  }
+  // Don't block rendering on hydration; WebViews can delay hydration and this can look like an infinite spinner.
+  // We still gate localStorage-dependent features behind `mounted` below.
 
   const user = session.user;
   const memberSince = new Date().toLocaleDateString("en-US", {

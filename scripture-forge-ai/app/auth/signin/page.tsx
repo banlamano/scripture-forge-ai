@@ -53,6 +53,10 @@ function SignInContent() {
   // If already signed in, leave this page immediately (prevents "spinning" state in WebViews)
   useEffect(() => {
     if (status === "authenticated") {
+      // Ensure we don't keep showing a loading spinner
+      setIsGoogleLoading(false);
+      googleInFlightRef.current = false;
+
       router.replace(callbackUrl || "/");
       // Extra hard navigation fallback for stubborn WebViews
       setTimeout(() => {
