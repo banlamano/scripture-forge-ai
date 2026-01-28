@@ -1,8 +1,8 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { SFGoogleAuth, isCapacitorNative } from "@/lib/mobile/sf-google-auth";
-import { useState, Suspense } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -21,6 +21,7 @@ function SignInContent() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
+  const { status } = useSession();
   const searchParams = useSearchParams();
 
   const normalizeCallbackUrl = (raw: string | null): string => {
@@ -47,6 +48,19 @@ function SignInContent() {
   };
 
   const callbackUrl = normalizeCallbackUrl(searchParams.get("callbackUrl"));
+
+  // If already signed in, leave this page immediately (prevents "spinning" state in WebViews)
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace(callbackUrl || "/");
+      // Extra hard navigation fallback for stubborn WebViews
+      setTimeout(() => {
+        try {
+          window.location.replace(callbackUrl || "/");
+        } catch {}
+      }, 150);
+    }
+  }, [status, router, callbackUrl]);
   const t = useTranslations("auth");
 
   const handleGoogleSignIn = async () => {
