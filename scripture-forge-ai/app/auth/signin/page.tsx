@@ -3,7 +3,7 @@
 import { signIn } from "next-auth/react";
 import { SFGoogleAuth, isCapacitorNative } from "@/lib/mobile/sf-google-auth";
 import { useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { BookOpen, Mail, Loader2, Lock, AlertCircle, User } from "lucide-react";
@@ -20,6 +20,7 @@ function SignInContent() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   const normalizeCallbackUrl = (raw: string | null): string => {
@@ -49,6 +50,7 @@ function SignInContent() {
   const t = useTranslations("auth");
 
   const handleGoogleSignIn = async () => {
+    if (isGoogleLoading) return;
     setIsGoogleLoading(true);
     setError("");
     setSuccess("");
@@ -71,9 +73,11 @@ function SignInContent() {
           return;
         }
 
-        // Always hard-navigate (prevents "spinning" state in some WebViews)
+        // Navigate inside the Next.js app, then refresh to ensure session state is reflected.
         const destination = result?.url || callbackUrl || "/";
-        window.location.replace(destination);
+        setIsGoogleLoading(false);
+        router.replace(destination);
+        router.refresh();
         return;
       }
 
