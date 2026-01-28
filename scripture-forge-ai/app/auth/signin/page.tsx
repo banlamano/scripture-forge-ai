@@ -2,7 +2,7 @@
 
 import { signIn, useSession } from "next-auth/react";
 import { SFGoogleAuth, isCapacitorNative } from "@/lib/mobile/sf-google-auth";
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 function SignInContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const googleInFlightRef = useRef(false);
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -64,7 +65,8 @@ function SignInContent() {
   const t = useTranslations("auth");
 
   const handleGoogleSignIn = async () => {
-    if (isGoogleLoading) return;
+    if (googleInFlightRef.current) return;
+    googleInFlightRef.current = true;
     setIsGoogleLoading(true);
     setError("");
     setSuccess("");
@@ -109,6 +111,7 @@ function SignInContent() {
       // Show the real error (especially important for Capacitor native flows)
       setError(message || t("error"));
     } finally {
+      googleInFlightRef.current = false;
       setIsGoogleLoading(false);
     }
   };
