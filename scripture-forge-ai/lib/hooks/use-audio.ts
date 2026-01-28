@@ -32,8 +32,14 @@ export function useAudio(options: UseAudioOptions = {}) {
       audioRef.current = null;
     }
     if (audioUrlRef.current) {
-      URL.revokeObjectURL(audioUrlRef.current);
-      audioUrlRef.current = null;
+      // Only revoke blob: URLs we created locally
+      try {
+        if (audioUrlRef.current.startsWith("blob:")) {
+          URL.revokeObjectURL(audioUrlRef.current);
+        }
+      } finally {
+        audioUrlRef.current = null;
+      }
     }
   }, []);
 
@@ -195,26 +201,37 @@ export function useAudio(options: UseAudioOptions = {}) {
         }
 
         const data = await response.json();
-        
-        if (!data.audioContent) {
-          throw new Error("No audio content received");
-        }
 
         console.log("Audio received, creating player...");
 
-        // Convert base64 to blob
-        const audioBytes = atob(data.audioContent);
-        const audioArray = new Uint8Array(audioBytes.length);
-        for (let i = 0; i < audioBytes.length; i++) {
-          audioArray[i] = audioBytes.charCodeAt(i);
+        let audioSrc: string;
+
+        // Prefer streaming URL (fast start) when provided
+        if (data.audioUrl && typeof data.audioUrl === "string") {
+          audioSrc = data.audioUrl;
+          // Do NOT store remote URLs in audioUrlRef (only blob URLs should be revoked)
+          audioUrlRef.current = null;
+        } else if (data.audioContent && typeof data.audioContent === "string") {
+          // Legacy/base64 path (slower): Convert base64 to blob
+          const audioBytes = atob(data.audioContent);
+          const audioArray = new Uint8Array(audioBytes.length);
+          for (let i = 0; i < audioBytes.length; i++) {
+            audioArray[i] = audioBytes.charCodeAt(i);
+          }
+          const audioBlob = new Blob([audioArray], { type: data.contentType || "audio/mpeg" });
+
+          const blobUrl = URL.createObjectURL(audioBlob);
+          audioUrlRef.current = blobUrl;
+          audioSrc = blobUrl;
+        } else {
+          throw new Error("No audio received");
         }
-        const audioBlob = new Blob([audioArray], { type: "audio/mpeg" });
-        
-        // Create audio element
-        const audioUrl = URL.createObjectURL(audioBlob);
-        audioUrlRef.current = audioUrl;
-        
-        const audio = new Audio(audioUrl);
+
+        const audio = new Audio();
+        // Allow streaming cross-origin audio (Murf hosted URLs)
+        audio.crossOrigin = "anonymous";
+        audio.preload = "auto";
+        audio.src = audioSrc;
         audio.volume = Math.max(0.1, Math.min(1, volume));
         audioRef.current = audio;
 

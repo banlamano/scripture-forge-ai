@@ -1,27 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
+import crypto from "crypto";
 
 /**
  * Murf.ai TTS - Primary provider (very natural, studio-quality voices)
- * Using verified voice IDs with Calm/Conversational styles for Bible reading
+ * We keep an ordered list of styles to try (some voices support only some styles).
  */
-const MURF_VOICES: Record<string, { voiceId: string; style: string; locale: string }> = {
-  en: { voiceId: "en-US-wayne", style: "Calm", locale: "en-US" },           // Middle-aged, warm calm voice
-  es: { voiceId: "es-MX-alejandro", style: "Calm", locale: "es-MX" },       // Spanish calm voice
-  fr: { voiceId: "fr-FR-maxime", style: "Conversational", locale: "fr-FR" }, // French male
-  de: { voiceId: "de-DE-josephine", style: "Calm", locale: "de-DE" },       // German calm (female available)
-  it: { voiceId: "it-IT-giorgio", style: "Conversational", locale: "it-IT" }, // Italian male
-  pt: { voiceId: "pt-BR-yago", style: "Conversational", locale: "pt-BR" }, // Portuguese male
-  zh: { voiceId: "zh-CN-wei", style: "Calm", locale: "zh-CN" },             // Chinese calm voice
+type MurfVoiceConfig = { voiceId: string; styles: string[]; locale: string };
+
+const MURF_VOICES: Record<string, MurfVoiceConfig> = {
+  // English: Marcus + Narration is consistently the most natural for long-form reading
+  en: { voiceId: "en-US-marcus", styles: ["Narration", "Calm", "Conversational"], locale: "en-US" },
+  es: { voiceId: "es-MX-alejandro", styles: ["Calm", "Narration", "Conversational"], locale: "es-MX" },
+  fr: { voiceId: "fr-FR-maxime", styles: ["Narration", "Conversational", "Calm"], locale: "fr-FR" },
+  de: { voiceId: "de-DE-josephine", styles: ["Calm", "Narration", "Conversational"], locale: "de-DE" },
+  it: { voiceId: "it-IT-giorgio", styles: ["Narration", "Conversational", "Calm"], locale: "it-IT" },
+  pt: { voiceId: "pt-BR-yago", styles: ["Narration", "Conversational", "Calm"], locale: "pt-BR" },
+  zh: { voiceId: "zh-CN-wei", styles: ["Calm", "Narration", "Conversational"], locale: "zh-CN" },
 };
 
-const MURF_VOICES_FEMALE: Record<string, { voiceId: string; style: string; locale: string }> = {
-  en: { voiceId: "en-AU-joyce", style: "Narration", locale: "en-AU" },      // Warm female narration
-  es: { voiceId: "es-ES-carla", style: "Conversational", locale: "es-ES" }, // Spanish female
-  fr: { voiceId: "fr-FR-justine", style: "Calm", locale: "fr-FR" },         // French female calm
-  de: { voiceId: "de-DE-josephine", style: "Calm", locale: "de-DE" },       // German female calm
-  it: { voiceId: "it-IT-greta", style: "Conversational", locale: "it-IT" }, // Italian female
-  pt: { voiceId: "pt-BR-isadora", style: "Conversational", locale: "pt-BR" }, // Portuguese female
-  zh: { voiceId: "zh-CN-wei", style: "Calm", locale: "zh-CN" },             // Chinese female calm
+const MURF_VOICES_FEMALE: Record<string, MurfVoiceConfig> = {
+  en: { voiceId: "en-AU-joyce", styles: ["Narration", "Calm", "Conversational"], locale: "en-AU" },
+  es: { voiceId: "es-ES-carla", styles: ["Calm", "Conversational", "Narration"], locale: "es-ES" },
+  fr: { voiceId: "fr-FR-justine", styles: ["Narration", "Calm", "Conversational"], locale: "fr-FR" },
+  de: { voiceId: "de-DE-josephine", styles: ["Calm", "Narration", "Conversational"], locale: "de-DE" },
+  it: { voiceId: "it-IT-greta", styles: ["Narration", "Conversational", "Calm"], locale: "it-IT" },
+  pt: { voiceId: "pt-BR-isadora", styles: ["Narration", "Conversational", "Calm"], locale: "pt-BR" },
+  zh: { voiceId: "zh-CN-wei", styles: ["Calm", "Narration", "Conversational"], locale: "zh-CN" },
 };
 
 /**
@@ -51,15 +55,24 @@ const AZURE_VOICES: Record<string, { voice: string; locale: string; style?: stri
 
 /**
  * Generate speech using Murf.ai (studio-quality natural voices)
- * Returns the audio as a Buffer
  */
+
+// Best-effort in-memory cache for Murf URLs (helps a lot with repeat plays)
+// Note: in serverless, cache lifetime depends on instance reuse.
+const murfUrlCache = new Map<string, { url: string; expiresAt: number; provider: "murf" }>();
+const MURF_CACHE_TTL_MS = 1000 * 60 * 60; // 1 hour
+
+function hashKey(input: string) {
+  return crypto.createHash("sha1").update(input).digest("hex");
+}
+
 async function synthesizeWithMurf(
   text: string,
   language: string,
   voiceGender: string = "male"
-): Promise<{ buffer: Buffer; format: string }> {
+): Promise<{ audioUrl: string; format: string; cached: boolean }> {
   const apiKey = process.env.MURF_API_KEY;
-  
+
   if (!apiKey) {
     throw new Error("Murf API key not configured");
   }
@@ -68,42 +81,62 @@ async function synthesizeWithMurf(
   const voiceMap = voiceGender === "female" ? MURF_VOICES_FEMALE : MURF_VOICES;
   const voiceConfig = voiceMap[language] || voiceMap["en"];
 
-  // Murf.ai request
-  const response = await fetch("https://api.murf.ai/v1/speech/generate", {
-    method: "POST",
-    headers: {
-      "api-key": apiKey,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      text: text,
-      voiceId: voiceConfig.voiceId,
-      style: voiceConfig.style,
-      format: "MP3",
-      sampleRate: 24000,
-      channelType: "MONO",
-    }),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Murf.ai error ${response.status}: ${errorText}`);
+  // Try cached URL for any style that has already succeeded
+  const baseCacheKey = `${language}:${voiceGender}:${voiceConfig.voiceId}:${text}`;
+  const baseHash = hashKey(baseCacheKey);
+  for (const style of voiceConfig.styles) {
+    const k = `${baseHash}:${style}`;
+    const cached = murfUrlCache.get(k);
+    if (cached && cached.expiresAt > Date.now()) {
+      return { audioUrl: cached.url, format: "audio/mpeg", cached: true };
+    }
   }
 
-  const data = await response.json();
-  
-  if (!data.audioFile) {
-    throw new Error("No audio URL in Murf.ai response");
+  // Try styles in order until one works
+  let lastError: unknown = null;
+  for (const style of voiceConfig.styles) {
+    try {
+      const response = await fetch("https://api.murf.ai/v1/speech/generate", {
+        method: "POST",
+        headers: {
+          "api-key": apiKey,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text,
+          voiceId: voiceConfig.voiceId,
+          style,
+          format: "MP3",
+          sampleRate: 24000,
+          channelType: "MONO",
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Murf.ai error ${response.status}: ${errorText}`);
+      }
+
+      const data = await response.json();
+      if (!data.audioFile) {
+        throw new Error("No audio URL in Murf.ai response");
+      }
+
+      const cacheKey = `${baseHash}:${style}`;
+      murfUrlCache.set(cacheKey, {
+        url: data.audioFile,
+        expiresAt: Date.now() + MURF_CACHE_TTL_MS,
+        provider: "murf",
+      });
+
+      return { audioUrl: data.audioFile, format: "audio/mpeg", cached: false };
+    } catch (e) {
+      lastError = e;
+      // try next style
+    }
   }
 
-  // Download the audio file
-  const audioResponse = await fetch(data.audioFile);
-  if (!audioResponse.ok) {
-    throw new Error("Failed to download Murf.ai audio");
-  }
-
-  const arrayBuffer = await audioResponse.arrayBuffer();
-  return { buffer: Buffer.from(arrayBuffer), format: "audio/mpeg" };
+  throw lastError instanceof Error ? lastError : new Error("Murf.ai synthesis failed");
 }
 
 /**
@@ -198,17 +231,19 @@ export async function POST(request: NextRequest) {
         const voiceConfig = voiceGender === "female" 
           ? MURF_VOICES_FEMALE[language] || MURF_VOICES_FEMALE["en"]
           : MURF_VOICES[language] || MURF_VOICES["en"];
-        
-        console.log(`TTS: Using Murf.ai (${voiceConfig.voiceId}, ${voiceConfig.style}), text length: ${truncatedText.length}`);
+
+        console.log(`TTS: Using Murf.ai (${voiceConfig.voiceId}), styles: ${voiceConfig.styles.join(",")}, text length: ${truncatedText.length}`);
         
         const result = await synthesizeWithMurf(truncatedText, language, voiceGender);
-        
-        console.log(`TTS: Murf.ai generated ${result.buffer.length} bytes`);
-        
+
+        console.log(`TTS: Murf.ai url ready (cached=${result.cached})`);
+
+        // Return audioUrl so the client can start streaming immediately (much faster than base64-in-JSON)
         return NextResponse.json({
-          audioContent: result.buffer.toString("base64"),
+          audioUrl: result.audioUrl,
           contentType: result.format,
           provider: "murf",
+          cached: result.cached,
         });
       } catch (murfError) {
         console.error("Murf.ai TTS failed, trying Azure:", murfError);
@@ -263,7 +298,7 @@ export async function GET(request: NextRequest) {
     primaryProvider: hasMurf ? "Murf.ai (studio-quality)" : hasAzure ? "Azure Speech" : "Browser",
     fallbackProvider: hasAzure ? "Azure Speech" : "Browser",
     voices: {
-      murf: murfVoice ? `${murfVoice.voiceId} (${murfVoice.style})` : "Not configured",
+      murf: murfVoice ? `${murfVoice.voiceId} (${murfVoice.styles[0]})` : "Not configured",
       azure: azureVoice?.voice || "en-US-GuyNeural",
     },
     supported: true,
