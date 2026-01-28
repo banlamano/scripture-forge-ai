@@ -9,6 +9,7 @@ import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -56,7 +57,9 @@ public class SFGoogleAuthPlugin extends Plugin {
 
     pendingCall = call;
     Intent signInIntent = googleSignInClient.getSignInIntent();
-    startActivityForResult(call, signInIntent, RC_SIGN_IN);
+
+    // Use Capacitor's ActivityCallback mechanism (more reliable than overriding handleOnActivityResult)
+    startActivityForResult(call, signInIntent, "onSignInResult");
   }
 
   @PluginMethod
@@ -69,21 +72,27 @@ public class SFGoogleAuthPlugin extends Plugin {
     googleSignInClient.signOut().addOnCompleteListener(task -> call.resolve());
   }
 
-  @Override
-  protected void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
-    super.handleOnActivityResult(requestCode, resultCode, data);
+  @ActivityCallback
+  private void onSignInResult(PluginCall call, ActivityResult result) {
+    if (pendingCall == null) {
+      // No call in progress
+      return;
+    }
 
-    if (requestCode != RC_SIGN_IN || pendingCall == null) return;
-
+    Intent data = result.getData();
+    if (data == null) {
+      pendingCall.reject("Google sign-in cancelled");
+      pendingCall = null;
+      return;
+    }
     Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
 
     try {
       GoogleSignInAccount account = task.getResult(ApiException.class);
-      String idToken = account.getIdToken();
+      String idToken = account != null ? account.getIdToken() : null;
 
       if (idToken == null || idToken.isEmpty()) {
         pendingCall.reject("No idToken returned. Ensure you used the correct Web client ID and enabled Google Sign-In.");
-        pendingCall = null;
         return;
       }
 
