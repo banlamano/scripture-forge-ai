@@ -14,6 +14,7 @@ export function useAudio(options: UseAudioOptions = {}) {
   const [error, setError] = useState<string | null>(null);
   const [currentCharIndex, setCurrentCharIndex] = useState<number>(0);
   const [currentWord, setCurrentWord] = useState<string>("");
+  const [playbackRate, setPlaybackRateState] = useState(1.0); // 0.75, 1.0, 1.25, 1.5
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioUrlRef = useRef<string | null>(null);
@@ -63,8 +64,9 @@ export function useAudio(options: UseAudioOptions = {}) {
 
     const utterance = new SpeechSynthesisUtterance(text);
     
-    // Slower rate for more natural Bible reading
-    utterance.rate = 0.85;
+    // Apply playback rate (browser TTS uses rate, not playbackRate)
+    // Base rate 0.85 for natural reading, then multiply by user preference
+    utterance.rate = 0.85 * playbackRate;
     // Slightly lower pitch for a more reverent tone
     utterance.pitch = 0.95;
     utterance.volume = Math.max(0.1, Math.min(1, volume));
@@ -233,6 +235,7 @@ export function useAudio(options: UseAudioOptions = {}) {
         audio.preload = "auto";
         audio.src = audioSrc;
         audio.volume = Math.max(0.1, Math.min(1, volume));
+        audio.playbackRate = playbackRate; // Apply current playback speed
         audioRef.current = audio;
 
         // Set up event listeners
@@ -335,6 +338,15 @@ export function useAudio(options: UseAudioOptions = {}) {
     }
   }, [isPaused, isPlaying, pause, resume]);
 
+  const setPlaybackRate = useCallback((rate: number) => {
+    // Clamp to reasonable range (0.5x to 2x)
+    const clampedRate = Math.max(0.5, Math.min(2.0, rate));
+    setPlaybackRateState(clampedRate);
+    if (audioRef.current) {
+      audioRef.current.playbackRate = clampedRate;
+    }
+  }, []);
+
   return {
     speak,
     pause,
@@ -347,6 +359,8 @@ export function useAudio(options: UseAudioOptions = {}) {
     error,
     currentCharIndex,
     currentWord,
+    playbackRate,
+    setPlaybackRate,
     isSupported: true,
     voices: [],
   };
