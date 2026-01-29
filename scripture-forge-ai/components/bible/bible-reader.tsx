@@ -1477,9 +1477,30 @@ export function BibleReader() {
                     <Volume2 className="w-4 h-4" />
                     {t("audioSettings") || "Audio"}
                   </h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground mb-4">
                     {t("audioHint") || "Click the speaker icon in the toolbar to listen to the chapter being read aloud."}
                   </p>
+                  
+                  {/* Playback Speed Control */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium flex items-center justify-between">
+                      <span>{t("playbackSpeed") || "Playback Speed"}</span>
+                      <span className="text-muted-foreground">{audio.playbackRate}x</span>
+                    </label>
+                    <div className="flex gap-2 flex-wrap">
+                      {[0.75, 1.0, 1.25, 1.5].map((rate) => (
+                        <Button
+                          key={rate}
+                          variant={audio.playbackRate === rate ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => audio.setPlaybackRate(rate)}
+                          className="flex-1 min-w-[60px]"
+                        >
+                          {rate}x
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
