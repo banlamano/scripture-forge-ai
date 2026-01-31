@@ -295,7 +295,7 @@ export function ChatInterface() {
     }
   };
 
-  // Voice input (speech-to-text)
+  // Voice input (speech-to-text) - Enhanced for better accuracy
   const startListening = () => {
     if (!speechSupported) {
       toast.error(t("speechNotSupported"));
@@ -316,39 +316,95 @@ export function ChatInterface() {
       it: "it-IT",
     };
     
-    recognition.continuous = false;
-    recognition.interimResults = true;
+    // Enhanced settings for better accuracy
+    recognition.continuous = true; // Keep listening until explicitly stopped
+    recognition.interimResults = true; // Show real-time transcription
+    recognition.maxAlternatives = 3; // Get multiple alternatives for better accuracy
     recognition.lang = speechLangMap[locale] || 'en-US';
 
     recognition.onstart = () => {
       setIsListening(true);
-      toast.info(t("listening"));
+      // Don't show toast to avoid interruption, rely on visual feedback
     };
 
     recognition.onresult = (event) => {
-      const transcript = Array.from(event.results)
-        .map(result => result[0].transcript)
-        .join('');
-      setInput(transcript);
+      // Build transcript from all results
+      let interimTranscript = '';
+      let finalTranscript = '';
+      
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript + ' ';
+        } else {
+          interimTranscript += transcript;
+        }
+      }
+      
+      // Combine previous final results with new ones
+      const currentInput = input;
+      if (finalTranscript) {
+        // Append final transcript to existing input
+        setInput(currentInput + finalTranscript);
+      } else if (interimTranscript) {
+        // Show interim results (real-time feedback)
+        setInput(currentInput + interimTranscript);
+      }
     };
 
     recognition.onerror = (event) => {
       console.error('Speech recognition error:', event.error);
       setIsListening(false);
-      toast.error(t("speechError"));
+      
+      // Provide specific error messages
+      let errorMessage = t("speechError");
+      switch (event.error) {
+        case 'no-speech':
+          errorMessage = t("noSpeechDetected") || "No speech detected. Please try again.";
+          break;
+        case 'audio-capture':
+          errorMessage = t("microphoneError") || "Microphone not accessible. Please check permissions.";
+          break;
+        case 'not-allowed':
+          errorMessage = t("microphonePermissionDenied") || "Microphone permission denied. Please allow access.";
+          break;
+        case 'network':
+          errorMessage = t("networkError") || "Network error. Please check your connection.";
+          break;
+        case 'aborted':
+          // User stopped, don't show error
+          return;
+      }
+      
+      toast.error(errorMessage);
     };
 
     recognition.onend = () => {
       setIsListening(false);
+      // Clean up the recognition instance
+      if (recognitionRef.current === recognition) {
+        recognitionRef.current = null;
+      }
     };
 
     recognitionRef.current = recognition;
-    recognition.start();
+    
+    try {
+      recognition.start();
+    } catch (error) {
+      console.error('Failed to start speech recognition:', error);
+      setIsListening(false);
+      toast.error(t("speechError"));
+    }
   };
 
   const stopListening = () => {
     if (recognitionRef.current) {
-      recognitionRef.current.stop();
+      try {
+        recognitionRef.current.stop();
+      } catch (error) {
+        console.error('Error stopping recognition:', error);
+      }
       setIsListening(false);
     }
   };
@@ -529,11 +585,37 @@ export function ChatInterface() {
               </div>
             </form>
 
-            {/* Voice input hint */}
+            {/* Voice input hint - Enhanced visual feedback */}
             {isListening && (
-              <p className="text-xs text-primary text-center mt-2 animate-pulse">
-                🎤 {t("listening")}
-              </p>
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="flex items-center justify-center gap-2 mt-3 text-sm"
+              >
+                <div className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/20">
+                  <div className="flex gap-1">
+                    <motion.div
+                      animate={{ scaleY: [1, 1.5, 1] }}
+                      transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
+                      className="w-1 h-3 bg-red-500 rounded-full"
+                    />
+                    <motion.div
+                      animate={{ scaleY: [1, 2, 1] }}
+                      transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
+                      className="w-1 h-3 bg-red-500 rounded-full"
+                    />
+                    <motion.div
+                      animate={{ scaleY: [1, 1.5, 1] }}
+                      transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
+                      className="w-1 h-3 bg-red-500 rounded-full"
+                    />
+                  </div>
+                  <span className="text-red-600 dark:text-red-400 font-medium ml-1">
+                    {t("listening")}
+                  </span>
+                </div>
+              </motion.div>
             )}
 
             {/* Disclaimer */}
