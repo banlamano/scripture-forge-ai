@@ -53,33 +53,6 @@ const featureKeys = ["bibleReader", "aiChat", "devotional", "smartSearch", "pray
 export function HomeContent() {
   const t = useTranslations();
 
-  const stats = [
-    { value: "66", label: t("home.stats.booksOfBible") },
-    { value: "4+", label: t("home.stats.translations") },
-    { value: "50K+", label: t("home.stats.activeUsers") },
-    { value: "4.8", label: t("home.stats.userRating") },
-  ];
-
-  const testimonials = [
-    {
-      quote: t("home.testimonials.testimonial1.quote"),
-      author: t("home.testimonials.testimonial1.author"),
-      role: t("home.testimonials.testimonial1.role"),
-      rating: 5,
-    },
-    {
-      quote: t("home.testimonials.testimonial2.quote"),
-      author: t("home.testimonials.testimonial2.author"),
-      role: t("home.testimonials.testimonial2.role"),
-      rating: 5,
-    },
-    {
-      quote: t("home.testimonials.testimonial3.quote"),
-      author: t("home.testimonials.testimonial3.author"),
-      role: t("home.testimonials.testimonial3.role"),
-      rating: 5,
-    },
-  ];
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -174,58 +147,6 @@ export function HomeContent() {
           </div>
         </section>
 
-        {/* Stats Section */}
-        <section className="py-16 px-4 md:px-6 lg:px-8">
-          <div className="container max-w-4xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {stats.map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold gradient-text mb-2">
-                    {stat.value}
-                  </div>
-                  <div className="text-muted-foreground text-sm">
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonials */}
-        <section className="py-20 px-4 md:px-6 lg:px-8 bg-muted/30">
-          <div className="container max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                {t("home.testimonialsTitle")}
-              </h2>
-              <p className="text-muted-foreground text-lg">
-                {t("home.testimonialsDescription")}
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-6">
-              {testimonials.map((testimonial, i) => (
-                <Card key={i} className="bg-card">
-                  <CardContent className="pt-6">
-                    <div className="flex gap-1 mb-4">
-                      {Array.from({ length: testimonial.rating }).map((_, j) => (
-                        <Star key={j} className="w-4 h-4 fill-scripture-gold text-scripture-gold" />
-                      ))}
-                    </div>
-                    <p className="text-foreground mb-4 italic">
-                      "{testimonial.quote}"
-                    </p>
-                    <div>
-                      <p className="font-semibold">{testimonial.author}</p>
-                      <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* CTA Section */}
         <section className="py-20 px-4 md:px-6 lg:px-8">
