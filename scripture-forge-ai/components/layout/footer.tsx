@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { BookOpen, Github, Twitter, Heart } from "lucide-react";
+import { BookOpen, Heart } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 const productLinks = [
@@ -43,24 +43,6 @@ export function Footer() {
             <p className="text-sm text-muted-foreground mb-4">
               {t("footer.tagline")}
             </p>
-            <div className="flex gap-4">
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Github className="w-5 h-5" />
-              </a>
-            </div>
           </div>
 
           {/* Product Links */}
