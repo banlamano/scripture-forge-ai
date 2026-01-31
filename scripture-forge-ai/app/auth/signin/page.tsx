@@ -320,14 +320,6 @@ function SignInContent() {
               </Button>
             </form>
 
-            {/* Demo Credentials Info - only show on sign in */}
-            {!isRegisterMode && (
-              <div className="p-3 bg-muted/50 rounded-lg text-xs text-muted-foreground">
-                <p className="font-medium mb-1">{t("demoCredentials")}:</p>
-                <p>{t("email")}: <code className="bg-muted px-1 rounded">demo@example.com</code></p>
-                <p>{t("password")}: <code className="bg-muted px-1 rounded">demo123</code></p>
-              </div>
-            )}
 
             <p className="text-xs text-center text-muted-foreground">
               {t("termsText")}{" "}
